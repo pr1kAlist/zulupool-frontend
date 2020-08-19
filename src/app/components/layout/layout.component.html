@@ -1,0 +1,52 @@
+<nz-layout>
+    <nz-sider
+        nzCollapsible
+        nzBreakpoint="md"
+        [nzTrigger]="siderTriggerTemplate"
+        [(nzCollapsed)]="sidebarCollapsed"
+        (nzCollapsedChange)="onCollapsedChange($event)"
+    >
+        <div>Zulupool</div>
+
+        <ul nz-menu nzMode="inline" [nzTheme]="theme | async">
+            <li
+                *ngFor="let item of navigationItems; trackBy: trackById"
+                nz-menu-item
+                [nzSelected]="item.route === select"
+            >
+                <a
+                    [href]="item.route"
+                    (click)="onLinkClick($event, item.route)"
+                >
+                    <span
+                        *ngIf="sidebarCollapsed; else navigationItemTemplate"
+                        nz-tooltip
+                        nzTooltipPlacement="right"
+                        [nzTooltipTitle]="item.title | translate"
+                    >
+                        <i nz-icon nzTheme="outline" [nzType]="item.icon"></i>
+                    </span>
+
+                    <ng-template #navigationItemTemplate>
+                        <i nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+                        {{ item.title | translate }}
+                    </ng-template>
+                </a>
+            </li>
+        </ul>
+    </nz-sider>
+
+    <nz-layout>
+        <nz-header></nz-header>
+
+        <nz-content>
+            <router-outlet></router-outlet>
+        </nz-content>
+
+        <nz-footer>ZuluPool</nz-footer>
+    </nz-layout>
+</nz-layout>
+
+<ng-template #siderTriggerTemplate>
+    <i nz-icon [nzType]="siderTriggerIcon" nzTheme="outline"></i>
+</ng-template>

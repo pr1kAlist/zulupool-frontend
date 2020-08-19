@@ -1,31 +1,49 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
+import { EAppRoutes } from "enums/app-routes";
 import { AuthGuard } from "guards/auth.guard";
+
+import { LayoutComponent } from "components/layout/layout.component";
+
+import { HomeComponent } from "pages/home/home.component";
+import { SignInComponent } from "pages/sign-in/sign-in.component";
+import { SignUpComponent } from "pages/sign-up/sign-up.component";
+import { MonitoringComponent } from "pages/monitoring/monitoring.component";
+import { PaymentsComponent } from "pages/payments/payments.component";
+import { PageNotFoundComponent } from "pages/404/page-not-found.component";
 
 const routes: Routes = [
     {
-        path: "",
+        path: EAppRoutes.Home,
         pathMatch: "full",
-        loadChildren: () =>
-            import("pages/home/home.module").then(m => m.HomeModule),
+        component: HomeComponent,
     },
     {
-        path: "sing-in",
-        loadChildren: () =>
-            import("pages/sign-in/sign-in.module").then(m => m.SignInModule),
+        path: EAppRoutes.SignIn,
+        component: SignInComponent,
     },
     {
-        path: "sing-up",
-        loadChildren: () =>
-            import("pages/sign-up/sign-up.module").then(m => m.SignUpModule),
+        path: EAppRoutes.SigUp,
+        component: SignUpComponent,
     },
     {
-        path: "**",
-        loadChildren: () =>
-            import("pages/404/page-not-found.module").then(
-                m => m.PageNotFoundModule,
-            ),
+        path: "",
+        component: LayoutComponent,
+        children: [
+            {
+                path: EAppRoutes.Monitoring,
+                component: MonitoringComponent,
+            },
+            {
+                path: EAppRoutes.Payments,
+                component: PaymentsComponent,
+            },
+            {
+                path: "**",
+                component: PageNotFoundComponent,
+            },
+        ],
         canActivate: [AuthGuard],
     },
 ];

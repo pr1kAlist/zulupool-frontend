@@ -1,1 +1,4 @@
-{ "test.key": "Робит" }
+{
+    "components.layout.nav.monitoring": "Мониторинг",
+    "components.layout.nav.payments": "Выплаты"
+}
