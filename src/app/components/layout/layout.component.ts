@@ -4,7 +4,6 @@ import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 
 import { filter } from "rxjs/operators";
 
-import { StorageService } from "services/storage.service";
 import { ThemeService } from "services/theme.service";
 import { EAppRoutes } from "enums/app-routes";
 import { BaseComponent } from "tools/base.component";
@@ -34,22 +33,16 @@ export class LayoutComponent extends BaseComponent implements OnInit {
         },
     ]);
 
+    readonly theme = this.themeService.theme;
+
     private readonly appRoutes = toValueArray(EAppRoutes).filter(hasValue);
 
-    select: EAppRoutes;
-
-    sidebarCollapsed = this.storageService.sidebarCollapsed;
-    theme = this.themeService.theme;
-
-    get siderTriggerIcon(): string {
-        return this.sidebarCollapsed ? "right-circle" : "left-circle";
-    }
+    currentRoute: EAppRoutes;
 
     constructor(
         private router: Router,
         private location: Location,
         private activatedRoute: ActivatedRoute,
-        private storageService: StorageService,
         private themeService: ThemeService,
     ) {
         super();
@@ -68,19 +61,6 @@ export class LayoutComponent extends BaseComponent implements OnInit {
         ];
     }
 
-    onLinkClick(event: Event, route: EAppRoutes): void {
-        event.preventDefault();
-
-        if (route !== this.select) {
-            this.router.navigate([route]);
-        }
-    }
-
-    onCollapsedChange(collapsed: boolean): void {
-        // TODO: fix bug
-        // this.storageService.sidebarCollapsed = collapsed;
-    }
-
     private onUrlChange(): void {
         const urlParts = this.location.path().split(/\//);
 
@@ -89,7 +69,7 @@ export class LayoutComponent extends BaseComponent implements OnInit {
         ) as EAppRoutes;
 
         if (route) {
-            this.select = route;
+            this.currentRoute = route;
         }
     }
 }

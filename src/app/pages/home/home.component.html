@@ -1,3 +1,20 @@
-<p>home</p>
+<nz-layout>
+    <nz-header>
+        <app-logo></app-logo>
+    </nz-header>
 
-<div>{{ "test.key" | translate }}</div>
+    <nz-content>
+        <canvas
+            baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+        ></canvas>
+    </nz-content>
+
+    <nz-footer>
+        <app-footer></app-footer>
+    </nz-footer>
+</nz-layout>

@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 
 import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -17,6 +18,8 @@ import {
     RightCircleOutline,
 } from "@ant-design/icons-angular/icons";
 
+import { ChartsModule } from "ng2-charts";
+
 import { PageNotFoundComponent } from "pages/404/page-not-found.component";
 import { HomeComponent } from "pages/home/home.component";
 import { MonitoringComponent } from "pages/monitoring/monitoring.component";
@@ -24,7 +27,9 @@ import { PaymentsComponent } from "pages/payments/payments.component";
 import { SignInComponent } from "pages/sign-in/sign-in.component";
 import { SignUpComponent } from "pages/sign-up/sign-up.component";
 
+import { FooterComponent } from "components/footer/footer.component";
 import { LayoutComponent } from "components/layout/layout.component";
+import { LogoComponent } from "components/logo/logo.component";
 
 import { AppRoutingModule } from "app.routing";
 import { AppComponent } from "app.component";
@@ -43,6 +48,7 @@ export const defaultLanguage = "ru";
     imports: [
         BrowserModule,
         HttpClientModule,
+        BrowserAnimationsModule,
         AppRoutingModule,
         TranslateModule,
         TranslateModule.forRoot({
@@ -63,6 +69,8 @@ export const defaultLanguage = "ru";
             LeftCircleOutline,
             RightCircleOutline,
         ]),
+
+        ChartsModule,
     ],
 
     declarations: [
@@ -75,7 +83,9 @@ export const defaultLanguage = "ru";
         SignInComponent,
         SignUpComponent,
 
+        FooterComponent,
         LayoutComponent,
+        LogoComponent,
     ],
     bootstrap: [AppComponent],
 })
