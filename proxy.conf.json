@@ -1,0 +1,6 @@
+{
+    "/api/*": {
+        "target": "http://pool.jsoncrypto.com/",
+        "secure": false
+    }
+}

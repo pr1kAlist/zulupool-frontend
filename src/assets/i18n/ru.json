@@ -1,4 +1,22 @@
 {
+    "validation.clientError.required": "Поле обязательно для заполнения",
+    "validation.clientError.minlength": "Минимум {{requiredLength}} символов",
+    "validation.clientError.maxlength": "Максимум {{requiredLength}} символов",
+    "validation.clientError.": "",
+    "validation.serverError.invalid_password": "Пользователя с такими логином/паролем не существует",
+    "validation.serverError.user_not_active": "Пользователь не активирован. Следуйте инструкции в письме, пришедшем при регистрации",
+    "validation.serverError.unknown": "Неизвестная ошибка",
+    "validation.serverError.": "",
+    "validation.unknownError": "Неизвестная ошибка",
     "components.layout.nav.monitoring": "Мониторинг",
-    "components.layout.nav.payments": "Выплаты"
+    "components.layout.nav.payments": "Выплаты",
+    "auth.tabs.signIn": "Авторизация",
+    "auth.tabs.signUp": "Зарегистрироваться",
+    "auth.login": "Логин",
+    "auth.password": "Пароль",
+    "auth.email": "e-mail",
+    "auth.signIn.form.submitButton": "Войти",
+    "auth.signIn.forgotPassword": "Забыли пароль?",
+    "auth.signUp.form.submitButton": "Создать пользователя",
+    "home.enterButton": "Рабочая панель"
 }

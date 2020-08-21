@@ -6,17 +6,27 @@ import {
     RouterStateSnapshot,
 } from "@angular/router";
 
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+
+import { AppService } from "services/app.service";
+import { EAppRoutes } from "enums/app-routes";
+
 @Injectable({
     providedIn: "root",
 })
 export class AuthGuard implements CanActivate {
-    constructor(private router: Router) {}
+    constructor(private router: Router, private appService: AppService) {}
 
-    canActivate(_, state: RouterStateSnapshot): true | UrlTree {
-        const isAuthenticated = true;
-
-        return isAuthenticated
-            ? true
-            : this.router.parseUrl(`sign-in?to=${state.url}`);
+    canActivate(_, state: RouterStateSnapshot): Observable<true | UrlTree> {
+        return this.appService.user.pipe(
+            map(user => {
+                return user
+                    ? true
+                    : this.router.parseUrl(
+                          `${EAppRoutes.Auth}?to=${state.url}`,
+                      );
+            }),
+        );
     }
 }

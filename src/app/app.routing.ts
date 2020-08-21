@@ -7,8 +7,7 @@ import { AuthGuard } from "guards/auth.guard";
 import { LayoutComponent } from "components/layout/layout.component";
 
 import { HomeComponent } from "pages/home/home.component";
-import { SignInComponent } from "pages/sign-in/sign-in.component";
-import { SignUpComponent } from "pages/sign-up/sign-up.component";
+import { AuthComponent } from "pages/auth/auth.component";
 import { MonitoringComponent } from "pages/monitoring/monitoring.component";
 import { PaymentsComponent } from "pages/payments/payments.component";
 import { PageNotFoundComponent } from "pages/404/page-not-found.component";
@@ -20,12 +19,8 @@ const routes: Routes = [
         component: HomeComponent,
     },
     {
-        path: EAppRoutes.SignIn,
-        component: SignInComponent,
-    },
-    {
-        path: EAppRoutes.SigUp,
-        component: SignUpComponent,
+        path: EAppRoutes.Auth,
+        component: AuthComponent,
     },
     {
         path: "",

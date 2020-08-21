@@ -1,6 +1,12 @@
 <nz-layout>
-    <nz-header>
+    <nz-header class="header">
         <app-logo></app-logo>
+
+        <div class="header-controls">
+            <a class="enter-link" [routerLink]="EAppRoutes.Monitoring">
+                {{ "home.enterButton" | translate }}
+            </a>
+        </div>
     </nz-header>
 
     <nz-content>

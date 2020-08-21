@@ -1,11 +1,17 @@
 import { Component } from "@angular/core";
 
+import { EAppRoutes } from "enums/app-routes";
+
 @Component({
     selector: "app-home",
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.less"],
 })
 export class HomeComponent {
+    readonly EAppRoutes = EAppRoutes;
+
+    // ...
+
     public barChartOptions = {
         scaleShowVerticalLines: false,
         responsive: true,
