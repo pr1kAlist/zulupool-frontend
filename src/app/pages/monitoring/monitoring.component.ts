@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { EAppRoutes } from "enums/app-routes";
+import { EAppRoutes } from "enums/routing";
 
 @Component({
     selector: "app-monitoring",

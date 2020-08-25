@@ -4,12 +4,14 @@ import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 
 import { filter } from "rxjs/operators";
 
+import { EAppRoutes } from "enums/routing";
 import { ThemeService } from "services/theme.service";
-import { EAppRoutes } from "enums/app-routes";
 import { BaseComponent } from "tools/base.component";
 import { trackById, patchTrackIds } from "tools/trackers";
 import { toValueArray } from "tools/enum";
 import { hasValue } from "tools/has-value";
+import { AppService } from "services/app.service";
+import { routeToUrl } from "tools/route-to-url";
 
 @Component({
     selector: "app-layout",
@@ -44,6 +46,7 @@ export class LayoutComponent extends BaseComponent implements OnInit {
         private location: Location,
         private activatedRoute: ActivatedRoute,
         private themeService: ThemeService,
+        private appService: AppService,
     ) {
         super();
     }
@@ -59,6 +62,12 @@ export class LayoutComponent extends BaseComponent implements OnInit {
                 this.onUrlChange();
             }),
         ];
+    }
+
+    logOut(): void {
+        this.appService.logOut().subscribe(() => {
+            this.router.navigate([routeToUrl(EAppRoutes.Home)]);
+        });
     }
 
     private onUrlChange(): void {

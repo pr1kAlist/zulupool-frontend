@@ -1,8 +1,13 @@
 {
-    "files": [],
-    "references": [
-        {
-            "path": "./tsconfig.app.json"
-        }
-    ]
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "baseUrl": "./src/app",
+        "paths": {
+            "@app/*": ["app/*"]
+        },
+        "outDir": "./out-tsc/app",
+        "types": []
+    },
+    "files": ["src/main.ts", "src/polyfills.ts"],
+    "include": ["src/**/*.d.ts"]
 }

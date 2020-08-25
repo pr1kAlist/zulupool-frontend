@@ -1,31 +1,29 @@
 import { Injectable } from "@angular/core";
 
 import { Observable, of } from "rxjs";
-import not from "logical-not";
+import { not } from "logical-not";
 
 import { RestService } from "services/rest.service";
-import { StorageService } from "services/storage.service";
 import { IUser } from "interfaces/user";
 
 @Injectable({
     providedIn: "root",
 })
 export class UserApiService {
-    constructor(
-        private rest: RestService,
-        private storageService: StorageService,
-    ) {}
+    constructor(private rest: RestService) {}
 
-    getUser(): Observable<IUser | null> {
-        const id = this.storageService.sessionId;
+    getUser(sessionId: string): Observable<IUser | null> {
+        if (not(sessionId)) return of(null);
 
-        if (not(id)) return of(null);
-
-        return this.rest.post(`/userGetCredentials`, { id });
+        return this.rest.post(`/userGetCredentials`, { id: sessionId });
     }
 
     createUser(user: IUserCreateParams): Observable<any> {
-        return this.rest.post("/user/", user);
+        return this.rest.post("/user", user);
+    }
+
+    resendEmail(params: IUserResendEmailParams): Observable<void> {
+        return this.rest.post("/userResendEmail", params);
     }
 }
 
@@ -33,5 +31,11 @@ export interface IUserCreateParams {
     login: string;
     password: string;
     email: string;
-    name: string;
+    // name: string;
+}
+
+export interface IUserResendEmailParams {
+    login: string;
+    password: string;
+    email: string;
 }

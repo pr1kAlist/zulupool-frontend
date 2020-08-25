@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
 import { AppService } from "services/app.service";
-import { EAppRoutes } from "enums/app-routes";
+import { EAppRoutes } from "enums/routing";
 
 @Injectable({
     providedIn: "root",

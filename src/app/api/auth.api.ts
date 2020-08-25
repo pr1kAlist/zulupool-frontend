@@ -11,7 +11,7 @@ import { IUser } from "interfaces/user";
 export class AuthApiService {
     constructor(private rest: RestService) {}
 
-    sigIn(params: IAuthSignInParams): Observable<IUser> {
+    sigIn(params: IAuthSignInParams): Observable<IAuthSignInResponse> {
         return this.rest.post(`/userLogin`, params);
     }
 
@@ -25,6 +25,10 @@ export class AuthApiService {
 export interface IAuthSignInParams {
     login: string;
     password: string;
+}
+
+export interface IAuthSignInResponse {
+    sessionid: string;
 }
 
 export interface IUserCreateParams {}

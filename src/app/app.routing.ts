@@ -1,7 +1,8 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
-import { EAppRoutes } from "enums/app-routes";
+import { EAppRoutes, EActionsRoutes } from "enums/routing";
+
 import { AuthGuard } from "guards/auth.guard";
 
 import { LayoutComponent } from "components/layout/layout.component";
@@ -11,6 +12,8 @@ import { AuthComponent } from "pages/auth/auth.component";
 import { MonitoringComponent } from "pages/monitoring/monitoring.component";
 import { PaymentsComponent } from "pages/payments/payments.component";
 import { PageNotFoundComponent } from "pages/404/page-not-found.component";
+import { UserActivateComponent } from "pages/actions/user-activate/user-activate.component";
+import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
 
 const routes: Routes = [
     {
@@ -21,6 +24,19 @@ const routes: Routes = [
     {
         path: EAppRoutes.Auth,
         component: AuthComponent,
+    },
+    {
+        path: EAppRoutes.UserResendEmail,
+        component: UserResendEmailComponent,
+    },
+    {
+        path: EAppRoutes.Actions,
+        children: [
+            {
+                path: EActionsRoutes.UserActivate,
+                component: UserActivateComponent,
+            },
+        ],
     },
     {
         path: "",

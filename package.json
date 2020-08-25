@@ -22,7 +22,7 @@
         "@ngx-translate/core": "^13.0.0",
         "@ngx-translate/http-loader": "^6.0.0",
         "chart.js": "^2.9.3",
-        "logical-not": "^1.0.3",
+        "logical-not": "^1.0.7",
         "ng-zorro-antd": "^9.3.0",
         "ng2-charts": "^2.3.3",
         "rxjs": "~6.5.5",

@@ -17,11 +17,14 @@ import { NzInputModule } from "ng-zorro-antd/input";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzTabsModule } from "ng-zorro-antd/tabs";
 import { NzModalModule } from "ng-zorro-antd/modal";
+import { NzMessageModule } from "ng-zorro-antd/message";
+import { NzSpinModule } from "ng-zorro-antd/spin";
 import {
     FundProjectionScreenOutline,
     WalletOutline,
     LeftCircleOutline,
     RightCircleOutline,
+    LoadingOutline,
 } from "@ant-design/icons-angular/icons";
 
 import { ChartsModule } from "ng2-charts";
@@ -31,6 +34,8 @@ import { HomeComponent } from "pages/home/home.component";
 import { MonitoringComponent } from "pages/monitoring/monitoring.component";
 import { PaymentsComponent } from "pages/payments/payments.component";
 import { AuthComponent } from "pages/auth/auth.component";
+import { UserActivateComponent } from "pages/actions/user-activate/user-activate.component";
+import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
 
 import { FooterComponent } from "components/footer/footer.component";
 import { LayoutComponent } from "components/layout/layout.component";
@@ -75,11 +80,14 @@ export const defaultLanguage = "ru";
         NzButtonModule,
         NzTabsModule,
         NzModalModule,
+        NzMessageModule,
+        NzSpinModule,
         NzIconModule.forRoot([
             FundProjectionScreenOutline,
             WalletOutline,
             LeftCircleOutline,
             RightCircleOutline,
+            LoadingOutline,
         ]),
 
         ChartsModule,
@@ -93,6 +101,8 @@ export const defaultLanguage = "ru";
         MonitoringComponent,
         PaymentsComponent,
         AuthComponent,
+        UserActivateComponent,
+        UserResendEmailComponent,
 
         FooterComponent,
         LayoutComponent,

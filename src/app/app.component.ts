@@ -8,5 +8,5 @@ import { AppService } from "services/app.service";
     styleUrls: ["./app.component.less"],
 })
 export class AppComponent {
-    constructor(private appService: AppService) {}
+    constructor(public appService: AppService) {}
 }

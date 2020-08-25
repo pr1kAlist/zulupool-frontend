@@ -1,11 +1,16 @@
 import { Component } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { Validators } from "@angular/forms";
+import { Router, ActivatedRoute } from "@angular/router";
+
+import { TranslateService } from "@ngx-translate/core";
+import { NzModalService } from "ng-zorro-antd/modal";
 
 import { AuthApiService, IAuthSignInParams } from "api/auth.api";
-import { UserApiService, IUserCreateParams } from "api/user.api";
-import { EAppRoutes } from "enums/app-routes";
-import { ErrorService } from "services/error.service";
+import { IUserCreateParams } from "api/user.api";
+import { FormService } from "services/form.service";
+import { EAppRoutes, userRootRoute } from "enums/routing";
 import { routeToUrl } from "tools/route-to-url";
+import { AppService } from "services/app.service";
 
 @Component({
     selector: "app-auth",
@@ -16,79 +21,118 @@ export class AuthComponent {
     readonly EAppRoutes = EAppRoutes;
     readonly routeToUrl = routeToUrl;
 
-    readonly signInForm = this.formBuilder.group({
-        login: ["", [Validators.required, Validators.maxLength(64)]],
-        password: [
-            "",
-            [
-                Validators.required,
-                Validators.minLength(8),
-                Validators.maxLength(64),
-            ],
-        ],
-    } as Record<keyof IAuthSignInParams, any>);
+    readonly signInForm = this.formService.createFormManager<IAuthSignInParams>(
+        {
+            login: {
+                validators: [Validators.required, Validators.maxLength(64)],
+            },
+            password: {
+                validators: [
+                    Validators.required,
+                    Validators.minLength(8),
+                    Validators.maxLength(64),
+                ],
+                errors: ["invalid_password", "user_not_active", "unknown"],
+            },
+        },
+        {
+            onSubmit: () => this.onSignIn(),
+        },
+    );
 
-    readonly signIn = this.errorService.createFormErrorsHandler<
-        IAuthSignInParams
-    >(this.signInForm, {
-        password: ["invalid_password", "user_not_active"],
-    });
-
-    readonly signUpForm = this.formBuilder.group({
-        login: ["", [Validators.required, Validators.maxLength(64)]],
-        password: [
-            "",
-            [
-                Validators.required,
-                Validators.minLength(8),
-                Validators.maxLength(64),
-            ],
-        ],
-        email: ["", [Validators.required]],
-    } as Record<keyof IUserCreateParams, any>);
-
-    readonly signUp = this.errorService.createFormErrorsHandler<
-        IUserCreateParams
-    >(this.signUpForm, {
-        login: ["login_format_invalid", "duplicate_login"],
-        password: ["password_format_invalid"],
-        email: [
-            "email_format_invalid",
-            "duplicate_email",
-            "smtp_client_create_error",
-            "email_send_error",
-        ],
-    });
+    readonly signUpForm = this.formService.createFormManager<IUserCreateParams>(
+        {
+            login: {
+                validators: [Validators.required, Validators.maxLength(64)],
+                errors: ["login_format_invalid", "duplicate_login"],
+            },
+            password: {
+                validators: [
+                    Validators.required,
+                    Validators.minLength(8),
+                    Validators.maxLength(64),
+                ],
+                errors: ["password_format_invalid"],
+            },
+            email: {
+                validators: [Validators.required, Validators.email],
+                errors: [
+                    "email_format_invalid",
+                    "duplicate_email",
+                    "smtp_client_create_error",
+                    "email_send_error",
+                    "unknown",
+                ],
+            },
+        },
+        {
+            onSubmit: () => this.onSignUp(),
+        },
+    );
 
     submitting = false;
 
     constructor(
-        private formBuilder: FormBuilder,
+        private formService: FormService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private translateService: TranslateService,
+        private nzModalService: NzModalService,
         private authApiService: AuthApiService,
-        private userApiService: UserApiService,
-        private errorService: ErrorService,
+        private appService: AppService,
     ) {}
 
     onSignIn(): void {
-        this.signIn.validationTrigger.emit();
-
-        if (this.signInForm.invalid) return;
-
         this.submitting = true;
 
-        const params = this.signInForm.value as IAuthSignInParams;
+        const params = this.signInForm.formData.value as IAuthSignInParams;
 
         this.authApiService.sigIn(params).subscribe(
-            () => {
-                console.log("AUTH COMPLETE");
+            ({ sessionid }) => {
+                this.appService.authorize(sessionid).subscribe(
+                    () => {
+                        const target =
+                            (this.activatedRoute.snapshot.queryParams
+                                .to as string) || routeToUrl(userRootRoute);
+
+                        this.router.navigate([target]);
+                    },
+                    () => {
+                        this.signInForm.onError("unknown");
+
+                        this.submitting = false;
+                    },
+                );
             },
             error => {
-                this.signIn.serverErrorsTrigger.emit(error?.message || "");
+                this.signInForm.onError(error);
 
                 this.submitting = false;
             },
         );
     }
 
-    onSignUp(): void {}
+    onSignUp(): void {
+        this.submitting = true;
+
+        const params = this.signUpForm.formData.value as IUserCreateParams;
+
+        this.authApiService.signUp(params).subscribe(
+            () => {
+                this.nzModalService.success({
+                    nzContent: this.translateService.instant(
+                        "auth.signIn.success",
+                    ),
+                    nzOkText: this.translateService.instant("common.ok"),
+                });
+
+                this.router.navigate([routeToUrl(EAppRoutes.Home)]);
+            },
+            error => {
+                this.signUpForm.onError(error);
+
+                this.submitting = false;
+            },
+        );
+    }
 }

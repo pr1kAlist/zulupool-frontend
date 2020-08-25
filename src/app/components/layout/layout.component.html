@@ -21,7 +21,16 @@
     </nz-sider>
 
     <nz-layout>
-        <nz-header></nz-header>
+        <nz-header>
+            <div class="header">
+                <div></div>
+                <div style="margin-right: 24px;">
+                    <button nz-button nzType="link" (click)="logOut()">
+                        Log Out
+                    </button>
+                </div>
+            </div>
+        </nz-header>
 
         <nz-content>
             <router-outlet></router-outlet>

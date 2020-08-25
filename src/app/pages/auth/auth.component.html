@@ -1,29 +1,40 @@
-<nz-tabset>
-    <nz-tab [nzTitle]="'auth.tabs.signIn' | translate">
+<nz-tabset nzLinkRouter>
+    <nz-tab>
+        <a
+            nz-tab-link
+            [routerLink]="['.']"
+            [queryParams]="{ registration: null }"
+            queryParamsHandling="merge"
+        >
+            {{ "auth.tabs.signIn" | translate }}
+        </a>
+
         <form
             nz-form
             nzLayout="vertical"
-            [formGroup]="signInForm"
-            (submit)="onSignIn()"
+            [formGroup]="signInForm.formData"
+            (submit)="signInForm.submit()"
         >
             <nz-form-item>
                 <nz-form-label nzFor="login">
-                    {{ "auth.login" | translate }}
+                    {{ "common.login" | translate }}
                 </nz-form-label>
                 <nz-form-control
-                    [nzValidateStatus]="signIn.errors.login.status | async"
-                    [nzErrorTip]="signIn.errors.login.error | async"
+                    [nzValidateStatus]="signInForm.errors.login.status | async"
+                    [nzErrorTip]="signInForm.errors.login.error | async"
                 >
                     <input formControlName="login" nz-input id="login" />
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
                 <nz-form-label nzFor="password">
-                    {{ "auth.password" | translate }}
+                    {{ "common.password" | translate }}
                 </nz-form-label>
                 <nz-form-control
-                    [nzValidateStatus]="signIn.errors.password.status | async"
-                    [nzErrorTip]="signIn.errors.password.error | async"
+                    [nzValidateStatus]="
+                        signInForm.errors.password.status | async
+                    "
+                    [nzErrorTip]="signInForm.errors.password.error | async"
                 >
                     <input
                         type="password"
@@ -35,42 +46,54 @@
             </nz-form-item>
             <nz-form-item>
                 <nz-form-control>
-                    <button type="submit" nz-button nzType="primary">
+                    <button
+                        type="submit"
+                        nz-button
+                        nzType="primary"
+                        [nzLoading]="submitting"
+                    >
                         {{ "auth.signIn.form.submitButton" | translate }}
                     </button>
                 </nz-form-control>
             </nz-form-item>
         </form>
-
-        <button nz-button nzType="link" class="reset-password-button">
-            {{ "auth.signIn.forgotPassword" | translate }}
-        </button>
     </nz-tab>
-    <nz-tab [nzTitle]="'auth.tabs.signUp' | translate">
+    <nz-tab>
+        <a
+            nz-tab-link
+            [routerLink]="['.']"
+            [queryParams]="{ registration: true }"
+            queryParamsHandling="merge"
+        >
+            {{ "auth.tabs.signUp" | translate }}
+        </a>
+
         <form
             nz-form
             nzLayout="vertical"
-            [formGroup]="signUpForm"
-            (submit)="onSignUp()"
+            [formGroup]="signUpForm.formData"
+            (submit)="signUpForm.submit()"
         >
             <nz-form-item>
                 <nz-form-label nzFor="login">
-                    {{ "auth.login" | translate }}
+                    {{ "common.login" | translate }}
                 </nz-form-label>
                 <nz-form-control
-                    [nzValidateStatus]="signUp.errors.login.status | async"
-                    [nzErrorTip]="signUp.errors.login.error | async"
+                    [nzValidateStatus]="signUpForm.errors.login.status | async"
+                    [nzErrorTip]="signUpForm.errors.login.error | async"
                 >
                     <input formControlName="login" nz-input id="login" />
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
                 <nz-form-label nzFor="password">
-                    {{ "auth.password" | translate }}
+                    {{ "common.password" | translate }}
                 </nz-form-label>
                 <nz-form-control
-                    [nzValidateStatus]="signUp.errors.password.status | async"
-                    [nzErrorTip]="signUp.errors.password.error | async"
+                    [nzValidateStatus]="
+                        signUpForm.errors.password.status | async
+                    "
+                    [nzErrorTip]="signUpForm.errors.password.error | async"
                 >
                     <input
                         type="password"
@@ -82,18 +105,23 @@
             </nz-form-item>
             <nz-form-item>
                 <nz-form-label nzFor="email">
-                    {{ "auth.email" | translate }}
+                    {{ "common.email" | translate }}
                 </nz-form-label>
                 <nz-form-control
-                    [nzValidateStatus]="signUp.errors.email.status | async"
-                    [nzErrorTip]="signUp.errors.email.error | async"
+                    [nzValidateStatus]="signUpForm.errors.email.status | async"
+                    [nzErrorTip]="signUpForm.errors.email.error | async"
                 >
                     <input formControlName="email" nz-input id="email" />
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
                 <nz-form-control>
-                    <button type="submit" nz-button nzType="primary">
+                    <button
+                        type="submit"
+                        nz-button
+                        nzType="primary"
+                        [nzLoading]="submitting"
+                    >
                         {{ "auth.signUp.form.submitButton" | translate }}
                     </button>
                 </nz-form-control>
