@@ -39,13 +39,11 @@ export class HomeComponent implements OnInit {
     constructor(private backendQueryApiService: BackendQueryApiService) {}
 
     ngOnInit(): void {
-        this.backendQueryApiService.getPoolStats().subscribe(response => {
-            console.log(response);
+        this.backendQueryApiService.getPoolStats().subscribe(({ stats }) => {
+            this.poolStatsList = stats;
 
-            this.poolStatsList = response.stats;
-
-            if (this.poolStatsList.length > 0) {
-                this.poolStats = this.poolStatsList[0];
+            if (stats.length > 0) {
+                this.poolStats = stats[0];
 
                 this.getFoundBlocks();
             }
@@ -61,32 +59,9 @@ export class HomeComponent implements OnInit {
 
         this.backendQueryApiService
             .getFoundBlocks({ coin: this.poolStats.coin })
-            .subscribe(response => {
-                console.log(response);
-
-                this.foundBlocks = response.blocks;
+            .subscribe(({ blocks }) => {
+                this.foundBlocks = blocks;
                 this.foundBlocksLoading = false;
             });
     }
-
-    // ...
-
-    chartOptions: ChartOptions = {
-        responsive: true,
-    };
-    chartLabels = ["1", "2", "3", "4", "5", "6", "7"];
-    chartType: ChartType = "line";
-    chartLegend = true;
-    chartData: ChartDataSets[] = [
-        {
-            lineTension: 0,
-            data: [65, 59, 80, 81, 56, 55, 40],
-            label: "Series A",
-        },
-        {
-            lineTension: 0,
-            data: [28, 48, 40, 19, 86, 27, 90],
-            label: "Series B",
-        },
-    ];
 }

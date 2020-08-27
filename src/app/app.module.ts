@@ -22,6 +22,7 @@ import { NzMessageModule } from "ng-zorro-antd/message";
 import { NzSpinModule } from "ng-zorro-antd/spin";
 import { NzTableModule } from "ng-zorro-antd/table";
 import { NzSelectModule } from "ng-zorro-antd/select";
+import { NzRadioModule } from "ng-zorro-antd/radio";
 import {
     FundProjectionScreenOutline,
     WalletOutline,
@@ -91,6 +92,7 @@ export const defaultLanguage = "ru";
         NzSpinModule,
         NzTableModule,
         NzSelectModule,
+        NzRadioModule,
         NzIconModule.forRoot([
             FundProjectionScreenOutline,
             WalletOutline,

@@ -1,1 +1,70 @@
-<p>monitoring</p>
+<div class="main">
+    <div class="info">
+        <nz-radio-group
+            nzButtonStyle="solid"
+            [(ngModel)]="currentCoin"
+            (ngModelChange)="onCurrentCoinChange($event)"
+        >
+            <label *ngFor="let coin of coins" nz-radio-button [nzValue]="coin">
+                {{ coin }}
+            </label>
+        </nz-radio-group>
+
+        <nz-table
+            class="info-table"
+            nzBordered
+            [nzTemplateMode]="true"
+            [nzLoading]="!userStatsItem"
+        >
+            <thead>
+                <tr>
+                    <th>Workers</th>
+                    <th>ShareRate</th>
+                    <th>Power</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ userStatsItem?.workers }}</td>
+                    <td>{{ userStatsItem?.shareRate }} share/s</td>
+                    <td>{{ formatPower(userStatsItem?.power) }} Ph/s</td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+
+    <div class="chart">
+        <canvas
+            *ngIf="chart"
+            style="width: 100%"
+            baseChart
+            chartType="line"
+            [datasets]="chart.datasets"
+            [labels]="chart.labels"
+            [options]="chart.options"
+        >
+        </canvas>
+    </div>
+</div>
+
+<nz-table
+    class="workers-table"
+    nzBordered
+    [nzTemplateMode]="true"
+    [nzLoading]="!userWorkersStatsList"
+>
+    <thead>
+        <tr>
+            <th>Workers</th>
+            <th>Shares/s</th>
+            <th>Power (Th/s)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of userWorkersStatsList || []">
+            <td>{{ item.name }}</td>
+            <td>{{ item.shareRate }} share/s</td>
+            <td>{{ formatPower(item.power) }} Ph/s</td>
+        </tr>
+    </tbody>
+</nz-table>

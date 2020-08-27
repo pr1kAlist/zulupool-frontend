@@ -1,7 +1,7 @@
 import { ECoins } from "enums/coins";
 
 export interface IUserBalanceItem {
-    coin: string;
+    coin: ECoins;
     balance: string;
     requested: string;
     paid: string;
@@ -34,6 +34,14 @@ export interface IPoolStatsItem {
 export interface IWorkerStatsItem {
     name: string;
     time: number;
+    shareRate: number;
+    shareWork: number;
+    power: number;
+}
+
+export interface IUserStatsItem {
+    clients: number;
+    workers: number;
     shareRate: number;
     shareWork: number;
     power: number;

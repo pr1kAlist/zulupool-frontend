@@ -10,6 +10,7 @@ import {
     IPoolStatsItem,
     IWorkerStatsItem,
     IUserStatsWorker,
+    IUserStatsItem,
 } from "interfaces/backend-query";
 import { ECoins } from "enums/coins";
 
@@ -55,7 +56,11 @@ export class BackendQueryApiService {
         return this.restService.post("/backendQueryUserStats", params);
     }
 
-    getUserStatsHistory(): void {}
+    getUserStatsHistory(
+        params: IGetUserStatsHistoryParams,
+    ): Observable<IGetUserStatsHistoryResponse> {
+        return this.restService.post("/backendQueryUserStatsHistory", params);
+    }
 
     getWorkerStatsHistory(
         params: IGetWorkerStatsHistoryParams,
@@ -121,14 +126,19 @@ export interface IGetUserStatsParams {
 export interface IGetUserStatsResponse {
     powerUnit: string;
     powerMultLog10: number;
-    total: {
-        clients: number;
-        workers: number;
-        shareRate: number;
-        shareWork: number;
-        power: number;
-    };
+    total: IUserStatsItem;
     workers: IUserStatsWorker[];
+}
+
+export interface IGetUserStatsHistoryParams {
+    coin: ECoins;
+    [key: string]: any;
+}
+
+export interface IGetUserStatsHistoryResponse {
+    powerUnit: string;
+    powerMultLog10: number;
+    stats: IWorkerStatsItem[];
 }
 
 export interface IGetWorkerStatsHistoryParams {
