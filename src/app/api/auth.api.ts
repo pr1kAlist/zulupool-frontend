@@ -9,17 +9,19 @@ import { IUser } from "interfaces/user";
     providedIn: "root",
 })
 export class AuthApiService {
-    constructor(private rest: RestService) {}
+    constructor(private restService: RestService) {}
 
     sigIn(params: IAuthSignInParams): Observable<IAuthSignInResponse> {
-        return this.rest.post(`/userLogin`, params);
+        return this.restService.post(`/userLogin`, params);
     }
 
     signUp(user: IUserCreateParams): Observable<any> {
-        return this.rest.post("/userCreate", user);
+        return this.restService.post("/userCreate", user);
     }
 
-    logOut(): any {}
+    logOut(): any {
+        return this.restService.post("/userLogout");
+    }
 }
 
 export interface IAuthSignInParams {

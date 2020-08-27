@@ -10,20 +10,20 @@ import { IUser } from "interfaces/user";
     providedIn: "root",
 })
 export class UserApiService {
-    constructor(private rest: RestService) {}
+    constructor(private restService: RestService) {}
 
     getUser(sessionId: string): Observable<IUser | null> {
         if (not(sessionId)) return of(null);
 
-        return this.rest.post(`/userGetCredentials`, { id: sessionId });
+        return this.restService.post(`/userGetCredentials`, { id: sessionId });
     }
 
     createUser(user: IUserCreateParams): Observable<any> {
-        return this.rest.post("/user", user);
+        return this.restService.post("/user", user);
     }
 
     resendEmail(params: IUserResendEmailParams): Observable<void> {
-        return this.rest.post("/userResendEmail", params);
+        return this.restService.post("/userResendEmail", params);
     }
 }
 

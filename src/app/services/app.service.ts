@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of } from "rxjs";
 import { filter, map, catchError, tap } from "rxjs/operators";
 
 import { UserApiService } from "api/user.api";
+import { AuthApiService } from "api/auth.api";
 import { IUser } from "interfaces/user";
 import { StorageService } from "services/storage.service";
 
@@ -19,6 +20,7 @@ export class AppService {
 
     constructor(
         private userApiService: UserApiService,
+        private authApiService: AuthApiService,
         private storageService: StorageService,
     ) {
         this.init();
@@ -40,7 +42,7 @@ export class AppService {
     }
 
     logOut(): Observable<void> {
-        return of(undefined).pipe(
+        return this.authApiService.logOut().pipe(
             tap(() => {
                 this.storageService.sessionId = null;
 

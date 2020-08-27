@@ -14,23 +14,23 @@ import { AppService } from "services/app.service";
 import { routeToUrl } from "tools/route-to-url";
 
 @Component({
-    selector: "app-layout",
-    templateUrl: "./layout.component.html",
-    styleUrls: ["./layout.component.less"],
+    selector: "app-user-layout",
+    templateUrl: "./user-layout.component.html",
+    styleUrls: ["./user-layout.component.less"],
 })
-export class LayoutComponent extends BaseComponent implements OnInit {
+export class UserLayoutComponent extends BaseComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly trackById = trackById;
 
     readonly navigationItems: INavigationItem[] = patchTrackIds([
         {
             route: EAppRoutes.Monitoring,
-            title: "components.layout.nav.monitoring",
+            title: "components.userLayout.nav.monitoring",
             icon: "fund-projection-screen",
         },
         {
             route: EAppRoutes.Payments,
-            title: "components.layout.nav.payments",
+            title: "components.userLayout.nav.payments",
             icon: "wallet",
         },
     ]);
@@ -86,7 +86,7 @@ export class LayoutComponent extends BaseComponent implements OnInit {
 interface INavigationItem {
     route: EAppRoutes;
     title:
-        | "components.layout.nav.monitoring"
-        | "components.layout.nav.payments";
+        | "components.userLayout.nav.monitoring"
+        | "components.userLayout.nav.payments";
     icon: "fund-projection-screen" | "wallet";
 }

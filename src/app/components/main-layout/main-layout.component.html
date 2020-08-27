@@ -1,0 +1,25 @@
+<nz-layout>
+    <nz-header class="header">
+        <a [routerLink]="EAppRoutes.Home">
+            <app-logo></app-logo>
+        </a>
+
+        <div class="header-controls">
+            <a class="help-link" [routerLink]="EAppRoutes.Help">
+                {{ "components.mainLayout.help" | translate }}
+                <i nz-icon nzType="question-circle" nzTheme="outline"></i>
+            </a>
+            <a class="enter-link" [routerLink]="EAppRoutes.Monitoring">
+                {{ "components.mainLayout.enterButton" | translate }}
+            </a>
+        </div>
+    </nz-header>
+
+    <nz-content class="content">
+        <router-outlet></router-outlet>
+    </nz-content>
+
+    <nz-footer>
+        <app-footer></app-footer>
+    </nz-footer>
+</nz-layout>

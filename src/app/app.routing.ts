@@ -5,7 +5,8 @@ import { EAppRoutes, EActionsRoutes } from "enums/routing";
 
 import { AuthGuard } from "guards/auth.guard";
 
-import { LayoutComponent } from "components/layout/layout.component";
+import { MainLayoutComponent } from "components/main-layout/main-layout.component";
+import { UserLayoutComponent } from "components/user-layout/user-layout.component";
 
 import { HomeComponent } from "pages/home/home.component";
 import { AuthComponent } from "pages/auth/auth.component";
@@ -14,12 +15,24 @@ import { PaymentsComponent } from "pages/payments/payments.component";
 import { PageNotFoundComponent } from "pages/404/page-not-found.component";
 import { UserActivateComponent } from "pages/actions/user-activate/user-activate.component";
 import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
+import { HelpComponent } from "pages/help/help.component";
 
 const routes: Routes = [
     {
-        path: EAppRoutes.Home,
-        pathMatch: "full",
-        component: HomeComponent,
+        path: "",
+        component: MainLayoutComponent,
+        children: [
+            {
+                path: EAppRoutes.Home,
+                pathMatch: "full",
+                component: HomeComponent,
+            },
+            {
+                path: EAppRoutes.Help,
+                pathMatch: "full",
+                component: HelpComponent,
+            },
+        ],
     },
     {
         path: EAppRoutes.Auth,
@@ -39,8 +52,12 @@ const routes: Routes = [
         ],
     },
     {
+        path: EAppRoutes.Help,
+        component: HelpComponent,
+    },
+    {
         path: "",
-        component: LayoutComponent,
+        component: UserLayoutComponent,
         children: [
             {
                 path: EAppRoutes.Monitoring,

@@ -19,12 +19,15 @@ import { NzTabsModule } from "ng-zorro-antd/tabs";
 import { NzModalModule } from "ng-zorro-antd/modal";
 import { NzMessageModule } from "ng-zorro-antd/message";
 import { NzSpinModule } from "ng-zorro-antd/spin";
+import { NzTableModule } from "ng-zorro-antd/table";
+import { NzSelectModule } from "ng-zorro-antd/select";
 import {
     FundProjectionScreenOutline,
     WalletOutline,
     LeftCircleOutline,
     RightCircleOutline,
     LoadingOutline,
+    QuestionCircleOutline,
 } from "@ant-design/icons-angular/icons";
 
 import { ChartsModule } from "ng2-charts";
@@ -36,9 +39,11 @@ import { PaymentsComponent } from "pages/payments/payments.component";
 import { AuthComponent } from "pages/auth/auth.component";
 import { UserActivateComponent } from "pages/actions/user-activate/user-activate.component";
 import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
+import { HelpComponent } from "pages/help/help.component";
 
 import { FooterComponent } from "components/footer/footer.component";
-import { LayoutComponent } from "components/layout/layout.component";
+import { MainLayoutComponent } from "components/main-layout/main-layout.component";
+import { UserLayoutComponent } from "components/user-layout/user-layout.component";
 import { LogoComponent } from "components/logo/logo.component";
 
 import { AppRoutingModule } from "app.routing";
@@ -82,12 +87,15 @@ export const defaultLanguage = "ru";
         NzModalModule,
         NzMessageModule,
         NzSpinModule,
+        NzTableModule,
+        NzSelectModule,
         NzIconModule.forRoot([
             FundProjectionScreenOutline,
             WalletOutline,
             LeftCircleOutline,
             RightCircleOutline,
             LoadingOutline,
+            QuestionCircleOutline,
         ]),
 
         ChartsModule,
@@ -103,9 +111,11 @@ export const defaultLanguage = "ru";
         AuthComponent,
         UserActivateComponent,
         UserResendEmailComponent,
+        HelpComponent,
 
         FooterComponent,
-        LayoutComponent,
+        MainLayoutComponent,
+        UserLayoutComponent,
         LogoComponent,
     ],
     bootstrap: [AppComponent],

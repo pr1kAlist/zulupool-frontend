@@ -1,26 +1,62 @@
-<nz-layout>
-    <nz-header class="header">
-        <app-logo></app-logo>
+<div style="display: flex;">
+    <nz-select
+        style="width: 300px;"
+        [(ngModel)]="poolStats"
+        [nzLoading]="!poolStatsList"
+        (ngModelChange)="onPoolStatsSelect()"
+    >
+        <nz-option
+            *ngFor="let item of poolStatsList"
+            [nzLabel]="item.coin"
+            [nzValue]="item"
+        ></nz-option>
+    </nz-select>
 
-        <div class="header-controls">
-            <a class="enter-link" [routerLink]="EAppRoutes.Monitoring">
-                {{ "home.enterButton" | translate }}
-            </a>
-        </div>
-    </nz-header>
+    <nz-table
+        *ngIf="poolStats"
+        style="flex: 1; margin-left: 32px; max-width: 800px;"
+        nzBordered
+        nzSize="small"
+        [nzTemplateMode]="true"
+    >
+        <tbody>
+            <tr *ngFor="let item of poolStatsPairs">
+                <td>{{ item.name }}</td>
+                <td>{{ item.value }}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>
 
-    <nz-content>
-        <canvas
-            baseChart
-            [datasets]="chartData"
-            [labels]="chartLabels"
-            [options]="chartOptions"
-            [legend]="chartLegend"
-            [chartType]="chartType"
-        ></canvas>
-    </nz-content>
+<nz-table
+    style="margin: 32px 0;"
+    nzBordered
+    [nzTemplateMode]="true"
+    [nzLoading]="foundBlocksLoading"
+>
+    <thead>
+        <tr>
+            <th *ngFor="let title of foundBlockKeys">
+                {{ title }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let foundBlock of foundBlocks">
+            <td *ngFor="let key of foundBlockKeys">
+                {{ foundBlock[key] }}
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
 
-    <nz-footer>
-        <app-footer></app-footer>
-    </nz-footer>
-</nz-layout>
+<div style="width: 600px; height: 400px;">
+    <canvas
+        baseChart
+        [datasets]="chartData"
+        [labels]="chartLabels"
+        [options]="chartOptions"
+        [legend]="chartLegend"
+        [chartType]="chartType"
+    ></canvas>
+</div>

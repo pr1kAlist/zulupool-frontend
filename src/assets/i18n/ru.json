@@ -19,8 +19,10 @@
     "validation.serverError.email_format_invalid": "Неверный формат",
     "validation.serverError.": "",
     "validation.unknownError": "Неизвестная ошибка",
-    "components.layout.nav.monitoring": "Мониторинг",
-    "components.layout.nav.payments": "Выплаты",
+    "components.mainLayout.help": "Инструкция",
+    "components.mainLayout.enterButton": "Рабочая панель",
+    "components.userLayout.nav.monitoring": "Мониторинг",
+    "components.userLayout.nav.payments": "Выплаты",
     "auth.tabs.signIn": "Авторизация",
     "auth.tabs.signUp": "Зарегистрироваться",
     "auth.signIn.form.submitButton": "Войти",
@@ -28,7 +30,6 @@
     "auth.signUp.form.submitButton": "Создать пользователя",
     "userResendEmail.submitButton": "Выслать письмо",
     "userResendEmail.success": "На указанную вами почту отправлено письмо",
-    "home.enterButton": "Рабочая панель",
     "actions.useractivate.success": "Учетная запись успешно активирована",
     "actions.useractivate.error": "Не удалось активировать учетную запись. Необходимо запросить письмо повторно"
 }
