@@ -23,6 +23,7 @@
     "components.mainLayout.enterButton": "Рабочая панель",
     "components.userLayout.nav.monitoring": "Мониторинг",
     "components.userLayout.nav.payments": "Выплаты",
+    "components.emptyContent.text": "Нет данных",
     "auth.tabs.signIn": "Авторизация",
     "auth.tabs.signUp": "Зарегистрироваться",
     "auth.signIn.form.submitButton": "Войти",

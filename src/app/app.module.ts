@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
+import { NZ_CONFIG } from "ng-zorro-antd/core/config";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
 import { NzIconModule } from "ng-zorro-antd/icon";
@@ -45,6 +46,7 @@ import { FooterComponent } from "components/footer/footer.component";
 import { MainLayoutComponent } from "components/main-layout/main-layout.component";
 import { UserLayoutComponent } from "components/user-layout/user-layout.component";
 import { LogoComponent } from "components/logo/logo.component";
+import { EmptyContentComponent } from "components/empty-content/empty-content.component";
 
 import { AppRoutingModule } from "app.routing";
 import { AppComponent } from "app.component";
@@ -101,6 +103,17 @@ export const defaultLanguage = "ru";
         ChartsModule,
     ],
 
+    providers: [
+        {
+            provide: NZ_CONFIG,
+            useValue: {
+                empty: {
+                    nzDefaultEmptyContent: EmptyContentComponent,
+                },
+            },
+        },
+    ],
+
     declarations: [
         AppComponent,
 
@@ -117,6 +130,7 @@ export const defaultLanguage = "ru";
         MainLayoutComponent,
         UserLayoutComponent,
         LogoComponent,
+        EmptyContentComponent,
     ],
     bootstrap: [AppComponent],
 })
