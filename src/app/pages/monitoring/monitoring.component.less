@@ -22,3 +22,34 @@
 .workers-table {
     margin-top: 32px;
 }
+
+.worker-state {
+    font-size: 18px;
+
+    &._normal {
+        color: rgb(55, 243, 55);
+    }
+
+    &._warning {
+        color: rgb(251, 255, 28);
+    }
+
+    &._error {
+        color: rgb(255, 40, 40);
+    }
+}
+
+@media (max-width: 992px) {
+    .main {
+        flex-direction: column;
+    }
+
+    .info {
+        width: 100%;
+    }
+
+    .chart {
+        margin-left: 0;
+        margin-top: 48px;
+    }
+}

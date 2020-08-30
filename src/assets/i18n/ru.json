@@ -22,7 +22,7 @@
     "components.mainLayout.help": "Инструкция",
     "components.mainLayout.enterButton": "Рабочая панель",
     "components.userLayout.nav.monitoring": "Мониторинг",
-    "components.userLayout.nav.payments": "Выплаты",
+    "components.userLayout.nav.payments": "История",
     "components.emptyContent.text": "Нет данных",
     "auth.tabs.signIn": "Авторизация",
     "auth.tabs.signUp": "Зарегистрироваться",

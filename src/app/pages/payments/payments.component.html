@@ -1,1 +1,18 @@
-<p>payments</p>
+<nz-table nzBordered [nzTemplateMode]="true" [nzLoading]="!statsHistory">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Shares/s</th>
+            <th>Power (Th/s)</th>
+            <th>Difficulty accepted</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of statsHistory || []">
+            <td>{{ formatDate(item.time) }}</td>
+            <td>{{ item.shareRate }} share/s</td>
+            <td>{{ formatPower(item.power) }} Ph/s</td>
+            <td>{{ formatDiff(item.shareWork) }}</td>
+        </tr>
+    </tbody>
+</nz-table>

@@ -37,6 +37,7 @@ export interface IWorkerStatsItem {
     shareRate: number;
     shareWork: number;
     power: number;
+    lastShareTime: number;
 }
 
 export interface IUserStatsItem {
@@ -52,4 +53,5 @@ export interface IUserStatsWorker {
     shareRate: number;
     shareWork: number;
     power: number;
+    lastShareTime: number;
 }

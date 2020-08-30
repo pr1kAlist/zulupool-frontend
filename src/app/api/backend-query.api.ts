@@ -65,7 +65,7 @@ export class BackendQueryApiService {
     getWorkerStatsHistory(
         params: IGetWorkerStatsHistoryParams,
     ): Observable<IGetWorkerStatsHistoryResponse> {
-        return this.restService.post("/", params);
+        return this.restService.post("/backendQueryWorkerStatsHistory", params);
     }
 }
 
@@ -132,6 +132,8 @@ export interface IGetUserStatsResponse {
 
 export interface IGetUserStatsHistoryParams {
     coin: ECoins;
+    timeFrom?: number;
+    groupByInterval?: number;
     [key: string]: any;
 }
 

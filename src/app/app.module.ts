@@ -30,6 +30,9 @@ import {
     RightCircleOutline,
     LoadingOutline,
     QuestionCircleOutline,
+    CheckCircleOutline,
+    ExclamationCircleOutline,
+    MinusCircleOutline,
 } from "@ant-design/icons-angular/icons";
 
 import { ChartsModule } from "ng2-charts";
@@ -100,6 +103,9 @@ export const defaultLanguage = "ru";
             RightCircleOutline,
             LoadingOutline,
             QuestionCircleOutline,
+            CheckCircleOutline,
+            ExclamationCircleOutline,
+            MinusCircleOutline,
         ]),
 
         ChartsModule,

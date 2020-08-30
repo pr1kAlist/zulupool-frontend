@@ -20,19 +20,21 @@ import { HelpComponent } from "pages/help/help.component";
 const routes: Routes = [
     {
         path: "",
-        component: MainLayoutComponent,
-        children: [
-            {
-                path: EAppRoutes.Home,
-                pathMatch: "full",
-                component: HomeComponent,
-            },
-            {
-                path: EAppRoutes.Help,
-                pathMatch: "full",
-                component: HelpComponent,
-            },
-        ],
+        pathMatch: "full",
+        redirectTo: EAppRoutes.Monitoring,
+        // component: MainLayoutComponent,
+        // children: [
+        //     {
+        //         path: EAppRoutes.Home,
+        //         pathMatch: "full",
+        //         component: HomeComponent,
+        //     },
+        //     {
+        //         path: EAppRoutes.Help,
+        //         pathMatch: "full",
+        //         component: HelpComponent,
+        //     },
+        // ],
     },
     {
         path: EAppRoutes.Auth,
