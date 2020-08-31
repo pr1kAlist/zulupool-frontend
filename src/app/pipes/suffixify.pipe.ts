@@ -29,6 +29,9 @@ export class SuffixifyPipe implements PipeTransform {
             case ESuffixifyPipeSuffix.M:
                 source /= 1e6;
                 break;
+            case ESuffixifyPipeSuffix.PowerPeta:
+                source /= 1e9;
+                break;
         }
 
         const stringifyed = stringifyNumber(source, toFixed);
