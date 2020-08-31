@@ -47,11 +47,3 @@ export interface IUserStatsItem {
     shareWork: number;
     power: number;
 }
-
-export interface IUserStatsWorker {
-    name: string;
-    shareRate: number;
-    shareWork: number;
-    power: number;
-    lastShareTime: number;
-}

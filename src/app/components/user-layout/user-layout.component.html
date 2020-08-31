@@ -1,9 +1,5 @@
-<nz-layout>
-    <nz-sider nzBreakpoint="md" [nzWidth]="64">
-        <a class="logo" routerLink="/">
-            <app-logo [iconOnly]="true"></app-logo>
-        </a>
-
+<nz-layout style="width: 100%;">
+    <nz-sider [nzWidth]="64">
         <ul nz-menu nzMode="inline" [nzTheme]="theme | async">
             <li
                 *ngFor="let item of navigationItems; trackBy: trackById"
@@ -23,12 +19,26 @@
     <nz-layout>
         <nz-header>
             <div class="header">
-                <div></div>
-                <div style="margin-right: 24px;">
-                    <button nz-button nzType="link" (click)="logOut()">
-                        Log Out
-                    </button>
-                </div>
+                <a class="logo" routerLink="/">
+                    <app-logo [iconOnly]="true"></app-logo>
+                </a>
+
+                <i
+                    class="nav-menu-mobile"
+                    nz-icon
+                    nzType="menu"
+                    nzTheme="outline"
+                    (click)="showMobileNavMenu = true"
+                ></i>
+
+                <button
+                    class="logout"
+                    nz-button
+                    nzType="link"
+                    (click)="logOut()"
+                >
+                    Log Out
+                </button>
             </div>
         </nz-header>
 
@@ -36,8 +46,33 @@
             <router-outlet></router-outlet>
         </nz-content>
 
-        <nz-footer>
+        <nz-footer *ngIf="false">
             <app-footer></app-footer>
         </nz-footer>
     </nz-layout>
 </nz-layout>
+
+<nz-drawer
+    [nzVisible]="showMobileNavMenu"
+    [nzClosable]="false"
+    (nzOnClose)="showMobileNavMenu = false"
+>
+    <div class="nav-menu-mobile-container">
+        <ul nz-menu nzMode="inline" [nzTheme]="theme | async">
+            <li
+                *ngFor="let item of navigationItems; trackBy: trackById"
+                nz-menu-item
+                [nzSelected]="item.route === currentRoute"
+            >
+                <a [routerLink]="item.route">
+                    <i nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+                    {{ item.title | translate }}
+                </a>
+            </li>
+        </ul>
+
+        <button nz-button (click)="logOut()">
+            Log Out
+        </button>
+    </div>
+</nz-drawer>

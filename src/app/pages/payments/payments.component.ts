@@ -5,13 +5,17 @@ import { BackendQueryApiService } from "api/backend-query.api";
 import { ECoins } from "enums/coins";
 import { IWorkerStatsItem } from "interfaces/backend-query";
 import { AppService } from "services/app.service";
+import { ESuffixifyPipeSuffix } from "pipes/suffixify.pipe";
+import { ETime } from "enums/time";
 
 @Component({
     selector: "app-payments",
     templateUrl: "./payments.component.html",
+    styleUrls: ["./payments.component.less"],
 })
 export class PaymentsComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
+    readonly ESuffixifyPipeSuffix = ESuffixifyPipeSuffix;
 
     coins: ECoins[];
     currentCoin: ECoins;
@@ -37,31 +41,13 @@ export class PaymentsComponent implements OnInit {
             });
     }
 
-    formatPower(source: number): string {
-        const value = source / 1000000000;
-
-        return isNaN(value) ? "" : value.toFixed(3);
-    }
-
-    formatDiff(source: number): string {
-        return String(source / 1000000) + " M";
-    }
-
-    formatDate(source: number): string {
-        const date = new Date(source * 1000);
-
-        date.setDate(date.getDate() - 1);
-
-        return date.toLocaleDateString();
-    }
-
     private onCurrentCoinChange(coin: ECoins): void {
         this.appService.user.subscribe(user => {
             this.backendQueryApiService
                 .getUserStatsHistory({
                     coin,
                     timeFrom: user.registrationDate,
-                    groupByInterval: 60 * 60 * 24,
+                    groupByInterval: ETime.Day,
                 })
                 .subscribe(({ stats }) => {
                     stats.pop();
@@ -70,13 +56,5 @@ export class PaymentsComponent implements OnInit {
                     this.statsHistory = stats;
                 });
         });
-
-        // this.backendQueryApiService
-        //     .getUserStatsHistory({
-        //         coin,
-        //     })
-        //     .subscribe(({ stats }) => {
-        //         console.log(stats);
-        //     });
     }
 }

@@ -29,9 +29,9 @@ export class UserLayoutComponent extends BaseComponent implements OnInit {
             icon: "fund-projection-screen",
         },
         {
-            route: EAppRoutes.Payments,
-            title: "components.userLayout.nav.payments",
-            icon: "wallet",
+            route: EAppRoutes.History,
+            title: "components.userLayout.nav.history",
+            icon: "history",
         },
     ]);
 
@@ -40,6 +40,8 @@ export class UserLayoutComponent extends BaseComponent implements OnInit {
     private readonly appRoutes = toValueArray(EAppRoutes).filter(hasValue);
 
     currentRoute: EAppRoutes;
+
+    showMobileNavMenu = false;
 
     constructor(
         private router: Router,
@@ -66,7 +68,15 @@ export class UserLayoutComponent extends BaseComponent implements OnInit {
 
     logOut(): void {
         this.appService.logOut().subscribe(() => {
-            this.router.navigate([routeToUrl(EAppRoutes.Home)]);
+            this.router.navigate([routeToUrl(EAppRoutes.Auth)], {
+                queryParams: {
+                    to: routeToUrl(EAppRoutes.Monitoring),
+                },
+            });
+
+            // this.router.navigate([routeToUrl(EAppRoutes.Home)]);
+
+            this.showMobileNavMenu = false;
         });
     }
 
@@ -79,6 +89,7 @@ export class UserLayoutComponent extends BaseComponent implements OnInit {
 
         if (route) {
             this.currentRoute = route;
+            this.showMobileNavMenu = false;
         }
     }
 }

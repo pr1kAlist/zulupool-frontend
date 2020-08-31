@@ -1,9 +1,12 @@
-import { NgModule } from "@angular/core";
+import { NgModule, LOCALE_ID } from "@angular/core";
 
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { DatePipe, I18nPluralPipe, registerLocaleData } from "@angular/common";
+
+import ru from "@angular/common/locales/ru";
 
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -23,9 +26,9 @@ import { NzSpinModule } from "ng-zorro-antd/spin";
 import { NzTableModule } from "ng-zorro-antd/table";
 import { NzSelectModule } from "ng-zorro-antd/select";
 import { NzRadioModule } from "ng-zorro-antd/radio";
+import { NzDrawerModule } from "ng-zorro-antd/drawer";
 import {
     FundProjectionScreenOutline,
-    WalletOutline,
     LeftCircleOutline,
     RightCircleOutline,
     LoadingOutline,
@@ -33,6 +36,8 @@ import {
     CheckCircleOutline,
     ExclamationCircleOutline,
     MinusCircleOutline,
+    HistoryOutline,
+    MenuOutline,
 } from "@ant-design/icons-angular/icons";
 
 import { ChartsModule } from "ng2-charts";
@@ -52,6 +57,10 @@ import { UserLayoutComponent } from "components/user-layout/user-layout.componen
 import { LogoComponent } from "components/logo/logo.component";
 import { EmptyContentComponent } from "components/empty-content/empty-content.component";
 
+import { AgoPipe } from "pipes/ago.pipe";
+import { SecondsPipe } from "pipes/seconds.pipe";
+import { SuffixifyPipe } from "pipes/suffixify.pipe";
+
 import { AppRoutingModule } from "app.routing";
 import { AppComponent } from "app.component";
 
@@ -64,6 +73,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 export const defaultLanguage = "ru";
+
+registerLocaleData(ru);
 
 @NgModule({
     imports: [
@@ -96,9 +107,9 @@ export const defaultLanguage = "ru";
         NzTableModule,
         NzSelectModule,
         NzRadioModule,
+        NzDrawerModule,
         NzIconModule.forRoot([
             FundProjectionScreenOutline,
-            WalletOutline,
             LeftCircleOutline,
             RightCircleOutline,
             LoadingOutline,
@@ -106,12 +117,15 @@ export const defaultLanguage = "ru";
             CheckCircleOutline,
             ExclamationCircleOutline,
             MinusCircleOutline,
+            HistoryOutline,
+            MenuOutline,
         ]),
 
         ChartsModule,
     ],
 
     providers: [
+        { provide: LOCALE_ID, useValue: "ru" },
         {
             provide: NZ_CONFIG,
             useValue: {
@@ -119,6 +133,12 @@ export const defaultLanguage = "ru";
                     nzDefaultEmptyContent: EmptyContentComponent,
                 },
             },
+        },
+        {
+            provide: I18nPluralPipe,
+        },
+        {
+            provide: DatePipe,
         },
     ],
 
@@ -139,6 +159,10 @@ export const defaultLanguage = "ru";
         UserLayoutComponent,
         LogoComponent,
         EmptyContentComponent,
+
+        AgoPipe,
+        SecondsPipe,
+        SuffixifyPipe,
     ],
     bootstrap: [AppComponent],
 })

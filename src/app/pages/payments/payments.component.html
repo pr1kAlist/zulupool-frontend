@@ -1,18 +1,45 @@
 <nz-table nzBordered [nzTemplateMode]="true" [nzLoading]="!statsHistory">
     <thead>
         <tr>
-            <th>Дата</th>
-            <th>Shares/s</th>
-            <th>Power (Th/s)</th>
-            <th>Difficulty accepted</th>
+            <th>
+                {{ "common.dictionary.date" | translate }}
+            </th>
+            <th>
+                {{ "common.dictionary.shareRate" | translate }}
+            </th>
+            <th>
+                {{ "common.dictionary.power" | translate }}
+            </th>
+            <th>
+                {{ "common.dictionary.acceptedDifficulty" | translate }}
+            </th>
         </tr>
     </thead>
-    <tbody>
-        <tr *ngFor="let item of statsHistory || []">
-            <td>{{ formatDate(item.time) }}</td>
-            <td>{{ item.shareRate }} share/s</td>
-            <td>{{ formatPower(item.power) }} Ph/s</td>
-            <td>{{ formatDiff(item.shareWork) }}</td>
+    <tbody *ngIf="statsHistory">
+        <tr *ngFor="let item of statsHistory">
+            <td>{{ item.time | seconds | date: "shortDate" }}</td>
+            <td>
+                {{
+                    item.shareRate
+                        | suffixify: { suffix: ESuffixifyPipeSuffix.ShareRate }
+                }}
+            </td>
+            <td>
+                {{
+                    item.power
+                        | suffixify
+                            : {
+                                  suffix: ESuffixifyPipeSuffix.PowerPeta,
+                                  toFixed: 3
+                              }
+                }}
+            </td>
+            <td>
+                {{
+                    item.shareWork
+                        | suffixify: { suffix: ESuffixifyPipeSuffix.M }
+                }}
+            </td>
         </tr>
     </tbody>
 </nz-table>

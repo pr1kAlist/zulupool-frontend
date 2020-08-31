@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { DatePipe } from "@angular/common";
 
 import { ChartDataSets, ChartOptions } from "chart.js";
 import { Label } from "ng2-charts";
@@ -6,11 +7,8 @@ import { Label } from "ng2-charts";
 import { EAppRoutes } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
 import { ECoins } from "enums/coins";
-import {
-    IUserBalanceItem,
-    IUserStatsItem,
-    IUserStatsWorker,
-} from "interfaces/backend-query";
+import { IUserStatsItem, IWorkerStatsItem } from "interfaces/backend-query";
+import { ESuffixifyPipeSuffix } from "pipes/suffixify.pipe";
 
 enum EWorkerState {
     Normal = "normal",
@@ -26,20 +24,23 @@ enum EWorkerState {
 export class MonitoringComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly EWorkerState = EWorkerState;
+    readonly ESuffixifyPipeSuffix = ESuffixifyPipeSuffix;
 
     coins: ECoins[];
     currentCoin: ECoins;
 
-    balanceItemList: IUserBalanceItem[];
     userStatsItem: IUserStatsItem;
-    userWorkersStatsList: IUserStatsWorker[];
+    userStatsHistory: IWorkerStatsItem[];
+    userWorkersStatsList: IWorkerStatsItem[];
 
     chart: IChartSettings;
 
-    // temp
-    miningBalance: number;
+    acceptedDifficulty: number;
 
-    constructor(private backendQueryApiService: BackendQueryApiService) {}
+    constructor(
+        private backendQueryApiService: BackendQueryApiService,
+        private datePipe: DatePipe,
+    ) {}
 
     ngOnInit(): void {
         this.backendQueryApiService
@@ -48,7 +49,6 @@ export class MonitoringComponent implements OnInit {
                 balances = balances.filter(item => item.coin === ECoins.HTR);
 
                 this.coins = balances.map(item => item.coin);
-                this.balanceItemList = balances;
 
                 if (this.coins.length > 0) {
                     this.onCurrentCoinChange(this.coins[0]);
@@ -73,27 +73,24 @@ export class MonitoringComponent implements OnInit {
         this.backendQueryApiService
             .getUserStatsHistory({ coin })
             .subscribe(({ stats }) => {
-                // TODO: уточнить Mining Balance
-                this.miningBalance = 0;
+                this.acceptedDifficulty = 0;
+
+                const today = new Date().getDate();
+
                 stats.forEach(item => {
                     const date = new Date(item.time * 1000);
-                    const today = new Date().getDate();
 
                     if (date.getDate() === today && date.getHours()) {
-                        this.miningBalance += item.shareWork;
+                        this.acceptedDifficulty += item.shareWork;
                     }
                 });
 
                 stats.pop();
 
-                this.updateChart(stats, "#17dc6f", "#4c5e54");
+                this.userStatsHistory = stats;
+
+                this.updateChart(stats);
             });
-    }
-
-    formatPower(source: number): string {
-        const value = source / 1000000000;
-
-        return isNaN(value) ? "" : value.toFixed(3);
     }
 
     onWorkerRowClick(workerId: string): void {
@@ -106,8 +103,14 @@ export class MonitoringComponent implements OnInit {
             .subscribe(({ stats }) => {
                 stats.pop();
 
-                this.updateChart(stats, "#3331c7", "#7473c5");
+                this.updateChart(stats, { r: 23, g: 220, b: 111 });
+
+                window.scroll(0, 0);
             });
+    }
+
+    showUserStatsHistoryChart(): void {
+        this.updateChart(this.userStatsHistory);
     }
 
     getWorkerState(time: number): EWorkerState {
@@ -124,79 +127,36 @@ export class MonitoringComponent implements OnInit {
         return EWorkerState.Normal;
     }
 
-    formatToTime(time: number): string {
-        const delta = new Date(Date.now() - time * 1000);
-
-        return `${format(delta.getMinutes())}:${format(delta.getSeconds())}`;
-
-        function format(source: number) {
-            return source < 10 ? "0" + source : String(source);
-        }
-    }
-
     private updateChart(
-        stats,
-        borderColor: string,
-        backgroundColor: string,
+        stats: IWorkerStatsItem[],
+        { r, g, b }: { r: number; g: number; b: number } = {
+            r: 23,
+            g: 125,
+            b: 220,
+        },
     ): void {
-        const shareRateData = [];
-        const powerData = [];
-        const dateLabels = [];
+        const data = [];
+        const labels = [];
 
         stats.forEach(item => {
-            shareRateData.push(item.shareRate);
-            powerData.push(item.power / 1000000000);
+            data.push(item.power / 1e9);
 
-            dateLabels.push(
-                new Date(item.time * 1000)
-                    .toLocaleTimeString()
-                    .replace(/:00$/, ""),
+            labels.push(
+                this.datePipe.transform(new Date(item.time * 1000), "hh:mm"),
             );
         });
 
         this.chart = {
             datasets: [
-                // {
-                //     label: "ShareRate (Shares/s)",
-                //     yAxisID: "ShareRate",
-                //     data: shareRateData,
-                //     lineTension: 0,
-                // },
                 {
                     label: "Power (Th/s)",
-                    yAxisID: "Power",
-                    data: powerData,
-                    borderColor,
-                    backgroundColor,
+                    data,
+                    borderColor: `rgb(${r}, ${g}, ${b})`,
+                    backgroundColor: `rgba(${r}, ${g}, ${b}, .3)`,
                 },
             ],
-            labels: dateLabels,
-            options: {
-                scales: {
-                    yAxes: [
-                        // {
-                        //     id: "ShareRate",
-                        //     type: "linear",
-                        //     position: "right",
-                        //     ticks: {
-                        //         min: 0,
-                        //     },
-                        // },
-                        {
-                            id: "Power",
-                            type: "linear",
-                            position: "left",
-                            ticks: {
-                                min: 0,
-                            },
-                            gridLines: {
-                                lineWidth: 1,
-                                color: "#333",
-                            },
-                        },
-                    ],
-                },
-            },
+            labels,
+            options: {},
         };
     }
 }

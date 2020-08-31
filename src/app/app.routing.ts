@@ -66,7 +66,7 @@ const routes: Routes = [
                 component: MonitoringComponent,
             },
             {
-                path: EAppRoutes.Payments,
+                path: EAppRoutes.History,
                 component: PaymentsComponent,
             },
             {

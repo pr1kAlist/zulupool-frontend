@@ -4,7 +4,7 @@ export enum EAppRoutes {
     UserResendEmail = "resend-email",
     Actions = "actions",
     Monitoring = "monitoring",
-    Payments = "payments",
+    History = "history",
     Help = "help",
 }
 

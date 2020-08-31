@@ -6,12 +6,14 @@
     display: flex;
 }
 
-.info {
-    width: 330px;
+.info-table,
+.info-table-mobile {
+    margin-top: 32px;
 }
 
-.info-table {
-    margin-top: 32px;
+.info-table-mobile,
+.workers-mobile {
+    display: none;
 }
 
 .chart {
@@ -45,11 +47,41 @@
     }
 
     .info {
-        width: 100%;
+        flex: 1;
     }
 
     .chart {
         margin-left: 0;
         margin-top: 48px;
+    }
+
+    .info-table,
+    .workers-table {
+        display: none;
+    }
+
+    .info-table-mobile,
+    .workers-mobile {
+        display: block;
+    }
+
+    .workers-mobile {
+        margin-top: 32px;
+    }
+
+    .worker-mobile-card:not(:last-child) {
+        border-bottom: 1px solid #333;
+        margin-bottom: 12px;
+    }
+
+    .worker-mobile-card-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+
+        span {
+            font-weight: bold;
+            margin-left: 12px;
+        }
     }
 }

@@ -9,7 +9,6 @@ import {
     IUserPayouts,
     IPoolStatsItem,
     IWorkerStatsItem,
-    IUserStatsWorker,
     IUserStatsItem,
 } from "interfaces/backend-query";
 import { ECoins } from "enums/coins";
@@ -127,7 +126,7 @@ export interface IGetUserStatsResponse {
     powerUnit: string;
     powerMultLog10: number;
     total: IUserStatsItem;
-    workers: IUserStatsWorker[];
+    workers: IWorkerStatsItem[];
 }
 
 export interface IGetUserStatsHistoryParams {

@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
     selector: "app-logo",
@@ -6,7 +6,7 @@ import { Component, Input, HostBinding } from "@angular/core";
     styleUrls: ["./logo.component.less"],
 })
 export class LogoComponent {
-    @HostBinding("class._iconOnly")
+    // @HostBinding("class._iconOnly")
     @Input()
     iconOnly: boolean;
 }
