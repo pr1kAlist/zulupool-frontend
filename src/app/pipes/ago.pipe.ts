@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { I18nPluralPipe } from "@angular/common";
 
 import { ETime } from "enums/time";
+import { createTimestamp } from "tools/date";
 
 @Pipe({ name: "ago" })
 export class AgoPipe implements PipeTransform {
@@ -10,16 +11,16 @@ export class AgoPipe implements PipeTransform {
     transform(source: any): string | any {
         if (typeof source !== "number") return source;
 
-        const time = Math.floor(Date.now() / 1000) - source;
+        const time = createTimestamp() - source;
 
         const s = time % ETime.Minute;
         const m = Math.floor(time / ETime.Minute) % ETime.Minute;
-        const h = Math.floor(time / ETime.Hour) % ETime.Hour;
-        const d = Math.floor(time / ETime.Day) % ETime.Day;
+        const h = Math.floor(time / ETime.Hour) % 24;
+        const d = Math.floor(time / ETime.Day);
 
         const parts: any[] = [];
 
-        if (d) {
+        if (d > 0) {
             parts.push(d);
             parts.push(
                 this.i18nPluralPipe.transform(d, {
