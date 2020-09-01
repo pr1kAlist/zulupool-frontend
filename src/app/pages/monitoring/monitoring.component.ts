@@ -149,7 +149,7 @@ export class MonitoringComponent implements OnInit {
         this.chart = {
             datasets: [
                 {
-                    label: "Power (Th/s)",
+                    label: "Power (Ph/s)",
                     data,
                     borderColor: `rgb(${r}, ${g}, ${b})`,
                     backgroundColor: `rgba(${r}, ${g}, ${b}, .3)`,

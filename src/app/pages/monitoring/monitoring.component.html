@@ -225,13 +225,13 @@
             <td>{{ item.name }}</td>
             <td>
                 {{
-                    userStatsItem?.shareRate
+                    item.shareRate
                         | suffixify: { suffix: ESuffixifyPipeSuffix.ShareRate }
                 }}
             </td>
             <td>
                 {{
-                    userStatsItem?.power
+                    item.power
                         | suffixify
                             : {
                                   suffix: ESuffixifyPipeSuffix.PowerPeta,
@@ -281,14 +281,14 @@
         <p>
             {{ "common.dictionary.shareRate" | translate }}:
             {{
-                userStatsItem?.shareRate
+                item.shareRate
                     | suffixify: { suffix: ESuffixifyPipeSuffix.ShareRate }
             }}
         </p>
         <p>
             {{ "common.dictionary.power" | translate }}:
             {{
-                userStatsItem?.power
+                item.power
                     | suffixify
                         : {
                               suffix: ESuffixifyPipeSuffix.PowerPeta,

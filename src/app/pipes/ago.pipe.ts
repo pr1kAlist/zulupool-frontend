@@ -52,16 +52,14 @@ export class AgoPipe implements PipeTransform {
             );
         }
 
-        if (s) {
-            parts.push(s);
-            parts.push(
-                this.i18nPluralPipe.transform(s, {
-                    "=1": "секунда",
-                    "=2": "секунды",
-                    other: "секунд",
-                }),
-            );
-        }
+        parts.push(s);
+        parts.push(
+            this.i18nPluralPipe.transform(s, {
+                "=1": "секунда",
+                "=2": "секунды",
+                other: "секунд",
+            }),
+        );
 
         return parts.join(" ");
     }
