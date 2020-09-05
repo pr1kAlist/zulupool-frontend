@@ -125,6 +125,7 @@ export interface IGetUserStatsParams {
 export interface IGetUserStatsResponse {
     powerUnit: string;
     powerMultLog10: number;
+    currentTime: number;
     total: IUserStatsItem;
     workers: IWorkerStatsItem[];
 }
@@ -139,6 +140,7 @@ export interface IGetUserStatsHistoryParams {
 export interface IGetUserStatsHistoryResponse {
     powerUnit: string;
     powerMultLog10: number;
+    currentTime: number;
     stats: IWorkerStatsItem[];
 }
 
@@ -153,5 +155,6 @@ export interface IGetWorkerStatsHistoryParams {
 export interface IGetWorkerStatsHistoryResponse {
     powerUnit: string;
     powerMultLog10: number;
+    currentTime: number;
     stats: IWorkerStatsItem[];
 }

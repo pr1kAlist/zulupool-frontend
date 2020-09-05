@@ -9,6 +9,7 @@ import { BackendQueryApiService } from "api/backend-query.api";
 import { ECoins } from "enums/coins";
 import { IUserStatsItem, IWorkerStatsItem } from "interfaces/backend-query";
 import { ESuffixifyPipeSuffix } from "pipes/suffixify.pipe";
+import { EPowerUnit } from "enums/power-unit";
 
 enum EWorkerState {
     Normal = "normal",
@@ -37,6 +38,8 @@ export class MonitoringComponent implements OnInit {
 
     acceptedDifficulty: number;
 
+    powerNumberMetric = 0;
+
     constructor(
         private backendQueryApiService: BackendQueryApiService,
         private datePipe: DatePipe,
@@ -61,18 +64,26 @@ export class MonitoringComponent implements OnInit {
 
         this.backendQueryApiService
             .getUserStats({ coin })
-            .subscribe(({ total, workers }) => {
+            .subscribe(({ total, workers, currentTime }) => {
+                workers.forEach(item => {
+                    item.lastShareTime = currentTime - item.lastShareTime;
+                });
+
                 this.userStatsItem = total;
                 this.userWorkersStatsList = workers;
 
                 this.userWorkersStatsList.sort((a, b) => {
-                    return a.lastShareTime - b.lastShareTime;
+                    return b.lastShareTime - a.lastShareTime;
                 });
             });
 
         this.backendQueryApiService
             .getUserStatsHistory({ coin })
-            .subscribe(({ stats }) => {
+            .subscribe(({ stats, powerMultLog10, powerUnit, currentTime }) => {
+                if (powerUnit === EPowerUnit.Hash) {
+                    this.powerNumberMetric = powerMultLog10 / 3;
+                }
+
                 this.acceptedDifficulty = 0;
 
                 const today = new Date().getDate();
@@ -100,8 +111,10 @@ export class MonitoringComponent implements OnInit {
                 workerId,
                 groupByInterval: 15 * 60,
             })
-            .subscribe(({ stats }) => {
-                stats.pop();
+            .subscribe(({ stats, currentTime }) => {
+                const last = stats[stats.length - 1];
+
+                last.time -= last.time - currentTime;
 
                 this.updateChart(stats, { r: 23, g: 220, b: 111 });
 
@@ -114,13 +127,11 @@ export class MonitoringComponent implements OnInit {
     }
 
     getWorkerState(time: number): EWorkerState {
-        const delta = Date.now() - time * 1000;
-
-        if (delta > 30 * 60 * 1000) {
+        if (time > 30 * 60 * 1000) {
             return EWorkerState.Error;
         }
 
-        if (delta > 15 * 60 * 1000) {
+        if (time > 15 * 60 * 1000) {
             return EWorkerState.Warning;
         }
 
@@ -153,6 +164,9 @@ export class MonitoringComponent implements OnInit {
                     data,
                     borderColor: `rgb(${r}, ${g}, ${b})`,
                     backgroundColor: `rgba(${r}, ${g}, ${b}, .3)`,
+                    pointRadius: 8,
+                    pointBackgroundColor: "rgba(0,0,0,0)",
+                    pointBorderColor: "rgba(0,0,0,0)",
                 },
             ],
             labels,

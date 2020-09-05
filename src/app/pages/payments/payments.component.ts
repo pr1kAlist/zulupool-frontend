@@ -42,16 +42,22 @@ export class PaymentsComponent implements OnInit {
     }
 
     private onCurrentCoinChange(coin: ECoins): void {
+        const groupByInterval = ETime.Day;
+
         this.appService.user.subscribe(user => {
             this.backendQueryApiService
                 .getUserStatsHistory({
                     coin,
                     timeFrom: user.registrationDate,
-                    groupByInterval: ETime.Day,
+                    groupByInterval,
                 })
                 .subscribe(({ stats }) => {
                     stats.pop();
                     stats.reverse();
+
+                    stats.forEach(item => {
+                        item.time -= groupByInterval;
+                    });
 
                     this.statsHistory = stats;
                 });

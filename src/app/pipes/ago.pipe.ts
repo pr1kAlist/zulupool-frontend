@@ -8,10 +8,8 @@ import { createTimestamp } from "tools/date";
 export class AgoPipe implements PipeTransform {
     constructor(private i18nPluralPipe: I18nPluralPipe) {}
 
-    transform(source: any): string | any {
-        if (typeof source !== "number") return source;
-
-        const time = createTimestamp() - source;
+    transform(time: any): string | any {
+        if (typeof time !== "number") return time;
 
         const s = time % ETime.Minute;
         const m = Math.floor(time / ETime.Minute) % ETime.Minute;
