@@ -127,11 +127,11 @@ export class MonitoringComponent implements OnInit {
     }
 
     getWorkerState(time: number): EWorkerState {
-        if (time > 30 * 60 * 1000) {
+        if (time > 30 * 60) {
             return EWorkerState.Error;
         }
 
-        if (time > 15 * 60 * 1000) {
+        if (time > 15 * 60) {
             return EWorkerState.Warning;
         }
 
