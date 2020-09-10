@@ -2,8 +2,10 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
 import { EAppRoutes, EActionsRoutes } from "enums/routing";
+import { ERole } from "enums/role";
 
 import { AuthGuard } from "guards/auth.guard";
+import { RoleAccessGuard } from "guards/role-access.guard";
 
 import { MainLayoutComponent } from "components/main-layout/main-layout.component";
 import { UserLayoutComponent } from "components/user-layout/user-layout.component";
@@ -70,16 +72,19 @@ const routes: Routes = [
                 path: EAppRoutes.History,
                 component: PaymentsComponent,
             },
-            // {
-            //     path: EAppRoutes,
-            //     component: UsersComponent,
-            // },
+            {
+                path: EAppRoutes.Users,
+                component: UsersComponent,
+                data: {
+                    credentials: ERole.Admin,
+                },
+            },
             {
                 path: "**",
                 component: PageNotFoundComponent,
             },
         ],
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleAccessGuard],
     },
 ];
 

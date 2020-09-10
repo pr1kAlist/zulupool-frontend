@@ -1,11 +1,14 @@
-<nz-table>
+<nz-table nzTemplateMode nzBordered [nzShowPagination]="false">
     <thead>
         <tr>
             <th>Name</th>
-            <th>Age</th>
-            <th>Address</th>
-            <th>Action</th>
+            <th>email</th>
         </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+        </tr>
+    </tbody>
 </nz-table>

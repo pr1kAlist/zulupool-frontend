@@ -1,18 +1,25 @@
 <nz-layout style="width: 100%;">
     <nz-sider [nzWidth]="64">
         <ul nz-menu nzMode="inline" [nzTheme]="theme | async">
-            <li
-                *ngFor="let item of navigationItems; trackBy: trackById"
-                nz-menu-item
-                nz-tooltip
-                nzTooltipPlacement="right"
-                [nzTooltipTitle]="item.title | translate"
-                [nzSelected]="item.route === currentRoute"
+            <ng-template
+                ngFor
+                let-item
+                [ngForOf]="navigationItems"
+                [ngForTrackBy]="trackById"
             >
-                <a [routerLink]="item.route">
-                    <i nz-icon [nzType]="item.icon" nzTheme="outline"></i>
-                </a>
-            </li>
+                <li
+                    *ngIf="hasAccess(item.access) | async"
+                    nz-menu-item
+                    nz-tooltip
+                    nzTooltipPlacement="right"
+                    [nzTooltipTitle]="item.title | translate"
+                    [nzSelected]="item.route === currentRoute"
+                >
+                    <a [routerLink]="item.route">
+                        <i nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+                    </a>
+                </li>
+            </ng-template>
         </ul>
     </nz-sider>
 
@@ -35,10 +42,22 @@
                     class="logout"
                     nz-button
                     nzType="link"
-                    (click)="logOut()"
+                    nz-dropdown
+                    nzTrigger="click"
+                    [nzDropdownMenu]="menu"
                 >
-                    Log Out
+                    {{ username }}
                 </button>
+
+                <nz-dropdown-menu #menu="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="logOut()">
+                            {{
+                                "components.userLayout.menu.logOut" | translate
+                            }}
+                        </li>
+                    </ul>
+                </nz-dropdown-menu>
             </div>
         </nz-header>
 
@@ -59,20 +78,27 @@
 >
     <div class="nav-menu-mobile-container">
         <ul nz-menu nzMode="inline" [nzTheme]="theme | async">
-            <li
-                *ngFor="let item of navigationItems; trackBy: trackById"
-                nz-menu-item
-                [nzSelected]="item.route === currentRoute"
+            <ng-template
+                ngFor
+                let-item
+                [ngForOf]="navigationItems"
+                [ngForTrackBy]="trackById"
             >
-                <a [routerLink]="item.route">
-                    <i nz-icon [nzType]="item.icon" nzTheme="outline"></i>
-                    {{ item.title | translate }}
-                </a>
-            </li>
+                <li
+                    *ngIf="hasAccess(item.access) | async"
+                    nz-menu-item
+                    [nzSelected]="item.route === currentRoute"
+                >
+                    <a [routerLink]="item.route">
+                        <i nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+                        {{ item.title | translate }}
+                    </a>
+                </li>
+            </ng-template>
         </ul>
 
         <button nz-button (click)="logOut()">
-            Log Out
+            {{ "components.userLayout.menu.logOut" | translate }}
         </button>
     </div>
 </nz-drawer>

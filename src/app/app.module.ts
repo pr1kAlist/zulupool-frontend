@@ -27,6 +27,7 @@ import { NzTableModule } from "ng-zorro-antd/table";
 import { NzSelectModule } from "ng-zorro-antd/select";
 import { NzRadioModule } from "ng-zorro-antd/radio";
 import { NzDrawerModule } from "ng-zorro-antd/drawer";
+import { NzDropDownModule } from "ng-zorro-antd/dropdown";
 import {
     FundProjectionScreenOutline,
     LeftCircleOutline,
@@ -38,6 +39,7 @@ import {
     MinusCircleOutline,
     HistoryOutline,
     MenuOutline,
+    UserOutline,
 } from "@ant-design/icons-angular/icons";
 
 import { ChartsModule } from "ng2-charts";
@@ -109,6 +111,7 @@ registerLocaleData(ru);
         NzSelectModule,
         NzRadioModule,
         NzDrawerModule,
+        NzDropDownModule,
         NzIconModule.forRoot([
             FundProjectionScreenOutline,
             LeftCircleOutline,
@@ -120,6 +123,7 @@ registerLocaleData(ru);
             MinusCircleOutline,
             HistoryOutline,
             MenuOutline,
+            UserOutline,
         ]),
 
         ChartsModule,

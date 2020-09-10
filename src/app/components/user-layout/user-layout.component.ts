@@ -4,21 +4,26 @@ import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 
 import { filter } from "rxjs/operators";
 
+import { SubscribableComponent } from "ngx-subscribable";
+
 import { EAppRoutes } from "enums/routing";
 import { ThemeService } from "services/theme.service";
-import { BaseComponent } from "tools/base.component";
 import { trackById, patchTrackIds } from "tools/trackers";
 import { toValueArray } from "tools/enum";
 import { hasValue } from "tools/has-value";
 import { AppService } from "services/app.service";
 import { routeToUrl } from "tools/route-to-url";
+import { ERole } from "enums/role";
+import { RoleAccessService } from "services/role-access.service";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "app-user-layout",
     templateUrl: "./user-layout.component.html",
     styleUrls: ["./user-layout.component.less"],
 })
-export class UserLayoutComponent extends BaseComponent implements OnInit {
+export class UserLayoutComponent extends SubscribableComponent
+    implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly trackById = trackById;
 
@@ -33,6 +38,12 @@ export class UserLayoutComponent extends BaseComponent implements OnInit {
             title: "components.userLayout.nav.history",
             icon: "history",
         },
+        {
+            route: EAppRoutes.Users,
+            title: "components.userLayout.nav.users",
+            icon: "user",
+            access: ERole.Admin,
+        },
     ]);
 
     readonly theme = this.themeService.theme;
@@ -43,12 +54,17 @@ export class UserLayoutComponent extends BaseComponent implements OnInit {
 
     showMobileNavMenu = false;
 
+    get username(): string {
+        return this.appService.getUser().name;
+    }
+
     constructor(
         private router: Router,
         private location: Location,
         private activatedRoute: ActivatedRoute,
         private themeService: ThemeService,
         private appService: AppService,
+        private roleAccessService: RoleAccessService,
     ) {
         super();
     }
@@ -78,6 +94,10 @@ export class UserLayoutComponent extends BaseComponent implements OnInit {
 
             this.showMobileNavMenu = false;
         });
+    }
+
+    hasAccess(role: ERole): Observable<boolean> {
+        return this.roleAccessService.hasAccess(role);
     }
 
     private onUrlChange(): void {

@@ -25,6 +25,10 @@ export class UserApiService {
     resendEmail(params: IUserResendEmailParams): Observable<void> {
         return this.restService.post("/userResendEmail", params);
     }
+
+    getUserList(): Observable<IUserListResponse> {
+        return this.restService.post("/userEnumerateAll");
+    }
 }
 
 export interface IUserCreateParams {
@@ -38,4 +42,8 @@ export interface IUserResendEmailParams {
     login: string;
     password: string;
     email: string;
+}
+
+export interface IUserListResponse {
+    users: IUser[];
 }

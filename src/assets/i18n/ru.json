@@ -31,6 +31,8 @@
     "components.mainLayout.enterButton": "Рабочая панель",
     "components.userLayout.nav.monitoring": "Мониторинг",
     "components.userLayout.nav.history": "История",
+    "components.userLayout.nav.users": "Пользователи",
+    "components.userLayout.menu.logOut": "Выйти",
     "components.emptyContent.text": "Нет данных",
     "auth.tabs.signIn": "Авторизация",
     "auth.tabs.signUp": "Зарегистрироваться",

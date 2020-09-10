@@ -1,0 +1,33 @@
+import { Injectable } from "@angular/core";
+import {
+    CanActivate,
+    ActivatedRouteSnapshot,
+    UrlTree,
+    Router,
+} from "@angular/router";
+
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+
+import { RoleAccessService } from "services/role-access.service";
+import { ERole } from "enums/role";
+import { userRootRoute } from "enums/routing";
+
+@Injectable({
+    providedIn: "root",
+})
+export class RoleAccessGuard implements CanActivate {
+    constructor(
+        private router: Router,
+        private roleAccessService: RoleAccessService,
+    ) {}
+    canActivate({
+        data: { credentials },
+    }: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
+        return this.roleAccessService.hasAccess(credentials as ERole).pipe(
+            map(hasAccess => {
+                return hasAccess || this.router.parseUrl(userRootRoute);
+            }),
+        );
+    }
+}

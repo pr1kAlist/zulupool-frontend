@@ -26,6 +26,7 @@
         "logical-not": "^1.0.7",
         "ng-zorro-antd": "^9.3.0",
         "ng2-charts": "^2.3.3",
+        "ngx-subscribable": "^1.0.0",
         "rxjs": "~6.5.5",
         "shoelace-style-angular": "^0.7.7",
         "tslib": "^2.0.0",
