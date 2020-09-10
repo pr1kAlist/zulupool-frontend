@@ -16,6 +16,7 @@ import { PageNotFoundComponent } from "pages/404/page-not-found.component";
 import { UserActivateComponent } from "pages/actions/user-activate/user-activate.component";
 import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
 import { HelpComponent } from "pages/help/help.component";
+import { UsersComponent } from "pages/users/users.component";
 
 const routes: Routes = [
     {
@@ -69,6 +70,10 @@ const routes: Routes = [
                 path: EAppRoutes.History,
                 component: PaymentsComponent,
             },
+            // {
+            //     path: EAppRoutes,
+            //     component: UsersComponent,
+            // },
             {
                 path: "**",
                 component: PageNotFoundComponent,

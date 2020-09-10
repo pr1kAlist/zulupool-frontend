@@ -1,22 +1,19 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { filter, map, catchError, tap } from "rxjs/operators";
+import { BehaviorSubject, Observable } from "rxjs";
+import { map, catchError, tap } from "rxjs/operators";
 
 import { UserApiService } from "api/user.api";
 import { AuthApiService } from "api/auth.api";
 import { IUser } from "interfaces/user";
 import { StorageService } from "services/storage.service";
 
-const undefined = void 0;
-const userStore = new BehaviorSubject<IUser | null>(undefined);
-
 @Injectable({
     providedIn: "root",
 })
 export class AppService {
     readonly isReady = new BehaviorSubject<boolean>(false);
-    readonly user = userStore.pipe(filter(value => value !== undefined));
+    readonly user = new EventEmitter<IUser | null>();
 
     constructor(
         private userApiService: UserApiService,
@@ -31,10 +28,12 @@ export class AppService {
             map(user => {
                 this.storageService.sessionId = sessionId;
 
-                userStore.next(user);
+                this.user.emit(user);
             }),
             catchError(error => {
                 this.storageService.sessionId = null;
+
+                this.user.emit(null);
 
                 throw error;
             }),
@@ -46,7 +45,7 @@ export class AppService {
             tap(() => {
                 this.storageService.sessionId = null;
 
-                userStore.next(null);
+                this.user.emit(null);
             }),
         );
     }
@@ -55,11 +54,13 @@ export class AppService {
         const initialSessionId = this.storageService.sessionId;
 
         this.userApiService.getUser(initialSessionId).subscribe(
-            value => userStore.next(value),
+            user => {
+                this.user.emit(user);
+            },
             () => {
                 this.storageService.sessionId = null;
 
-                userStore.next(null);
+                this.user.emit(null);
             },
             () => {
                 this.isReady.next(true);

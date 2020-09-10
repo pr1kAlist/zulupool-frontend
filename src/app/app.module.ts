@@ -1,4 +1,4 @@
-import { NgModule, LOCALE_ID } from "@angular/core";
+import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -50,6 +50,7 @@ import { AuthComponent } from "pages/auth/auth.component";
 import { UserActivateComponent } from "pages/actions/user-activate/user-activate.component";
 import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
 import { HelpComponent } from "pages/help/help.component";
+import { UsersComponent } from "pages/users/users.component";
 
 import { FooterComponent } from "components/footer/footer.component";
 import { MainLayoutComponent } from "components/main-layout/main-layout.component";
@@ -153,6 +154,7 @@ registerLocaleData(ru);
         UserActivateComponent,
         UserResendEmailComponent,
         HelpComponent,
+        UsersComponent,
 
         FooterComponent,
         MainLayoutComponent,
@@ -165,5 +167,6 @@ registerLocaleData(ru);
         SuffixifyPipe,
     ],
     bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
