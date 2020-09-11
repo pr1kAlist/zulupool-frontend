@@ -32,11 +32,7 @@
                 <tr>
                     <td>
                         <span style="font-size: 1.1em;">
-                            {{
-                                acceptedDifficulty
-                                    | suffixify
-                                        : { suffix: ESuffixifyPipeSuffix.M }
-                            }}
+                            {{ acceptedDifficulty }}
                         </span>
                     </td>
                 </tr>
@@ -68,19 +64,15 @@
                     <td>
                         {{
                             userStatsItem?.shareRate
-                                | suffixify
-                                    : { suffix: ESuffixifyPipeSuffix.ShareRate }
+                                | suffixify: ESuffix.ShareRate
                         }}
                     </td>
                     <td>
                         {{
                             userStatsItem?.power
-                                | suffixify
-                                    : {
-                                          suffix:
-                                              ESuffixifyPipeSuffix.PowerTera,
-                                          toFixed: 3
-                                      }
+                                | metricPrefixify: userStatsItemZeroUnitsOffset
+                                | toFixed
+                                | suffixify: ESuffix.Power
                         }}
                     </td>
                 </tr>
@@ -102,11 +94,7 @@
                 <tr>
                     <td>
                         <span style="font-size: 1.1em;">
-                            {{
-                                acceptedDifficulty
-                                    | suffixify
-                                        : { suffix: ESuffixifyPipeSuffix.M }
-                            }}
+                            {{ acceptedDifficulty }}
                         </span>
                     </td>
                 </tr>
@@ -127,8 +115,7 @@
                     <td>
                         {{
                             userStatsItem?.shareRate
-                                | suffixify
-                                    : { suffix: ESuffixifyPipeSuffix.ShareRate }
+                                | suffixify: ESuffix.ShareRate
                         }}
                     </td>
                 </tr>
@@ -141,12 +128,8 @@
                     <td>
                         {{
                             userStatsItem?.power
-                                | suffixify
-                                    : {
-                                          suffix:
-                                              ESuffixifyPipeSuffix.PowerTera,
-                                          toFixed: 3
-                                      }
+                                | metricPrefixify: userStatsItemZeroUnitsOffset
+                                | suffixify: ESuffix.Power
                         }}
                     </td>
                 </tr>
@@ -224,19 +207,13 @@
             </td>
             <td>{{ item.name }}</td>
             <td>
-                {{
-                    item.shareRate
-                        | suffixify: { suffix: ESuffixifyPipeSuffix.ShareRate }
-                }}
+                {{ item.shareRate | suffixify: ESuffix.ShareRate }}
             </td>
             <td>
                 {{
                     item.power
-                        | suffixify
-                            : {
-                                  suffix: ESuffixifyPipeSuffix.PowerTera,
-                                  toFixed: 3
-                              }
+                        | metricPrefixify: userStatsItemZeroUnitsOffset
+                        | suffixify: ESuffix.Power
                 }}
             </td>
             <td>{{ item.lastShareTime | ago }}</td>
@@ -280,20 +257,14 @@
 
         <p>
             {{ "common.dictionary.shareRate" | translate }}:
-            {{
-                item.shareRate
-                    | suffixify: { suffix: ESuffixifyPipeSuffix.ShareRate }
-            }}
+            {{ item.shareRate | suffixify: ESuffix.ShareRate }}
         </p>
         <p>
             {{ "common.dictionary.power" | translate }}:
             {{
                 item.power
-                    | suffixify
-                        : {
-                              suffix: ESuffixifyPipeSuffix.PowerTera,
-                              toFixed: 3
-                          }
+                    | metricPrefixify: userStatsItemZeroUnitsOffset
+                    | suffixify: ESuffix.Power
             }}
         </p>
         <p>

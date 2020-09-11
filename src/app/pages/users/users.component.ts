@@ -17,4 +17,6 @@ export class UsersComponent implements OnInit {
             this.users = users;
         });
     }
+
+    onUserClick(user: IUser): void {}
 }

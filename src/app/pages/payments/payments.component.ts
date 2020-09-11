@@ -5,7 +5,7 @@ import { BackendQueryApiService } from "api/backend-query.api";
 import { ECoins } from "enums/coins";
 import { IWorkerStatsItem } from "interfaces/backend-query";
 import { AppService } from "services/app.service";
-import { ESuffixifyPipeSuffix } from "pipes/suffixify.pipe";
+import { ESuffix } from "pipes/suffixify.pipe";
 import { ETime } from "enums/time";
 
 @Component({
@@ -15,7 +15,7 @@ import { ETime } from "enums/time";
 })
 export class PaymentsComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
-    readonly ESuffixifyPipeSuffix = ESuffixifyPipeSuffix;
+    readonly ESuffixifyPipeSuffix = ESuffix;
 
     coins: ECoins[];
     currentCoin: ECoins;

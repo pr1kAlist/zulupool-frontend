@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { I18nPluralPipe } from "@angular/common";
 
 import { ETime } from "enums/time";
-import { createTimestamp } from "tools/date";
 
 @Pipe({ name: "ago" })
 export class AgoPipe implements PipeTransform {
@@ -51,15 +50,17 @@ export class AgoPipe implements PipeTransform {
             );
         }
 
-        parts.push(s);
-        parts.push(
-            this.i18nPluralPipe.transform(s, {
-                "=1": "секунда",
-                "=2": "секунды",
-                other: "секунд",
-            }),
-        );
+        if (s) {
+            parts.push(s);
+            parts.push(
+                this.i18nPluralPipe.transform(s, {
+                    "=1": "секунда",
+                    "=2": "секунды",
+                    other: "секунд",
+                }),
+            );
+        }
 
-        return parts.join(" ");
+        return parts.join(" ") || "0 секунд";
     }
 }

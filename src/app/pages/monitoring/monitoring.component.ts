@@ -8,7 +8,7 @@ import { EAppRoutes } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
 import { ECoins } from "enums/coins";
 import { IUserStatsItem, IWorkerStatsItem } from "interfaces/backend-query";
-import { ESuffixifyPipeSuffix } from "pipes/suffixify.pipe";
+import { ESuffix } from "pipes/suffixify.pipe";
 import { EPowerUnit } from "enums/power-unit";
 
 enum EWorkerState {
@@ -25,18 +25,19 @@ enum EWorkerState {
 export class MonitoringComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly EWorkerState = EWorkerState;
-    readonly ESuffixifyPipeSuffix = ESuffixifyPipeSuffix;
+    readonly ESuffix = ESuffix;
 
     coins: ECoins[];
     currentCoin: ECoins;
 
     userStatsItem: IUserStatsItem;
+    userStatsItemZeroUnitsOffset: number;
     userStatsHistory: IWorkerStatsItem[];
     userWorkersStatsList: IWorkerStatsItem[];
 
     chart: IChartSettings;
 
-    acceptedDifficulty: number;
+    acceptedDifficulty: string;
 
     powerNumberMetric = 0;
 
@@ -64,12 +65,13 @@ export class MonitoringComponent implements OnInit {
 
         this.backendQueryApiService
             .getUserStats({ coin })
-            .subscribe(({ total, workers, currentTime }) => {
+            .subscribe(({ total, workers, currentTime, powerMultLog10 }) => {
                 workers.forEach(item => {
                     item.lastShareTime = currentTime - item.lastShareTime;
                 });
 
                 this.userStatsItem = total;
+                this.userStatsItemZeroUnitsOffset = powerMultLog10;
                 this.userWorkersStatsList = workers;
 
                 this.userWorkersStatsList.sort((a, b) => {
@@ -79,22 +81,12 @@ export class MonitoringComponent implements OnInit {
 
         this.backendQueryApiService
             .getUserStatsHistory({ coin })
-            .subscribe(({ stats, powerMultLog10, powerUnit, currentTime }) => {
+            .subscribe(({ stats, powerMultLog10, powerUnit }) => {
                 if (powerUnit === EPowerUnit.Hash) {
                     this.powerNumberMetric = powerMultLog10 / 3;
                 }
 
-                this.acceptedDifficulty = 0;
-
-                const today = new Date().getDate();
-
-                stats.forEach(item => {
-                    const date = new Date(item.time * 1000);
-
-                    if (date.getDate() === today && date.getHours()) {
-                        this.acceptedDifficulty += item.shareWork;
-                    }
-                });
+                this.setAcceptedDifficulty(stats);
 
                 stats.pop();
 
@@ -172,6 +164,28 @@ export class MonitoringComponent implements OnInit {
             labels,
             options: {},
         };
+    }
+
+    private setAcceptedDifficulty(stats: IWorkerStatsItem[]): void {
+        let acceptedDifficulty = 0;
+
+        const today = new Date().getDate();
+
+        stats.forEach(item => {
+            const date = new Date(item.time * 1000);
+
+            if (date.getDate() === today && date.getHours()) {
+                acceptedDifficulty += item.shareWork;
+            }
+        });
+
+        const asString = (acceptedDifficulty / 1e6).toFixed(3);
+
+        // const asString = parseFloat(
+        //     (acceptedDifficulty / 1e6).toFixed(3),
+        // ).toLocaleString();
+
+        this.acceptedDifficulty = `${asString} M`;
     }
 }
 

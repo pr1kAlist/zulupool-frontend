@@ -1,79 +1,41 @@
 import { Pipe, PipeTransform } from "@angular/core";
+import { not } from "logical-not";
 
-export enum ESuffixifyPipeSuffix {
-    M = "M",
+import { MetricPrefix } from "pipes/metric-prefixify.pipe";
+
+export enum ESuffix {
     ShareRate = "ShareRate",
-    PowerPeta = "PowerPeta",
-    PowerTera = "PowerTera",
     Power = "Power",
 }
 
 export interface ISuffixifyPipeSettings {
-    suffix: ESuffixifyPipeSuffix;
-    toFixed?: number;
-    numberMetric?: number;
+    suffix?: ESuffix;
 }
 
 const suffixMap = {
-    [ESuffixifyPipeSuffix.M]: "M",
-    [ESuffixifyPipeSuffix.ShareRate]: "share/s",
-    [ESuffixifyPipeSuffix.PowerPeta]: "Ph/s",
-    [ESuffixifyPipeSuffix.PowerTera]: "Th/s",
+    [ESuffix.ShareRate]: "share/s",
+    [ESuffix.Power]: "h/s",
 };
-
-const metricPrefixList = ["", "k", "M", "G", "T", "P", "E", "Z", "Y"];
 
 @Pipe({ name: "suffixify" })
 export class SuffixifyPipe implements PipeTransform {
-    transform(
-        source: any,
-        { suffix, toFixed, numberMetric = 0 }: ISuffixifyPipeSettings,
-    ): string | any {
-        if (typeof source !== "number") return source;
+    transform(source: any, suffix?: ESuffix): string | MetricPrefix | any {
+        if (not(source)) return source;
 
-        switch (suffix) {
-            case ESuffixifyPipeSuffix.M:
-                source /= 1e6;
-                break;
-            case ESuffixifyPipeSuffix.Power:
-                // TODO
-                for (let i = numberMetric; i < metricPrefixList.length; i++) {
-                    if (i === 0) continue;
+        const suffixString = suffixMap[suffix] || "";
 
-                    source /= 1000;
+        if (source instanceof MetricPrefix) {
+            const { value, metricPrefix } = source as MetricPrefix;
 
-                    if (source < 1000) break;
-                }
-                break;
-            case ESuffixifyPipeSuffix.PowerPeta:
-                source /= 1e9;
-                break;
-            case ESuffixifyPipeSuffix.PowerTera:
-                if (source / 1e6 > 1000) {
-                    return this.transform(source, {
-                        suffix: ESuffixifyPipeSuffix.PowerPeta,
-                        toFixed,
-                    });
-                }
-
-                source /= 1e6;
-                break;
+            return `${value} ${metricPrefix}${suffixString}`;
         }
 
-        const stringifyed = stringifyNumber(source, toFixed);
+        if (typeof source === "number") {
+            if (source === 0) return source;
 
-        if (suffix === ESuffixifyPipeSuffix.Power) {
-            return `${stringifyed}\u00a0${metricPrefixList[numberMetric]}h/s`;
+            return `${source} ${suffixString}`;
         }
 
-        return suffix in suffixMap
-            ? `${stringifyed}\u00a0${suffixMap[suffix]}`
-            : stringifyed;
+        return source;
     }
-}
-
-function stringifyNumber(source: number, toFixed?: number): string {
-    return typeof toFixed === "number"
-        ? source.toFixed(toFixed)
-        : String(source);
 }

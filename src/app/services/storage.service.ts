@@ -13,4 +13,16 @@ export class StorageService {
             window.localStorage.removeItem("sid");
         }
     }
+
+    get targetLogin(): string | null {
+        return window.localStorage.getItem("target") || null;
+    }
+
+    set targetLogin(target: string | null) {
+        if (target) {
+            window.localStorage.setItem("target", target);
+        } else {
+            window.localStorage.removeItem("target");
+        }
+    }
 }

@@ -61,8 +61,10 @@ import { LogoComponent } from "components/logo/logo.component";
 import { EmptyContentComponent } from "components/empty-content/empty-content.component";
 
 import { AgoPipe } from "pipes/ago.pipe";
+import { MetricPrefixifyPipe } from "pipes/metric-prefixify.pipe";
 import { SecondsPipe } from "pipes/seconds.pipe";
 import { SuffixifyPipe } from "pipes/suffixify.pipe";
+import { ToFixedPipe } from "pipes/to-fixed.pipe";
 
 import { AppRoutingModule } from "app.routing";
 import { AppComponent } from "app.component";
@@ -167,8 +169,10 @@ registerLocaleData(ru);
         EmptyContentComponent,
 
         AgoPipe,
+        MetricPrefixifyPipe,
         SecondsPipe,
         SuffixifyPipe,
+        ToFixedPipe,
     ],
     bootstrap: [AppComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

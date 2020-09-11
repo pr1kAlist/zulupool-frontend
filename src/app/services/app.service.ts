@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { map, catchError, tap, switchMap, filter } from "rxjs/operators";
+import { not } from "logical-not";
 
 import { UserApiService } from "api/user.api";
 import { AuthApiService } from "api/auth.api";
@@ -76,31 +77,36 @@ export class AppService {
     private init(): void {
         const initialSessionId = this.storageService.sessionId;
 
-        this.userApiService.getUser(initialSessionId).subscribe(
-            user => {
-                this.userApiService.getUserList().subscribe(
-                    () => {
-                        userStore.next({
-                            role: ERole.Admin,
-                            ...user,
-                        });
-                        this.isReady.next(true);
-                    },
-                    () => {
-                        userStore.next({
-                            role: ERole.User,
-                            ...user,
-                        });
-                        this.isReady.next(true);
-                    },
-                );
-            },
-            () => {
-                this.storageService.sessionId = null;
+        if (not(initialSessionId)) {
+            userStore.next(null);
+            this.isReady.next(true);
+        } else {
+            this.userApiService.getUser(initialSessionId).subscribe(
+                user => {
+                    this.userApiService.getUserList().subscribe(
+                        () => {
+                            userStore.next({
+                                role: ERole.Admin,
+                                ...user,
+                            });
+                            this.isReady.next(true);
+                        },
+                        () => {
+                            userStore.next({
+                                role: ERole.User,
+                                ...user,
+                            });
+                            this.isReady.next(true);
+                        },
+                    );
+                },
+                () => {
+                    this.storageService.sessionId = null;
 
-                userStore.next(null);
-                this.isReady.next(true);
-            },
-        );
+                    userStore.next(null);
+                    this.isReady.next(true);
+                },
+            );
+        }
     }
 }

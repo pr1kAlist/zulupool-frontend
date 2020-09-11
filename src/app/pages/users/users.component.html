@@ -6,7 +6,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of users" (click)="onUserClick(user)">
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
         </tr>
