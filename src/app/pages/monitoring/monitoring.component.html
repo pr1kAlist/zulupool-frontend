@@ -141,6 +141,7 @@
                         {{
                             userStatsItem?.power
                                 | metricPrefixify: userStatsItemZeroUnitsOffset
+                                | toFixed
                                 | suffixify: ESuffix.Power
                         }}
                     </td>
@@ -225,6 +226,7 @@
                 {{
                     item.power
                         | metricPrefixify: userStatsItemZeroUnitsOffset
+                        | toFixed
                         | suffixify: ESuffix.Power
                 }}
             </td>
@@ -276,6 +278,7 @@
             {{
                 item.power
                     | metricPrefixify: userStatsItemZeroUnitsOffset
+                    | toFixed
                     | suffixify: ESuffix.Power
             }}
         </p>
