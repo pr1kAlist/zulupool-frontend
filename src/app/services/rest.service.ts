@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
-import { BehaviorSubject, Observable } from "rxjs";
-import { skip, tap, catchError, map } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { tap, catchError, map } from "rxjs/operators";
 
 import { StorageService } from "services/storage.service";
 import { not } from "logical-not";
@@ -24,15 +24,6 @@ export class RestService {
         "Content-Type": "application/json",
     };
 
-    readonly sessionId = new BehaviorSubject<string | null>(
-        this.storageService.sessionId,
-    ).pipe(
-        skip(1),
-        tap(() => {
-            console.log("Session id");
-        }),
-    );
-
     constructor(
         private http: HttpClient,
         private storageService: StorageService,
@@ -45,6 +36,12 @@ export class RestService {
 
         if (not(params.id)) {
             delete params.id;
+        }
+
+        const { targetLogin } = this.storageService;
+
+        if (targetLogin) {
+            params.targetLogin = targetLogin;
         }
 
         return this.http.post(createAPIUrl(url), params, options).pipe(

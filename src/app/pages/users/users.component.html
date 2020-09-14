@@ -6,7 +6,11 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let user of users" (click)="onUserClick(user)">
+        <tr
+            *ngFor="let user of users"
+            [class._selected]="user.name === targetLogin"
+            (click)="onUserClick(user)"
+        >
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
         </tr>

@@ -19,7 +19,7 @@ export class AuthApiService {
         return this.restService.post("/userCreate", user);
     }
 
-    logOut(): any {
+    logOut(): Observable<void> {
         return this.restService.post("/userLogout");
     }
 }

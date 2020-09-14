@@ -14,10 +14,10 @@ export class RoleAccessService {
 
     hasAccess(role: ERole): Observable<boolean> {
         switch (role) {
-            case ERole.Admin:
+            case ERole.SuperUser:
                 return this.appService.user.pipe(
                     map(user => {
-                        return user?.role === ERole.Admin;
+                        return user?.role === ERole.SuperUser;
                     }),
                 );
             default:

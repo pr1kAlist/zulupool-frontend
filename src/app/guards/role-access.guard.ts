@@ -22,9 +22,9 @@ export class RoleAccessGuard implements CanActivate {
         private roleAccessService: RoleAccessService,
     ) {}
     canActivate({
-        data: { credentials },
+        data: { permission },
     }: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
-        return this.roleAccessService.hasAccess(credentials as ERole).pipe(
+        return this.roleAccessService.hasAccess(permission as ERole).pipe(
             map(hasAccess => {
                 return hasAccess || this.router.parseUrl(userRootRoute);
             }),

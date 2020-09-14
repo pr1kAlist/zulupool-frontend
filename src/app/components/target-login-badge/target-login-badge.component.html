@@ -1,0 +1,8 @@
+<nz-alert
+    *ngIf="targetLogin"
+    nzType="success"
+    [nzMessage]="
+        'components.targetLoginBadge.message'
+            | translate: { login: targetLogin }
+    "
+></nz-alert>

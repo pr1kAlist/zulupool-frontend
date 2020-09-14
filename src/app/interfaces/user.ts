@@ -5,4 +5,5 @@ export interface IUser {
     email: string;
     registrationDate: number;
     role: ERole;
+    users?: IUser[];
 }

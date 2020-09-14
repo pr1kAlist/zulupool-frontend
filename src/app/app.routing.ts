@@ -76,7 +76,7 @@ const routes: Routes = [
                 path: EAppRoutes.Users,
                 component: UsersComponent,
                 data: {
-                    credentials: ERole.Admin,
+                    permission: ERole.SuperUser,
                 },
             },
             {

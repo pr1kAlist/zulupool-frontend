@@ -42,7 +42,7 @@ export class UserLayoutComponent extends SubscribableComponent
             route: EAppRoutes.Users,
             title: "components.userLayout.nav.users",
             icon: "user",
-            access: ERole.Admin,
+            access: ERole.SuperUser,
         },
     ]);
 

@@ -28,6 +28,7 @@ import { NzSelectModule } from "ng-zorro-antd/select";
 import { NzRadioModule } from "ng-zorro-antd/radio";
 import { NzDrawerModule } from "ng-zorro-antd/drawer";
 import { NzDropDownModule } from "ng-zorro-antd/dropdown";
+import { NzAlertModule } from "ng-zorro-antd/alert";
 import {
     FundProjectionScreenOutline,
     LeftCircleOutline,
@@ -59,6 +60,7 @@ import { MainLayoutComponent } from "components/main-layout/main-layout.componen
 import { UserLayoutComponent } from "components/user-layout/user-layout.component";
 import { LogoComponent } from "components/logo/logo.component";
 import { EmptyContentComponent } from "components/empty-content/empty-content.component";
+import { TargetLoginBadgeComponent } from "components/target-login-badge/target-login-badge.component";
 
 import { AgoPipe } from "pipes/ago.pipe";
 import { MetricPrefixifyPipe } from "pipes/metric-prefixify.pipe";
@@ -114,6 +116,7 @@ registerLocaleData(ru);
         NzRadioModule,
         NzDrawerModule,
         NzDropDownModule,
+        NzAlertModule,
         NzIconModule.forRoot([
             FundProjectionScreenOutline,
             LeftCircleOutline,
@@ -167,6 +170,7 @@ registerLocaleData(ru);
         UserLayoutComponent,
         LogoComponent,
         EmptyContentComponent,
+        TargetLoginBadgeComponent,
 
         AgoPipe,
         MetricPrefixifyPipe,

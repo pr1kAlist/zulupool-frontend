@@ -1,5 +1,3 @@
-@import "~ng-zorro-antd/ng-zorro-antd.dark.less";
-
 @layout-header-padding: 0;
 @menu-icon-size: 20px;
 
@@ -7,6 +5,10 @@
     padding: 32px 24px;
 }
 
-._clickable {
+tbody tr:not(._selected) {
     cursor: pointer;
+}
+
+._selected td {
+    background-color: @table-row-hover-bg;
 }

@@ -1,7 +1,14 @@
 import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, of } from "rxjs";
-import { map, catchError, tap, switchMap, filter } from "rxjs/operators";
+import {
+    map,
+    catchError,
+    tap,
+    switchMap,
+    filter,
+    finalize,
+} from "rxjs/operators";
 import { not } from "logical-not";
 
 import { UserApiService } from "api/user.api";
@@ -34,11 +41,14 @@ export class AppService {
                 this.storageService.sessionId = sessionId;
 
                 return this.userApiService.getUserList().pipe(
-                    map(() => {
+                    map(({ users }) => {
                         userStore.next({
-                            role: ERole.Admin,
+                            role: ERole.SuperUser,
+                            users,
                             ...user,
                         });
+
+                        this.setUpTargetLogin(users);
                     }),
                     catchError(() => {
                         userStore.next({
@@ -46,14 +56,14 @@ export class AppService {
                             ...user,
                         });
 
+                        this.storageService.targetLogin = null;
+
                         return of(void 0);
                     }),
                 );
             }),
             catchError(error => {
-                this.storageService.sessionId = null;
-
-                userStore.next(null);
+                this.reset();
 
                 throw error;
             }),
@@ -63,9 +73,7 @@ export class AppService {
     logOut(): Observable<void> {
         return this.authApiService.logOut().pipe(
             tap(() => {
-                this.storageService.sessionId = null;
-
-                userStore.next(null);
+                this.reset();
             }),
         );
     }
@@ -79,34 +87,35 @@ export class AppService {
 
         if (not(initialSessionId)) {
             userStore.next(null);
+
             this.isReady.next(true);
         } else {
-            this.userApiService.getUser(initialSessionId).subscribe(
-                user => {
-                    this.userApiService.getUserList().subscribe(
-                        () => {
-                            userStore.next({
-                                role: ERole.Admin,
-                                ...user,
-                            });
-                            this.isReady.next(true);
-                        },
-                        () => {
-                            userStore.next({
-                                role: ERole.User,
-                                ...user,
-                            });
-                            this.isReady.next(true);
-                        },
-                    );
-                },
-                () => {
-                    this.storageService.sessionId = null;
-
-                    userStore.next(null);
-                    this.isReady.next(true);
-                },
-            );
+            this.authorize(initialSessionId)
+                .pipe(
+                    finalize(() => {
+                        this.isReady.next(true);
+                    }),
+                )
+                .subscribe();
         }
+    }
+
+    private setUpTargetLogin(users: IUser[]): void {
+        const { targetLogin } = this.storageService;
+
+        if (targetLogin && users.some(user => user.name === targetLogin)) {
+            return;
+        }
+
+        if (users.length > 0) {
+            this.storageService.targetLogin = users[0].name;
+        }
+    }
+
+    private reset(): void {
+        this.storageService.sessionId = null;
+        this.storageService.targetLogin = null;
+
+        userStore.next(null);
     }
 }
