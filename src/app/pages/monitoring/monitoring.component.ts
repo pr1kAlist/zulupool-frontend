@@ -37,7 +37,7 @@ export class MonitoringComponent implements OnInit {
 
     chart: IChartSettings;
 
-    acceptedDifficulty: string;
+    acceptedDifficulty: number;
 
     powerNumberMetric = 0;
 
@@ -167,7 +167,7 @@ export class MonitoringComponent implements OnInit {
     }
 
     private setAcceptedDifficulty(stats: IWorkerStatsItem[]): void {
-        let acceptedDifficulty = 0;
+        this.acceptedDifficulty = 0;
 
         const today = new Date().getDate();
 
@@ -175,17 +175,9 @@ export class MonitoringComponent implements OnInit {
             const date = new Date(item.time * 1000);
 
             if (date.getDate() === today && date.getHours()) {
-                acceptedDifficulty += item.shareWork;
+                this.acceptedDifficulty += item.shareWork;
             }
         });
-
-        const asString = (acceptedDifficulty / 1e6).toFixed(3);
-
-        // const asString = parseFloat(
-        //     (acceptedDifficulty / 1e6).toFixed(3),
-        // ).toLocaleString();
-
-        this.acceptedDifficulty = `${asString} M`;
     }
 }
 

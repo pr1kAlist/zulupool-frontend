@@ -34,7 +34,12 @@
                 <tr>
                     <td>
                         <span style="font-size: 1.1em;">
-                            {{ acceptedDifficulty }}
+                            {{
+                                acceptedDifficulty
+                                    | acceptedDifficulty
+                                    | toFixed
+                                    | suffixify
+                            }}
                         </span>
                     </td>
                 </tr>
@@ -96,7 +101,12 @@
                 <tr>
                     <td>
                         <span style="font-size: 1.1em;">
-                            {{ acceptedDifficulty }}
+                            {{
+                                acceptedDifficulty
+                                    | acceptedDifficulty
+                                    | toFixed
+                                    | suffixify
+                            }}
                         </span>
                     </td>
                 </tr>

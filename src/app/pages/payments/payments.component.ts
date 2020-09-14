@@ -15,12 +15,13 @@ import { ETime } from "enums/time";
 })
 export class PaymentsComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
-    readonly ESuffixifyPipeSuffix = ESuffix;
+    readonly ESuffix = ESuffix;
 
     coins: ECoins[];
     currentCoin: ECoins;
 
     statsHistory: IWorkerStatsItem[];
+    powerMultLog10: number;
 
     constructor(
         private backendQueryApiService: BackendQueryApiService,
@@ -51,7 +52,7 @@ export class PaymentsComponent implements OnInit {
                     timeFrom: user.registrationDate,
                     groupByInterval,
                 })
-                .subscribe(({ stats }) => {
+                .subscribe(({ stats, powerMultLog10 }) => {
                     stats.pop();
                     stats.reverse();
 
@@ -60,6 +61,7 @@ export class PaymentsComponent implements OnInit {
                     });
 
                     this.statsHistory = stats;
+                    this.powerMultLog10 = powerMultLog10;
                 });
         });
     }

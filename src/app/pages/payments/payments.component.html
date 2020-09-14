@@ -21,26 +21,18 @@
         <tr *ngFor="let item of statsHistory">
             <td>{{ item.time | seconds | date: "shortDate" }}</td>
             <td>
-                {{
-                    item.shareRate
-                        | suffixify: { suffix: ESuffixifyPipeSuffix.ShareRate }
-                }}
+                {{ item.shareRate | suffixify: ESuffix.ShareRate }}
             </td>
             <td>
                 {{
                     item.power
-                        | suffixify
-                            : {
-                                  suffix: ESuffixifyPipeSuffix.PowerPeta,
-                                  toFixed: 3
-                              }
+                        | metricPrefixify: powerMultLog10
+                        | toFixed
+                        | suffixify: ESuffix.Power
                 }}
             </td>
             <td>
-                {{
-                    item.shareWork
-                        | suffixify: { suffix: ESuffixifyPipeSuffix.M }
-                }}
+                {{ item.shareWork | acceptedDifficulty | toFixed | suffixify }}
             </td>
         </tr>
     </tbody>
