@@ -24,20 +24,20 @@ const routes: Routes = [
     {
         path: "",
         pathMatch: "full",
-        redirectTo: EAppRoutes.Monitoring,
-        // component: MainLayoutComponent,
-        // children: [
-        //     {
-        //         path: EAppRoutes.Home,
-        //         pathMatch: "full",
-        //         component: HomeComponent,
-        //     },
-        //     {
-        //         path: EAppRoutes.Help,
-        //         pathMatch: "full",
-        //         component: HelpComponent,
-        //     },
-        // ],
+        // redirectTo: EAppRoutes.Monitoring,
+        component: MainLayoutComponent,
+        children: [
+            {
+                path: EAppRoutes.Home,
+                pathMatch: "full",
+                component: HomeComponent,
+            },
+            {
+                path: EAppRoutes.Help,
+                pathMatch: "full",
+                component: HelpComponent,
+            },
+        ],
     },
     {
         path: EAppRoutes.Auth,
