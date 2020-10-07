@@ -4,12 +4,12 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
 import { RestService } from "services/rest.service";
-import { ECoins } from "enums/coins";
+import { Coin } from "interfaces/coin";
 
 @Injectable({
     providedIn: "root",
 })
-export class BackendQueryApiService {
+export class BackendManualApiService {
     constructor(private restService: RestService) {}
 
     forcePayout(params: IForcePayoutParams): Observable<boolean> {
@@ -24,7 +24,7 @@ export class BackendQueryApiService {
 }
 
 export interface IForcePayoutParams {
-    coin: ECoins;
+    coin: Coin;
 }
 
 interface IForcePayoutResponse {

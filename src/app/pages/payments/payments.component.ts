@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 
 import { EAppRoutes } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
-import { ECoins } from "enums/coins";
+import { Coin } from "interfaces/coin";
 import { IWorkerStatsItem } from "interfaces/backend-query";
 import { AppService } from "services/app.service";
 import { ESuffix } from "pipes/suffixify.pipe";
@@ -17,8 +17,8 @@ export class PaymentsComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly ESuffix = ESuffix;
 
-    coins: ECoins[];
-    currentCoin: ECoins;
+    coins: Coin[];
+    currentCoin: Coin;
 
     statsHistory: IWorkerStatsItem[];
     powerMultLog10: number;
@@ -32,7 +32,7 @@ export class PaymentsComponent implements OnInit {
         this.backendQueryApiService
             .getUserBalance()
             .subscribe(({ balances }) => {
-                balances = balances.filter(item => item.coin === ECoins.HTR);
+                balances = balances.filter(item => item.coin === "HTR");
 
                 this.coins = balances.map(item => item.coin);
 
@@ -42,7 +42,7 @@ export class PaymentsComponent implements OnInit {
             });
     }
 
-    private onCurrentCoinChange(coin: ECoins): void {
+    private onCurrentCoinChange(coin: Coin): void {
         const groupByInterval = ETime.Day;
 
         this.appService.user.subscribe(user => {

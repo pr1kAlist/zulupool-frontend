@@ -44,6 +44,16 @@ export class UserLayoutComponent extends SubscribableComponent
             icon: "user",
             access: ERole.SuperUser,
         },
+        {
+            route: EAppRoutes.Payouts,
+            title: "components.userLayout.nav.payouts",
+            icon: "wallet",
+        },
+        {
+            route: EAppRoutes.Settings,
+            title: "components.userLayout.nav.settings",
+            icon: "setting",
+        },
     ]);
 
     readonly theme = this.themeService.theme;

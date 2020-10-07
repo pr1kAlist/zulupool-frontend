@@ -1,0 +1,61 @@
+<div>
+    <span class="coin-label">
+        {{ "settings.coinLabel" | translate }}
+    </span>
+
+    <nz-select
+        class="coin-select"
+        [(ngModel)]="selectedIndex"
+        (ngModelChange)="changeCoin()"
+    >
+        <nz-option
+            *ngFor="let item of settingsItems; index as i"
+            [nzLabel]="item.name"
+            [nzValue]="i"
+        ></nz-option>
+    </nz-select>
+</div>
+
+<form
+    class="settings-form"
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="form"
+    (submit)="save()"
+>
+    <nz-form-item>
+        <nz-form-label nzFor="address">
+            {{ "settings.form.address" | translate }}
+        </nz-form-label>
+        <nz-form-control>
+            <input nz-input formControlName="address" id="address" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="payoutThreshold">
+            {{ "settings.form.payoutThreshold" | translate }}
+        </nz-form-label>
+        <nz-form-control>
+            <input
+                nz-input
+                formControlName="payoutThreshold"
+                id="payoutThreshold"
+            />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="autoPayoutEnabled">
+            <nz-switch
+                [formControl]="form.get('autoPayoutEnabled')"
+            ></nz-switch>
+
+            <span class="autoPayoutLabel">
+                {{ "settings.form.autoPayoutEnabled" | translate }}
+            </span>
+        </nz-form-label>
+    </nz-form-item>
+
+    <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        {{ "common.save" | translate }}
+    </button>
+</form>

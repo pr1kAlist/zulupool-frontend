@@ -29,6 +29,7 @@ import { NzRadioModule } from "ng-zorro-antd/radio";
 import { NzDrawerModule } from "ng-zorro-antd/drawer";
 import { NzDropDownModule } from "ng-zorro-antd/dropdown";
 import { NzAlertModule } from "ng-zorro-antd/alert";
+import { NzSwitchModule } from "ng-zorro-antd/switch";
 import {
     FundProjectionScreenOutline,
     LeftCircleOutline,
@@ -41,6 +42,8 @@ import {
     HistoryOutline,
     MenuOutline,
     UserOutline,
+    WalletOutline,
+    SettingOutline,
 } from "@ant-design/icons-angular/icons";
 
 import { ChartsModule } from "ng2-charts";
@@ -54,6 +57,8 @@ import { UserActivateComponent } from "pages/actions/user-activate/user-activate
 import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
 import { HelpComponent } from "pages/help/help.component";
 import { UsersComponent } from "pages/users/users.component";
+import { PayoutsComponent } from "pages/payouts/payouts.component";
+import { SettingsComponent } from "pages/settings/settings.component";
 
 import { FooterComponent } from "components/footer/footer.component";
 import { MainLayoutComponent } from "components/main-layout/main-layout.component";
@@ -61,6 +66,8 @@ import { UserLayoutComponent } from "components/user-layout/user-layout.componen
 import { LogoComponent } from "components/logo/logo.component";
 import { EmptyContentComponent } from "components/empty-content/empty-content.component";
 import { TargetLoginBadgeComponent } from "components/target-login-badge/target-login-badge.component";
+import { ChartComponent } from "components/chart/chart.component";
+import { ChartPowerComponent } from "components/chart-power/chart-power.component";
 
 import { AgoPipe } from "pipes/ago.pipe";
 import { MetricPrefixifyPipe } from "pipes/metric-prefixify.pipe";
@@ -118,6 +125,7 @@ registerLocaleData(ru);
         NzDrawerModule,
         NzDropDownModule,
         NzAlertModule,
+        NzSwitchModule,
         NzIconModule.forRoot([
             FundProjectionScreenOutline,
             LeftCircleOutline,
@@ -130,6 +138,8 @@ registerLocaleData(ru);
             HistoryOutline,
             MenuOutline,
             UserOutline,
+            WalletOutline,
+            SettingOutline,
         ]),
 
         ChartsModule,
@@ -165,6 +175,8 @@ registerLocaleData(ru);
         UserResendEmailComponent,
         HelpComponent,
         UsersComponent,
+        PayoutsComponent,
+        SettingsComponent,
 
         FooterComponent,
         MainLayoutComponent,
@@ -172,6 +184,8 @@ registerLocaleData(ru);
         LogoComponent,
         EmptyContentComponent,
         TargetLoginBadgeComponent,
+        ChartComponent,
+        ChartPowerComponent,
 
         AgoPipe,
         MetricPrefixifyPipe,

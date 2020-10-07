@@ -1,0 +1,46 @@
+<div class="header-block">
+    <nz-select
+        class="coin-select"
+        [(ngModel)]="selectedIndex"
+        [nzLoading]="!settings"
+        (ngModelChange)="onCurrentCoinChange()"
+    >
+        <nz-option
+            *ngFor="let item of settings; index as i"
+            [nzLabel]="item.name"
+            [nzValue]="i"
+        ></nz-option>
+    </nz-select>
+
+    <div>
+        <button
+            nz-button
+            nzType="primary"
+            [nzLoading]="isManualPayoutSending"
+            (click)="manualPayout()"
+        >
+            {{ "payouts.manualPayoutButton" | translate }}
+        </button>
+    </div>
+</div>
+
+<nz-table nzBordered nzTemplateMode [nzLoading]="isPayoutsLoading">
+    <thead>
+        <tr>
+            <th>
+                {{ "common.dictionary.time" | translate }}
+            </th>
+            <th>txid</th>
+            <th>
+                {{ "common.dictionary.amount" | translate }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let payout of payouts">
+            <td>{{ payout.time | date: "HH:mm" }}</td>
+            <td>{{ payout.txid }}</td>
+            <td>{{ payout.value }}</td>
+        </tr>
+    </tbody>
+</nz-table>

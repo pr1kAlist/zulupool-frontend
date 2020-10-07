@@ -1,15 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { DatePipe } from "@angular/common";
-
-import { ChartDataSets, ChartOptions } from "chart.js";
-import { Label } from "ng2-charts";
 
 import { EAppRoutes } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
-import { ECoins } from "enums/coins";
+import { Coin } from "interfaces/coin";
 import { IUserStatsItem, IWorkerStatsItem } from "interfaces/backend-query";
 import { ESuffix } from "pipes/suffixify.pipe";
-import { EPowerUnit } from "enums/power-unit";
 
 enum EWorkerState {
     Normal = "normal",
@@ -27,30 +22,30 @@ export class MonitoringComponent implements OnInit {
     readonly EWorkerState = EWorkerState;
     readonly ESuffix = ESuffix;
 
-    coins: ECoins[];
-    currentCoin: ECoins;
+    coins: Coin[];
+    currentCoin: Coin;
 
     userStatsItem: IUserStatsItem;
     userStatsItemZeroUnitsOffset: number;
-    userStatsHistory: IWorkerStatsItem[];
+    userStatsHistory = {
+        stats: [] as IWorkerStatsItem[],
+        powerMultLog10: 0,
+    };
     userWorkersStatsList: IWorkerStatsItem[];
-
-    chart: IChartSettings;
+    userWorkersStatsHistory: {
+        stats: IWorkerStatsItem[];
+        powerMultLog10: number;
+    };
 
     acceptedDifficulty: number;
 
-    powerNumberMetric = 0;
-
-    constructor(
-        private backendQueryApiService: BackendQueryApiService,
-        private datePipe: DatePipe,
-    ) {}
+    constructor(private backendQueryApiService: BackendQueryApiService) {}
 
     ngOnInit(): void {
         this.backendQueryApiService
             .getUserBalance()
             .subscribe(({ balances }) => {
-                balances = balances.filter(item => item.coin === ECoins.HTR);
+                balances = balances.filter(item => item.coin === "HTR");
 
                 this.coins = balances.map(item => item.coin);
 
@@ -60,7 +55,7 @@ export class MonitoringComponent implements OnInit {
             });
     }
 
-    onCurrentCoinChange(coin: ECoins): void {
+    onCurrentCoinChange(coin: Coin): void {
         this.currentCoin = coin;
 
         this.backendQueryApiService
@@ -81,18 +76,10 @@ export class MonitoringComponent implements OnInit {
 
         this.backendQueryApiService
             .getUserStatsHistory({ coin })
-            .subscribe(({ stats, powerMultLog10, powerUnit }) => {
-                if (powerUnit === EPowerUnit.Hash) {
-                    this.powerNumberMetric = powerMultLog10 / 3;
-                }
-
+            .subscribe(({ stats, powerMultLog10 }) => {
                 this.setAcceptedDifficulty(stats);
 
-                stats.pop();
-
-                this.userStatsHistory = stats;
-
-                this.updateChart(stats);
+                this.userStatsHistory = { stats, powerMultLog10 };
             });
     }
 
@@ -103,19 +90,12 @@ export class MonitoringComponent implements OnInit {
                 workerId,
                 groupByInterval: 15 * 60,
             })
-            .subscribe(({ stats, currentTime }) => {
-                const last = stats[stats.length - 1];
-
-                last.time -= last.time - currentTime;
-
-                this.updateChart(stats, { r: 23, g: 220, b: 111 });
-
-                window.scroll(0, 0);
+            .subscribe(({ stats, powerMultLog10 }) => {
+                this.userWorkersStatsHistory = {
+                    stats,
+                    powerMultLog10,
+                };
             });
-    }
-
-    showUserStatsHistoryChart(): void {
-        this.updateChart(this.userStatsHistory);
     }
 
     getWorkerState(time: number): EWorkerState {
@@ -128,42 +108,6 @@ export class MonitoringComponent implements OnInit {
         }
 
         return EWorkerState.Normal;
-    }
-
-    private updateChart(
-        stats: IWorkerStatsItem[],
-        { r, g, b }: { r: number; g: number; b: number } = {
-            r: 23,
-            g: 125,
-            b: 220,
-        },
-    ): void {
-        const data = [];
-        const labels = [];
-
-        stats.forEach(item => {
-            data.push(item.power / 1e9);
-
-            labels.push(
-                this.datePipe.transform(new Date(item.time * 1000), "hh:mm"),
-            );
-        });
-
-        this.chart = {
-            datasets: [
-                {
-                    label: "Power (Ph/s)",
-                    data,
-                    borderColor: `rgb(${r}, ${g}, ${b})`,
-                    backgroundColor: `rgba(${r}, ${g}, ${b}, .3)`,
-                    pointRadius: 8,
-                    pointBackgroundColor: "rgba(0,0,0,0)",
-                    pointBorderColor: "rgba(0,0,0,0)",
-                },
-            ],
-            labels,
-            options: {},
-        };
     }
 
     private setAcceptedDifficulty(stats: IWorkerStatsItem[]): void {
@@ -179,10 +123,4 @@ export class MonitoringComponent implements OnInit {
             }
         });
     }
-}
-
-interface IChartSettings {
-    datasets: ChartDataSets[];
-    labels: Label[];
-    options: ChartOptions;
 }

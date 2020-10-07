@@ -1,11 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 
-import { ChartType, ChartOptions, ChartDataSets } from "chart.js";
-
-import { EAppRoutes } from "enums/routing";
+import { EAppRoutes, userRootRoute } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
-import { ECoins } from "enums/coins";
-import { IPoolStatsItem, IFoundBlock } from "interfaces/backend-query";
+import {
+    IPoolStatsItem,
+    IFoundBlock,
+    IWorkerStatsItem,
+} from "interfaces/backend-query";
+import { ESuffix } from "pipes/suffixify.pipe";
 
 @Component({
     selector: "app-home",
@@ -14,6 +16,12 @@ import { IPoolStatsItem, IFoundBlock } from "interfaces/backend-query";
 })
 export class HomeComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
+    readonly ESuffix = ESuffix;
+
+    poolStatsHistory = {
+        stats: [] as IWorkerStatsItem[],
+        powerMultLog10: 0,
+    };
 
     poolStatsList: IPoolStatsItem[];
     poolStats: IPoolStatsItem;
@@ -29,16 +37,23 @@ export class HomeComponent implements OnInit {
         "time",
     ];
 
-    get poolStatsPairs(): { name: string; value: any }[] {
-        return Object.entries(this.poolStats || {}).map(([name, value]) => ({
-            name,
-            value,
-        }));
-    }
+    signUpLink = {
+        href: `/${EAppRoutes.Auth}`,
+        params: {
+            to: decodeURIComponent(`/${userRootRoute}`),
+            registration: true,
+        },
+    };
 
     constructor(private backendQueryApiService: BackendQueryApiService) {}
 
     ngOnInit(): void {
+        this.backendQueryApiService
+            .getPoolStatsHistory({ coin: "HTR" })
+            .subscribe(({ stats, powerMultLog10 }) => {
+                this.poolStatsHistory = { stats, powerMultLog10 };
+            });
+
         this.backendQueryApiService.getPoolStats().subscribe(({ stats }) => {
             this.poolStatsList = stats;
 
@@ -55,13 +70,20 @@ export class HomeComponent implements OnInit {
     }
 
     private getFoundBlocks(): void {
+        console.log(this.poolStats);
         this.foundBlocksLoading = true;
 
         this.backendQueryApiService
             .getFoundBlocks({ coin: this.poolStats.coin })
-            .subscribe(({ blocks }) => {
-                this.foundBlocks = blocks;
-                this.foundBlocksLoading = false;
-            });
+            .subscribe(
+                ({ blocks }) => {
+                    this.foundBlocks = blocks;
+                    this.foundBlocksLoading = false;
+                },
+                () => {
+                    this.foundBlocks = [];
+                    this.foundBlocksLoading = false;
+                },
+            );
     }
 }

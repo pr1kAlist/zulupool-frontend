@@ -1,6 +1,25 @@
-<div style="display: flex;">
+<app-chart-power
+    [stats]="poolStatsHistory.stats"
+    [powerMultLog10]="poolStatsHistory.powerMultLog10"
+></app-chart-power>
+
+<div class="sign-up-block">
+    <a
+        class="sign-up-link"
+        [routerLink]="[signUpLink.href]"
+        [queryParams]="signUpLink.params"
+    >
+        {{ "home.signUpButton" | translate }}
+    </a>
+</div>
+
+<div class="coins-block">
+    <span class="coin-select-label">
+        {{ "home.coinSelect" | translate }}
+    </span>
+
     <nz-select
-        style="width: 300px;"
+        class="coin-select"
         [(ngModel)]="poolStats"
         [nzLoading]="!poolStatsList"
         (ngModelChange)="onPoolStatsSelect()"
@@ -20,16 +39,31 @@
         [nzTemplateMode]="true"
     >
         <tbody>
-            <tr *ngFor="let item of poolStatsPairs">
-                <td>{{ item.name }}</td>
-                <td>{{ item.value }}</td>
+            <tr>
+                <td>{{ "common.dictionary.power" | translate }}</td>
+                <td>
+                    {{
+                        poolStats.power
+                            | metricPrefixify: poolStats.powerMultLog10
+                            | toFixed
+                            | suffixify: ESuffix.Power
+                    }}
+                </td>
+            </tr>
+            <tr>
+                <td>Clients</td>
+                <td>{{ poolStats.clients }}</td>
+            </tr>
+            <tr>
+                <td>{{ "common.dictionary.workers" | translate }}</td>
+                <td>{{ poolStats.workers }}</td>
             </tr>
         </tbody>
     </nz-table>
 </div>
 
 <nz-table
-    style="margin: 32px 0;"
+    class="found-blocks-table"
     nzBordered
     [nzTemplateMode]="true"
     [nzLoading]="foundBlocksLoading"
@@ -37,7 +71,7 @@
     <thead>
         <tr>
             <th *ngFor="let title of foundBlockKeys">
-                {{ title }}
+                {{ "home.foundBlocksTable.title." + title | translate }}
             </th>
         </tr>
     </thead>

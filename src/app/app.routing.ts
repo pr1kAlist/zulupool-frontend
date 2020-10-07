@@ -19,6 +19,8 @@ import { UserActivateComponent } from "pages/actions/user-activate/user-activate
 import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
 import { HelpComponent } from "pages/help/help.component";
 import { UsersComponent } from "pages/users/users.component";
+import { PayoutsComponent } from "pages/payouts/payouts.component";
+import { SettingsComponent } from "pages/settings/settings.component";
 
 const routes: Routes = [
     {
@@ -78,6 +80,14 @@ const routes: Routes = [
                 data: {
                     permission: ERole.SuperUser,
                 },
+            },
+            {
+                path: EAppRoutes.Payouts,
+                component: PayoutsComponent,
+            },
+            {
+                path: EAppRoutes.Settings,
+                component: SettingsComponent,
             },
             {
                 path: "**",

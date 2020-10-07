@@ -1,7 +1,8 @@
-import { ECoins } from "enums/coins";
+import { Coin } from "interfaces/coin";
+import { EPowerUnit } from "enums/power-unit";
 
 export interface IUserBalanceItem {
-    coin: ECoins;
+    coin: Coin;
     balance: string;
     requested: string;
     paid: string;
@@ -23,12 +24,14 @@ export interface IUserPayouts {
 }
 
 export interface IPoolStatsItem {
-    coin: ECoins;
+    coin: Coin;
     clients: number;
     workers: number;
     shareRate: number;
     shareWork: number;
     power: number;
+    powerMultLog10: number;
+    powerUnit: EPowerUnit;
 }
 
 export interface IWorkerStatsItem {

@@ -11,7 +11,7 @@ import {
     IWorkerStatsItem,
     IUserStatsItem,
 } from "interfaces/backend-query";
-import { ECoins } from "enums/coins";
+import { Coin } from "interfaces/coin";
 
 @Injectable({
     providedIn: "root",
@@ -69,7 +69,7 @@ export class BackendQueryApiService {
 }
 
 export interface IGetUserBalanceParams {
-    coin?: ECoins;
+    coin?: Coin;
 }
 
 export interface IGetUserBalanceResponse {
@@ -77,7 +77,7 @@ export interface IGetUserBalanceResponse {
 }
 
 export interface IGetFoundBlocksParams {
-    coin: ECoins;
+    coin: Coin;
     heightFrom?: number;
     hashFrom?: string;
     count?: number;
@@ -98,7 +98,7 @@ export interface IGetFoundBlocksResponse {
 }
 
 export interface IGetPoolStatsParams {
-    coin?: ECoins;
+    coin?: Coin;
 }
 
 export interface IGetPoolStatsResponse {
@@ -106,7 +106,7 @@ export interface IGetPoolStatsResponse {
 }
 
 export interface IGetPoolStatsHistoryParams {
-    coin: ECoins;
+    coin: Coin;
     timeFrom?: number;
     timeTo?: number;
     groupByInterval?: number;
@@ -119,7 +119,7 @@ export interface IGetPoolStatsHistoryResponse {
 }
 
 export interface IGetUserStatsParams {
-    coin: ECoins;
+    coin: Coin;
 }
 
 export interface IGetUserStatsResponse {
@@ -131,7 +131,7 @@ export interface IGetUserStatsResponse {
 }
 
 export interface IGetUserStatsHistoryParams {
-    coin: ECoins;
+    coin: Coin;
     timeFrom?: number;
     groupByInterval?: number;
     [key: string]: any;
@@ -145,7 +145,7 @@ export interface IGetUserStatsHistoryResponse {
 }
 
 export interface IGetWorkerStatsHistoryParams {
-    coin: ECoins;
+    coin: Coin;
     workerId: string;
     timeFrom?: number;
     timeTo?: number;

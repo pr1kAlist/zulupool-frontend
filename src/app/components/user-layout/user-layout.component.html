@@ -1,6 +1,6 @@
-<nz-layout style="width: 100%;">
+<nz-layout class="layout">
     <nz-sider [nzWidth]="64">
-        <ul nz-menu nzMode="inline" [nzTheme]="theme | async">
+        <ul nz-menu nzMode="vertical" [nzTheme]="theme | async">
             <ng-template
                 ngFor
                 let-item
@@ -9,14 +9,20 @@
             >
                 <li
                     *ngIf="hasAccess(item.access) | async"
+                    class="nav-item"
                     nz-menu-item
                     nz-tooltip
                     nzTooltipPlacement="right"
                     [nzTooltipTitle]="item.title | translate"
                     [nzSelected]="item.route === currentRoute"
                 >
-                    <a [routerLink]="item.route">
-                        <i nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+                    <a [routerLink]="item.route" class="nav-link">
+                        <i
+                            nz-icon
+                            class="nav-icon"
+                            [nzType]="item.icon"
+                            nzTheme="outline"
+                        ></i>
                     </a>
                 </li>
             </ng-template>

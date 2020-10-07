@@ -46,45 +46,47 @@
             </tbody>
         </nz-table>
 
-        <nz-table
-            class="info-table"
-            nzBordered
-            [nzTemplateMode]="true"
-            [nzLoading]="!userStatsItem"
-        >
-            <thead>
-                <tr>
-                    <th>
-                        {{ "common.dictionary.workers" | translate }}
-                    </th>
-                    <th>
-                        {{ "common.dictionary.shareRate" | translate }}
-                    </th>
-                    <th>
-                        {{ "common.dictionary.power" | translate }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ userStatsItem?.workers }}</td>
-                    <td>
-                        {{
-                            userStatsItem?.shareRate
-                                | suffixify: ESuffix.ShareRate
-                        }}
-                    </td>
-                    <td>
-                        {{
-                            userStatsItem?.power
-                                | metricPrefixify: userStatsItemZeroUnitsOffset
-                                | toFixed
-                                | suffixify: ESuffix.Power
-                        }}
-                    </td>
-                </tr>
-            </tbody>
-        </nz-table>
+        <div class="info-table">
+            <nz-table
+                nzBordered
+                [nzTemplateMode]="true"
+                [nzLoading]="!userStatsItem"
+            >
+                <thead>
+                    <tr>
+                        <th>
+                            {{ "common.dictionary.workers" | translate }}
+                        </th>
+                        <th>
+                            {{ "common.dictionary.shareRate" | translate }}
+                        </th>
+                        <th>
+                            {{ "common.dictionary.power" | translate }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ userStatsItem?.workers }}</td>
+                        <td>
+                            {{
+                                userStatsItem?.shareRate
+                                    | suffixify: ESuffix.ShareRate
+                            }}
+                        </td>
+                        <td>
+                            {{
+                                userStatsItem?.power
+                                    | metricPrefixify
+                                        : userStatsItemZeroUnitsOffset
+                                    | toFixed
+                                    | suffixify: ESuffix.Power
+                            }}
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
 
         <nz-table
             class="info-table-mobile"
@@ -150,18 +152,11 @@
         </nz-table>
     </div>
 
-    <div class="chart">
-        <canvas
-            *ngIf="chart"
-            style="width: 100%;"
-            baseChart
-            chartType="line"
-            [datasets]="chart.datasets"
-            [labels]="chart.labels"
-            [options]="chart.options"
-        >
-        </canvas>
-    </div>
+    <app-chart-power
+        class="chart"
+        [stats]="userStatsHistory.stats"
+        [powerMultLog10]="userStatsHistory.powerMultLog10"
+    ></app-chart-power>
 </div>
 
 <nz-table
@@ -288,3 +283,17 @@
         </p>
     </div>
 </div>
+
+<nz-modal
+    nzWidth="80%"
+    [nzVisible]="userWorkersStatsHistory"
+    [nzTitle]="null"
+    [nzFooter]="null"
+    (nzOnCancel)="userWorkersStatsHistory = null"
+>
+    <app-chart-power
+        *ngIf="userWorkersStatsHistory"
+        [stats]="userWorkersStatsHistory.stats"
+        [powerMultLog10]="userWorkersStatsHistory.powerMultLog10"
+    ></app-chart-power>
+</nz-modal>
