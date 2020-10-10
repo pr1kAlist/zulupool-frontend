@@ -17,6 +17,8 @@
     "common.dictionary.": "",
     "common.lang": "Язык",
     "common.theme": "Тема",
+    "common.theme.light": "Светлая",
+    "common.theme.dark": "Темная",
     "validation.clientError.required": "Поле обязательно для заполнения",
     "validation.clientError.minlength": "Минимум {{requiredLength}} символов",
     "validation.clientError.maxlength": "Максимум {{requiredLength}} символов",
