@@ -58,7 +58,9 @@ export class HomeComponent implements OnInit {
             this.poolStatsList = stats;
 
             if (stats.length > 0) {
-                this.poolStats = stats[0];
+                this.poolStats = stats.find(item => {
+                    return item.coin === "HTR";
+                });
 
                 this.getFoundBlocks();
             }
@@ -70,7 +72,6 @@ export class HomeComponent implements OnInit {
     }
 
     private getFoundBlocks(): void {
-        console.log(this.poolStats);
         this.foundBlocksLoading = true;
 
         this.backendQueryApiService
@@ -85,5 +86,11 @@ export class HomeComponent implements OnInit {
                     this.foundBlocksLoading = false;
                 },
             );
+
+        this.backendQueryApiService
+            .getPoolStatsHistory({ coin: this.poolStats.coin })
+            .subscribe(({ stats, powerMultLog10 }) => {
+                this.poolStatsHistory = { stats, powerMultLog10 };
+            });
     }
 }

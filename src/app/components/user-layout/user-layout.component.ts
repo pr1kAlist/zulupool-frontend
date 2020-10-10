@@ -2,12 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
 
+import { Observable } from "rxjs";
 import { filter } from "rxjs/operators";
 
 import { SubscribableComponent } from "ngx-subscribable";
 
 import { EAppRoutes } from "enums/routing";
-import { ThemeService } from "services/theme.service";
 import { trackById, patchTrackIds } from "tools/trackers";
 import { toValueArray } from "tools/enum";
 import { hasValue } from "tools/has-value";
@@ -15,7 +15,7 @@ import { AppService } from "services/app.service";
 import { routeToUrl } from "tools/route-to-url";
 import { ERole } from "enums/role";
 import { RoleAccessService } from "services/role-access.service";
-import { Observable } from "rxjs";
+import { TimeService } from "services/time.service";
 
 @Component({
     selector: "app-user-layout",
@@ -56,13 +56,12 @@ export class UserLayoutComponent extends SubscribableComponent
         },
     ]);
 
-    readonly theme = this.themeService.theme;
-
     private readonly appRoutes = toValueArray(EAppRoutes).filter(hasValue);
 
     currentRoute: EAppRoutes;
 
     showMobileNavMenu = false;
+    currentTime: Date;
 
     get username(): string {
         return this.appService.getUser().name;
@@ -72,9 +71,9 @@ export class UserLayoutComponent extends SubscribableComponent
         private router: Router,
         private location: Location,
         private activatedRoute: ActivatedRoute,
-        private themeService: ThemeService,
         private appService: AppService,
         private roleAccessService: RoleAccessService,
+        private timeService: TimeService,
     ) {
         super();
     }
@@ -88,6 +87,11 @@ export class UserLayoutComponent extends SubscribableComponent
                 }),
             this.activatedRoute.url.subscribe(() => {
                 this.onUrlChange();
+            }),
+            this.timeService.time.subscribe(time => {
+                if (time) {
+                    this.currentTime = new Date(time * 1000);
+                }
             }),
         ];
     }

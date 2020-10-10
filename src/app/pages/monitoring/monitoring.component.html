@@ -7,13 +7,8 @@
             [(ngModel)]="currentCoin"
             (ngModelChange)="onCurrentCoinChange($event)"
         >
-            <label
-                *ngFor="let coin of coins"
-                nz-radio-button
-                [nzValue]="coin"
-                (click)="showUserStatsHistoryChart()"
-            >
-                SHA256
+            <label *ngFor="let coin of coins" nz-radio-button [nzValue]="coin">
+                {{ coin }}
             </label>
         </nz-radio-group>
 
@@ -26,21 +21,14 @@
             <thead>
                 <tr>
                     <th>
-                        {{ "common.dictionary.acceptedDifficulty" | translate }}
+                        {{ "monitoring.balance" | translate }}
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        <span style="font-size: 1.1em;">
-                            {{
-                                acceptedDifficulty
-                                    | acceptedDifficulty
-                                    | toFixed
-                                    | suffixify
-                            }}
-                        </span>
+                        {{ balance }}
                     </td>
                 </tr>
             </tbody>

@@ -12,9 +12,14 @@
     color: white;
     text-shadow: 1px 1px 3px black;
     font-size: 20px;
-    margin: 30px 0 25px;
+    margin: 0 0 35px;
     padding: 15px 25px;
     border-radius: 5px;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
 }
 
 .coin-select-label {
@@ -22,14 +27,26 @@
     margin-right: 10px;
 }
 
-.coins-block {
+.coin-select-block {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.coins-block {
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
+    padding-right: 32px;
 }
 
 .coin-select {
-    width: 200px;
+    width: 100px;
+}
+
+.coin-chart {
+    flex: 1;
 }
 
 .found-blocks-table {

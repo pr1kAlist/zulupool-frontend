@@ -30,6 +30,7 @@ import { NzDrawerModule } from "ng-zorro-antd/drawer";
 import { NzDropDownModule } from "ng-zorro-antd/dropdown";
 import { NzAlertModule } from "ng-zorro-antd/alert";
 import { NzSwitchModule } from "ng-zorro-antd/switch";
+import { NzTypographyModule } from "ng-zorro-antd/typography";
 import {
     FundProjectionScreenOutline,
     LeftCircleOutline,
@@ -68,6 +69,7 @@ import { EmptyContentComponent } from "components/empty-content/empty-content.co
 import { TargetLoginBadgeComponent } from "components/target-login-badge/target-login-badge.component";
 import { ChartComponent } from "components/chart/chart.component";
 import { ChartPowerComponent } from "components/chart-power/chart-power.component";
+import { HeaderControlsComponent } from "components/header-controls/header-controls.component";
 
 import { AgoPipe } from "pipes/ago.pipe";
 import { MetricPrefixifyPipe } from "pipes/metric-prefixify.pipe";
@@ -78,6 +80,7 @@ import { AcceptedDifficultyPipe } from "pipes/accepted-difficulty.pipe";
 
 import { AppRoutingModule } from "app.routing";
 import { AppComponent } from "app.component";
+import { from } from "rxjs";
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(
@@ -126,6 +129,7 @@ registerLocaleData(ru);
         NzDropDownModule,
         NzAlertModule,
         NzSwitchModule,
+        NzTypographyModule,
         NzIconModule.forRoot([
             FundProjectionScreenOutline,
             LeftCircleOutline,
@@ -186,6 +190,7 @@ registerLocaleData(ru);
         TargetLoginBadgeComponent,
         ChartComponent,
         ChartPowerComponent,
+        HeaderControlsComponent,
 
         AgoPipe,
         MetricPrefixifyPipe,

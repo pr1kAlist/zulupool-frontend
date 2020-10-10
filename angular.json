@@ -79,21 +79,18 @@
                                 }
                             ]
                         },
-                        "theme-dark": {
+                        "themes": {
+                            "scripts": [],
                             "styles": [
                                 {
                                     "input": "src/app/styles/theme/dark.less",
                                     "inject": false,
-                                    "bundleName": "bundle"
-                                }
-                            ]
-                        },
-                        "theme-light": {
-                            "styles": [
+                                    "bundleName": "assets/css/theme-dark"
+                                },
                                 {
                                     "input": "src/app/styles/theme/light.less",
                                     "inject": false,
-                                    "bundleName": "bundle"
+                                    "bundleName": "assets/css/theme-light"
                                 }
                             ]
                         }
@@ -109,11 +106,8 @@
                         "production": {
                             "browserTarget": "zulupool-frontend:build:production"
                         },
-                        "theme-dark": {
-                            "browserTarget": "zulupool-frontend:build:theme-dark"
-                        },
-                        "theme-light": {
-                            "browserTarget": "zulupool-frontend:build:theme-light"
+                        "themes": {
+                            "browserTarget": "zulupool-frontend:build:themes"
                         }
                     }
                 }

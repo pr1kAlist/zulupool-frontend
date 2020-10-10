@@ -1,10 +1,17 @@
 import { Component, OnInit } from "@angular/core";
 
+import { not } from "logical-not";
+
 import { EAppRoutes } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
 import { Coin } from "interfaces/coin";
-import { IUserStatsItem, IWorkerStatsItem } from "interfaces/backend-query";
+import {
+    IUserBalanceItem,
+    IUserStatsItem,
+    IWorkerStatsItem,
+} from "interfaces/backend-query";
 import { ESuffix } from "pipes/suffixify.pipe";
+import { TimeService } from "services/time.service";
 
 enum EWorkerState {
     Normal = "normal",
@@ -25,6 +32,7 @@ export class MonitoringComponent implements OnInit {
     coins: Coin[];
     currentCoin: Coin;
 
+    userBalances: IUserBalanceItem[];
     userStatsItem: IUserStatsItem;
     userStatsItemZeroUnitsOffset: number;
     userStatsHistory = {
@@ -39,14 +47,24 @@ export class MonitoringComponent implements OnInit {
 
     acceptedDifficulty: number;
 
-    constructor(private backendQueryApiService: BackendQueryApiService) {}
+    get balance(): string {
+        if (not(this.userBalances)) return "";
+
+        return this.userBalances.find(item => {
+            return item.coin === this.currentCoin;
+        }).balance;
+    }
+
+    constructor(
+        private backendQueryApiService: BackendQueryApiService,
+        private timeService: TimeService,
+    ) {}
 
     ngOnInit(): void {
         this.backendQueryApiService
             .getUserBalance()
             .subscribe(({ balances }) => {
-                balances = balances.filter(item => item.coin === "HTR");
-
+                this.userBalances = balances;
                 this.coins = balances.map(item => item.coin);
 
                 if (this.coins.length > 0) {
@@ -72,12 +90,14 @@ export class MonitoringComponent implements OnInit {
                 this.userWorkersStatsList.sort((a, b) => {
                     return b.lastShareTime - a.lastShareTime;
                 });
+
+                this.timeService.time.next(currentTime);
             });
 
         this.backendQueryApiService
             .getUserStatsHistory({ coin })
             .subscribe(({ stats, powerMultLog10 }) => {
-                this.setAcceptedDifficulty(stats);
+                // this.setAcceptedDifficulty(stats);
 
                 this.userStatsHistory = { stats, powerMultLog10 };
             });

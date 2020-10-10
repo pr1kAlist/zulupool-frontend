@@ -1,6 +1,6 @@
 <nz-layout class="layout">
     <nz-sider [nzWidth]="64">
-        <ul nz-menu nzMode="vertical" [nzTheme]="theme | async">
+        <ul nz-menu nzMode="vertical" nzTheme="dark">
             <ng-template
                 ngFor
                 let-item
@@ -36,34 +36,41 @@
                     <app-logo [iconOnly]="true"></app-logo>
                 </a>
 
-                <i
-                    class="nav-menu-mobile"
-                    nz-icon
-                    nzType="menu"
-                    nzTheme="outline"
-                    (click)="showMobileNavMenu = true"
-                ></i>
+                <div class="right-content">
+                    <i
+                        class="nav-menu-mobile"
+                        nz-icon
+                        nzType="menu"
+                        nzTheme="outline"
+                        (click)="showMobileNavMenu = true"
+                    ></i>
 
-                <button
-                    class="logout"
-                    nz-button
-                    nzType="link"
-                    nz-dropdown
-                    nzTrigger="click"
-                    [nzDropdownMenu]="menu"
-                >
-                    {{ username }}
-                </button>
+                    <button
+                        class="logout"
+                        nz-button
+                        nzType="link"
+                        nz-dropdown
+                        nzTrigger="click"
+                        [nzDropdownMenu]="menu"
+                    >
+                        {{ username }}
+                    </button>
 
-                <nz-dropdown-menu #menu="nzDropdownMenu">
-                    <ul nz-menu>
-                        <li nz-menu-item (click)="logOut()">
-                            {{
-                                "components.userLayout.menu.logOut" | translate
-                            }}
-                        </li>
-                    </ul>
-                </nz-dropdown-menu>
+                    <nz-dropdown-menu #menu="nzDropdownMenu">
+                        <ul nz-menu>
+                            <li nz-menu-item (click)="logOut()">
+                                {{
+                                    "components.userLayout.menu.logOut"
+                                        | translate
+                                }}
+                            </li>
+                        </ul>
+                    </nz-dropdown-menu>
+
+                    <!-- <button *ngIf="currentTime" nz-button nzType="secondary">
+                        {{ currentTime | date: "HH:mm" }}
+                    </button> -->
+                </div>
             </div>
         </nz-header>
 
@@ -83,7 +90,7 @@
     (nzOnClose)="showMobileNavMenu = false"
 >
     <div class="nav-menu-mobile-container">
-        <ul nz-menu nzMode="inline" [nzTheme]="theme | async">
+        <ul nz-menu nzMode="inline" nzTheme="dark">
             <ng-template
                 ngFor
                 let-item

@@ -8,14 +8,6 @@ import { SubscribableComponent } from "ngx-subscribable";
 import { not } from "logical-not";
 
 import { ThemeService } from "services/theme.service";
-import { ETheme } from "enums/theme";
-
-type Color = [number, number, number];
-
-const themes: Record<ETheme, Color> = {
-    [ETheme.Default]: [23, 125, 220],
-    [ETheme.Dark]: [23, 125, 220],
-};
 
 @Component({
     selector: "app-chart",
@@ -44,7 +36,7 @@ export class ChartComponent extends SubscribableComponent
 
     ngOnInit(): void {
         this.subscriptions.push(
-            this.themeService.theme.subscribe(theme => {
+            this.themeService.chartsColor.subscribe(() => {
                 this.ngOnChanges();
             }),
         );
@@ -55,7 +47,7 @@ export class ChartComponent extends SubscribableComponent
 
         if (not(data?.length > 0)) return;
 
-        const [r, g, b] = themes[this.themeService.theme.value];
+        const [r, g, b] = this.themeService.chartsColor.value;
 
         this.chart = {
             datasets: [

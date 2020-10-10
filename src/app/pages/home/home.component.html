@@ -1,8 +1,3 @@
-<app-chart-power
-    [stats]="poolStatsHistory.stats"
-    [powerMultLog10]="poolStatsHistory.powerMultLog10"
-></app-chart-power>
-
 <div class="sign-up-block">
     <a
         class="sign-up-link"
@@ -13,53 +8,63 @@
     </a>
 </div>
 
-<div class="coins-block">
-    <span class="coin-select-label">
-        {{ "home.coinSelect" | translate }}
-    </span>
+<div class="main">
+    <div class="coins-block">
+        <div class="coin-select-block">
+            <span class="coin-select-label">
+                {{ "home.coinSelect" | translate }}
+            </span>
 
-    <nz-select
-        class="coin-select"
-        [(ngModel)]="poolStats"
-        [nzLoading]="!poolStatsList"
-        (ngModelChange)="onPoolStatsSelect()"
-    >
-        <nz-option
-            *ngFor="let item of poolStatsList"
-            [nzLabel]="item.coin"
-            [nzValue]="item"
-        ></nz-option>
-    </nz-select>
+            <nz-select
+                class="coin-select"
+                [(ngModel)]="poolStats"
+                [nzLoading]="!poolStatsList"
+                (ngModelChange)="onPoolStatsSelect()"
+            >
+                <nz-option
+                    *ngFor="let item of poolStatsList"
+                    [nzLabel]="item.coin"
+                    [nzValue]="item"
+                ></nz-option>
+            </nz-select>
+        </div>
 
-    <nz-table
-        *ngIf="poolStats"
-        style="flex: 1; margin-left: 32px; max-width: 800px;"
-        nzBordered
-        nzSize="small"
-        [nzTemplateMode]="true"
-    >
-        <tbody>
-            <tr>
-                <td>{{ "common.dictionary.power" | translate }}</td>
-                <td>
-                    {{
-                        poolStats.power
-                            | metricPrefixify: poolStats.powerMultLog10
-                            | toFixed
-                            | suffixify: ESuffix.Power
-                    }}
-                </td>
-            </tr>
-            <tr>
-                <td>Clients</td>
-                <td>{{ poolStats.clients }}</td>
-            </tr>
-            <tr>
-                <td>{{ "common.dictionary.workers" | translate }}</td>
-                <td>{{ poolStats.workers }}</td>
-            </tr>
-        </tbody>
-    </nz-table>
+        <nz-table
+            *ngIf="poolStats"
+            style="width: 100%;"
+            nzBordered
+            nzSize="small"
+            [nzTemplateMode]="true"
+        >
+            <tbody>
+                <tr>
+                    <td>{{ "common.dictionary.power" | translate }}</td>
+                    <td>
+                        {{
+                            poolStats.power
+                                | metricPrefixify: poolStats.powerMultLog10
+                                | toFixed
+                                | suffixify: ESuffix.Power
+                        }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Clients</td>
+                    <td>{{ poolStats.clients }}</td>
+                </tr>
+                <tr>
+                    <td>{{ "common.dictionary.workers" | translate }}</td>
+                    <td>{{ poolStats.workers }}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+
+    <app-chart-power
+        class="coin-chart"
+        [stats]="poolStatsHistory.stats"
+        [powerMultLog10]="poolStatsHistory.powerMultLog10"
+    ></app-chart-power>
 </div>
 
 <nz-table
@@ -78,7 +83,12 @@
     <tbody>
         <tr *ngFor="let foundBlock of foundBlocks">
             <td *ngFor="let key of foundBlockKeys">
-                {{ foundBlock[key] }}
+                <ng-container *ngIf="key === 'time'">
+                    {{ foundBlock[key] * 1000 | date: "MM.dd HH:mm" }}
+                </ng-container>
+                <ng-container *ngIf="key !== 'time'">
+                    {{ foundBlock[key] }}
+                </ng-container>
             </td>
         </tr>
     </tbody>

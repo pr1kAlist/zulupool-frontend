@@ -53,7 +53,7 @@ export class PaymentsComponent implements OnInit {
                     groupByInterval,
                 })
                 .subscribe(({ stats, powerMultLog10 }) => {
-                    stats.pop();
+                    // stats.pop();
                     stats.reverse();
 
                     stats.forEach(item => {

@@ -1,0 +1,14 @@
+<button nz-button nz-dropdown [nzDropdownMenu]="themePicker">
+    {{ "common.theme" | translate }}
+</button>
+
+<nz-dropdown-menu #themePicker="nzDropdownMenu">
+    <ul nz-menu>
+        <li nz-menu-item *ngFor="let theme of themeList">
+            <div
+                class="theme _theme-{{ theme }}"
+                (click)="changeTheme(theme)"
+            ></div>
+        </li>
+    </ul>
+</nz-dropdown-menu>
