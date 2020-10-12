@@ -20,13 +20,7 @@ npm i
 Для сборки в темных тонах:
 
 ```bash
-npx ng build --configuration=production,theme-dark --build-optimizer
-```
-
-Для сборки в светлых тонах:
-
-```bash
-npx ng build --configuration=production,theme-light --build-optimizer
+npm run build
 ```
 
 ### Скопировать скомпилированный код
