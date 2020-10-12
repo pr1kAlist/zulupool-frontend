@@ -6,10 +6,6 @@ import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { DatePipe, I18nPluralPipe, registerLocaleData } from "@angular/common";
 
-import ru from "@angular/common/locales/ru";
-import en from "@angular/common/locales/en";
-// import zh from "@angular/common/locales/zh-Hans";
-
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
@@ -79,21 +75,16 @@ import { SecondsPipe } from "pipes/seconds.pipe";
 import { SuffixifyPipe } from "pipes/suffixify.pipe";
 import { ToFixedPipe } from "pipes/to-fixed.pipe";
 import { AcceptedDifficultyPipe } from "pipes/accepted-difficulty.pipe";
+import { DateXPipe } from "pipes/date.pipe";
 
 import { AppRoutingModule } from "app.routing";
 import { AppComponent } from "app.component";
 
-const { ELang } = zpLangController;
-
-const langMap = {
-    [ELang.Ru]: ru,
-    [ELang.En]: en,
-    // [ELang.China]: zh,
-};
+import { langs } from "tools/langs";
 
 const currentLang = zpLangController.getCurrentLang();
 
-registerLocaleData(langMap[currentLang]);
+registerLocaleData(langs[currentLang], currentLang);
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(
@@ -159,7 +150,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ],
 
     providers: [
-        { provide: LOCALE_ID, useValue: currentLang },
+        {
+            provide: LOCALE_ID,
+            useValue: currentLang,
+        },
         {
             provide: NZ_CONFIG,
             useValue: {
@@ -207,6 +201,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         SuffixifyPipe,
         ToFixedPipe,
         AcceptedDifficultyPipe,
+        DateXPipe,
     ],
     bootstrap: [AppComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],

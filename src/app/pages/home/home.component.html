@@ -84,7 +84,7 @@
         <tr *ngFor="let foundBlock of foundBlocks">
             <td *ngFor="let key of foundBlockKeys">
                 <ng-container *ngIf="key === 'time'">
-                    {{ foundBlock[key] * 1000 | date: "MM.dd HH:mm" }}
+                    {{ foundBlock[key] * 1000 | date: "dd MMM HH:mm" | async }}
                 </ng-container>
                 <ng-container *ngIf="key !== 'time'">
                     {{ foundBlock[key] }}

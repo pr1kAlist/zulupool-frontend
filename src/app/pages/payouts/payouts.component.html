@@ -38,7 +38,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let payout of payouts">
-            <td>{{ payout.time | date: "HH:mm" }}</td>
+            <td>{{ payout.time * 1000 | date: "dd MMM HH:mm" | async }}</td>
             <td>{{ payout.txid }}</td>
             <td>{{ payout.value }}</td>
         </tr>

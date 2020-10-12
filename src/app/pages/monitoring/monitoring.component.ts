@@ -68,7 +68,11 @@ export class MonitoringComponent implements OnInit, OnDestroy {
                 this.coins = balances.map(item => item.coin);
 
                 if (this.coins.length > 0) {
-                    this.onCurrentCoinChange(this.coins[0]);
+                    const coin = this.coins.includes("HTR")
+                        ? "HTR"
+                        : this.coins[0];
+
+                    this.onCurrentCoinChange(coin);
                 }
             });
     }
