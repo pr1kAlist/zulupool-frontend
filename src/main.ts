@@ -1,3 +1,4 @@
+/// <reference path="./lang-controller.d.ts" />
 /// <reference path="./theme-controller.d.ts" />
 
 import { enableProdMode } from "@angular/core";

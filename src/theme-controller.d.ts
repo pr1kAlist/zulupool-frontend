@@ -10,4 +10,5 @@ declare namespace zpThemeController {
     function getThemeList(): ETheme[];
     function changeTheme(target: ETheme, callback?: () => void);
     function getChartsColor(): Color;
+    function getGridLineColor(): Color;
 }

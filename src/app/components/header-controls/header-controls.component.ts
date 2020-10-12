@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 
+import { LangService } from "services/lang.service";
 import { ThemeService } from "services/theme.service";
 
 @Component({
@@ -8,17 +9,28 @@ import { ThemeService } from "services/theme.service";
     styleUrls: ["./header-controls.component.less"],
 })
 export class HeaderControlsComponent {
+    readonly ELang = zpLangController.ELang;
+
+    readonly langList = zpLangController.getLangList();
     readonly themeList = zpThemeController.getThemeList();
 
+    currentLang = zpLangController.getCurrentLang();
     currentTheme = zpThemeController.getCurrentTheme();
 
-    constructor(private themeService: ThemeService) {}
+    constructor(
+        private langService: LangService,
+        private themeService: ThemeService,
+    ) {}
+
+    changeLang(lang: zpLangController.ELang): void {
+        this.langService.changeLang(lang);
+
+        this.currentLang = lang;
+    }
 
     changeTheme(theme: zpThemeController.ETheme): void {
-        zpThemeController.changeTheme(theme, () => {
-            this.themeService.chartsColor.next(
-                zpThemeController.getChartsColor(),
-            );
-        });
+        this.themeService.changeTheme(theme);
+
+        this.currentTheme = theme;
     }
 }

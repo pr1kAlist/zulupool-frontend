@@ -7,6 +7,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { DatePipe, I18nPluralPipe, registerLocaleData } from "@angular/common";
 
 import ru from "@angular/common/locales/ru";
+import en from "@angular/common/locales/en";
+// import zh from "@angular/common/locales/zh-Hans";
 
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -80,7 +82,18 @@ import { AcceptedDifficultyPipe } from "pipes/accepted-difficulty.pipe";
 
 import { AppRoutingModule } from "app.routing";
 import { AppComponent } from "app.component";
-import { from } from "rxjs";
+
+const { ELang } = zpLangController;
+
+const langMap = {
+    [ELang.Ru]: ru,
+    [ELang.En]: en,
+    // [ELang.China]: zh,
+};
+
+const currentLang = zpLangController.getCurrentLang();
+
+registerLocaleData(langMap[currentLang]);
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(
@@ -89,10 +102,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         `.json?v=${Date.now()}`,
     );
 }
-
-export const defaultLanguage = "ru";
-
-registerLocaleData(ru);
 
 @NgModule({
     imports: [
@@ -104,7 +113,7 @@ registerLocaleData(ru);
         AppRoutingModule,
         TranslateModule,
         TranslateModule.forRoot({
-            defaultLanguage,
+            defaultLanguage: currentLang,
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
@@ -150,7 +159,7 @@ registerLocaleData(ru);
     ],
 
     providers: [
-        { provide: LOCALE_ID, useValue: "ru" },
+        { provide: LOCALE_ID, useValue: currentLang },
         {
             provide: NZ_CONFIG,
             useValue: {

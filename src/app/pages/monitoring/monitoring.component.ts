@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { not } from "logical-not";
 
@@ -11,7 +11,6 @@ import {
     IWorkerStatsItem,
 } from "interfaces/backend-query";
 import { ESuffix } from "pipes/suffixify.pipe";
-import { TimeService } from "services/time.service";
 
 enum EWorkerState {
     Normal = "normal",
@@ -24,7 +23,7 @@ enum EWorkerState {
     templateUrl: "./monitoring.component.html",
     styleUrls: ["./monitoring.component.less"],
 })
-export class MonitoringComponent implements OnInit {
+export class MonitoringComponent implements OnInit, OnDestroy {
     readonly EAppRoutes = EAppRoutes;
     readonly EWorkerState = EWorkerState;
     readonly ESuffix = ESuffix;
@@ -45,7 +44,11 @@ export class MonitoringComponent implements OnInit {
         powerMultLog10: number;
     };
 
-    acceptedDifficulty: number;
+    tableData = {
+        isLoading: false,
+        updateTimeoutId: null,
+    };
+    // acceptedDifficulty: number;
 
     get balance(): string {
         if (not(this.userBalances)) return "";
@@ -55,10 +58,7 @@ export class MonitoringComponent implements OnInit {
         }).balance;
     }
 
-    constructor(
-        private backendQueryApiService: BackendQueryApiService,
-        private timeService: TimeService,
-    ) {}
+    constructor(private backendQueryApiService: BackendQueryApiService) {}
 
     ngOnInit(): void {
         this.backendQueryApiService
@@ -73,26 +73,14 @@ export class MonitoringComponent implements OnInit {
             });
     }
 
+    ngOnDestroy(): void {
+        clearTimeout(this.tableData.updateTimeoutId);
+    }
+
     onCurrentCoinChange(coin: Coin): void {
         this.currentCoin = coin;
 
-        this.backendQueryApiService
-            .getUserStats({ coin })
-            .subscribe(({ total, workers, currentTime, powerMultLog10 }) => {
-                workers.forEach(item => {
-                    item.lastShareTime = currentTime - item.lastShareTime;
-                });
-
-                this.userStatsItem = total;
-                this.userStatsItemZeroUnitsOffset = powerMultLog10;
-                this.userWorkersStatsList = workers;
-
-                this.userWorkersStatsList.sort((a, b) => {
-                    return b.lastShareTime - a.lastShareTime;
-                });
-
-                this.timeService.time.next(currentTime);
-            });
+        this.updateTablesData();
 
         this.backendQueryApiService
             .getUserStatsHistory({ coin })
@@ -130,17 +118,48 @@ export class MonitoringComponent implements OnInit {
         return EWorkerState.Normal;
     }
 
-    private setAcceptedDifficulty(stats: IWorkerStatsItem[]): void {
-        this.acceptedDifficulty = 0;
+    private updateTablesData(): void {
+        this.tableData.isLoading = true;
 
-        const today = new Date().getDate();
+        clearTimeout(this.tableData.updateTimeoutId);
 
-        stats.forEach(item => {
-            const date = new Date(item.time * 1000);
+        this.backendQueryApiService
+            .getUserStats({ coin: this.currentCoin })
+            .subscribe({
+                complete: () => {
+                    this.tableData.isLoading = false;
 
-            if (date.getDate() === today && date.getHours()) {
-                this.acceptedDifficulty += item.shareWork;
-            }
-        });
+                    this.tableData.updateTimeoutId = setTimeout(() => {
+                        this.updateTablesData();
+                    }, 45000);
+                },
+                next: ({ total, workers, currentTime, powerMultLog10 }) => {
+                    workers.forEach(item => {
+                        item.lastShareTime = currentTime - item.lastShareTime;
+                    });
+                    workers.sort((a, b) => {
+                        return b.lastShareTime - a.lastShareTime;
+                    });
+
+                    this.userStatsItem = total;
+                    this.userStatsItemZeroUnitsOffset = powerMultLog10;
+                    this.userWorkersStatsList = workers;
+                    this.tableData.isLoading = false;
+                },
+            });
     }
+
+    // private setAcceptedDifficulty(stats: IWorkerStatsItem[]): void {
+    //     this.acceptedDifficulty = 0;
+
+    //     const today = new Date().getDate();
+
+    //     stats.forEach(item => {
+    //         const date = new Date(item.time * 1000);
+
+    //         if (date.getDate() === today && date.getHours()) {
+    //             this.acceptedDifficulty += item.shareWork;
+    //         }
+    //     });
+    // }
 }

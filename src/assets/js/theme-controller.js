@@ -1,5 +1,6 @@
 const zpThemeController = (function () {
-    const storageKey = "zp-theme";
+    const STORAGE_KEY = "zp-theme";
+
     const ETheme = Object.freeze({
         Light: "light",
         Dark: "dark",
@@ -7,7 +8,6 @@ const zpThemeController = (function () {
 
     const zpThemeController = Object.freeze({
         ETheme,
-        storageKey,
 
         getCurrentTheme() {
             return currentTheme;
@@ -22,7 +22,7 @@ const zpThemeController = (function () {
             if (target === currentTheme) return;
 
             currentTheme = target;
-            window.localStorage.setItem(storageKey, target);
+            window.localStorage.setItem(STORAGE_KEY, target);
 
             if (linkElement) linkElement.remove();
 
@@ -39,20 +39,24 @@ const zpThemeController = (function () {
         },
 
         getChartsColor() {
-            return ChartsColor[currentTheme];
+            return ChartsColor[currentTheme].color;
+        },
+
+        getGridLineColor() {
+            return ChartsColor[currentTheme].gridLine;
         },
     });
 
     const ChartsColor = {
-        [ETheme.Light]: [23, 124, 220],
-        [ETheme.Dark]: [255, 255, 255],
+        [ETheme.Light]: { color: [23, 124, 220], gridLine: [0, 0, 0] },
+        [ETheme.Dark]: { color: [43, 144, 143], gridLine: [255, 255, 255] },
     };
 
     let linkElement;
     let currentTheme;
 
     zpThemeController.changeTheme(
-        toTheme(window.localStorage.getItem(storageKey)),
+        toTheme(window.localStorage.getItem(STORAGE_KEY)),
     );
 
     return zpThemeController;

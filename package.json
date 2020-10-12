@@ -21,7 +21,7 @@
         "chart.js": "^2.9.3",
         "logical-not": "^1.0.7",
         "ng-zorro-antd": "^10.0.0",
-        "ng2-charts": "^2.3.3",
+        "ng2-charts": "^2.4.2",
         "ngx-subscribable": "^1.0.0",
         "rxjs": "~6.6.3",
         "tslib": "^2.0.0",

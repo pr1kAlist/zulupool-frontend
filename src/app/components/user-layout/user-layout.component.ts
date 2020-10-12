@@ -15,7 +15,6 @@ import { AppService } from "services/app.service";
 import { routeToUrl } from "tools/route-to-url";
 import { ERole } from "enums/role";
 import { RoleAccessService } from "services/role-access.service";
-import { TimeService } from "services/time.service";
 
 @Component({
     selector: "app-user-layout",
@@ -61,7 +60,6 @@ export class UserLayoutComponent extends SubscribableComponent
     currentRoute: EAppRoutes;
 
     showMobileNavMenu = false;
-    currentTime: Date;
 
     get username(): string {
         return this.appService.getUser().name;
@@ -73,7 +71,6 @@ export class UserLayoutComponent extends SubscribableComponent
         private activatedRoute: ActivatedRoute,
         private appService: AppService,
         private roleAccessService: RoleAccessService,
-        private timeService: TimeService,
     ) {
         super();
     }
@@ -87,11 +84,6 @@ export class UserLayoutComponent extends SubscribableComponent
                 }),
             this.activatedRoute.url.subscribe(() => {
                 this.onUrlChange();
-            }),
-            this.timeService.time.subscribe(time => {
-                if (time) {
-                    this.currentTime = new Date(time * 1000);
-                }
             }),
         ];
     }
