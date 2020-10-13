@@ -1,10 +1,10 @@
-import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { NgModule } from "@angular/core";
 
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { DatePipe, I18nPluralPipe, registerLocaleData } from "@angular/common";
+import { NgLocaleLocalization } from "@angular/common";
 
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -75,16 +75,10 @@ import { SecondsPipe } from "pipes/seconds.pipe";
 import { SuffixifyPipe } from "pipes/suffixify.pipe";
 import { ToFixedPipe } from "pipes/to-fixed.pipe";
 import { AcceptedDifficultyPipe } from "pipes/accepted-difficulty.pipe";
-import { DateXPipe } from "pipes/date.pipe";
+import { DatePipe } from "pipes/date.pipe";
 
 import { AppRoutingModule } from "app.routing";
 import { AppComponent } from "app.component";
-
-import { langs } from "tools/langs";
-
-const currentLang = zpLangController.getCurrentLang();
-
-registerLocaleData(langs[currentLang], currentLang);
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(
@@ -93,6 +87,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         `.json?v=${Date.now()}`,
     );
 }
+
+const currentLang = zpLangController.getCurrentLang();
 
 @NgModule({
     imports: [
@@ -104,7 +100,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppRoutingModule,
         TranslateModule,
         TranslateModule.forRoot({
-            defaultLanguage: currentLang,
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
@@ -151,10 +146,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
     providers: [
         {
-            provide: LOCALE_ID,
-            useValue: currentLang,
-        },
-        {
             provide: NZ_CONFIG,
             useValue: {
                 empty: {
@@ -163,10 +154,7 @@ export function HttpLoaderFactory(http: HttpClient) {
             },
         },
         {
-            provide: I18nPluralPipe,
-        },
-        {
-            provide: DatePipe,
+            provide: NgLocaleLocalization,
         },
     ],
 
@@ -201,9 +189,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         SuffixifyPipe,
         ToFixedPipe,
         AcceptedDifficultyPipe,
-        DateXPipe,
+        DatePipe,
     ],
     bootstrap: [AppComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

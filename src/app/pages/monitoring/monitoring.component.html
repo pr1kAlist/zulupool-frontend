@@ -208,7 +208,7 @@
                         | suffixify: ESuffix.Power
                 }}
             </td>
-            <td>{{ item.lastShareTime | ago }}</td>
+            <td>{{ item.lastShareTime | ago | async }}</td>
         </tr>
     </tbody>
 </nz-table>
@@ -262,7 +262,7 @@
         </p>
         <p>
             {{ "common.dictionary.lastSeen" | translate }}:
-            {{ item.lastShareTime | ago }}
+            {{ item.lastShareTime | ago | async }}
         </p>
     </div>
 </div>

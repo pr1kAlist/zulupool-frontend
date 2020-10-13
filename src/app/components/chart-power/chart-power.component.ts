@@ -1,9 +1,10 @@
 import { Component, Input, OnChanges } from "@angular/core";
-import { DatePipe } from "@angular/common";
+import { formatDate } from "@angular/common";
 
 import { Label } from "ng2-charts";
 
 import { IWorkerStatsItem } from "interfaces/backend-query";
+import { LangService } from "services/lang.service";
 
 @Component({
     selector: "app-chart-power",
@@ -20,7 +21,7 @@ export class ChartPowerComponent implements OnChanges {
     labels: Label[];
     data: number[];
 
-    constructor(private datePipe: DatePipe) {}
+    constructor(private langService: LangService) {}
 
     ngOnChanges(): void {
         this.labels = [];
@@ -35,7 +36,11 @@ export class ChartPowerComponent implements OnChanges {
             this.data.push(item.power / rate);
 
             this.labels.push(
-                this.datePipe.transform(new Date(item.time * 1000), "HH:mm"),
+                formatDate(
+                    new Date(item.time * 1000),
+                    "HH:mm",
+                    this.langService.getCurrentLang(),
+                ),
             );
         });
     }
