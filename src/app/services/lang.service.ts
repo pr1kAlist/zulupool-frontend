@@ -6,7 +6,7 @@ import en from "@angular/common/locales/en";
 // import zh from "@angular/common/locales/zh-Hans";
 
 import { TranslateService } from "@ngx-translate/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 const { ELang } = zpLangController;
 
@@ -16,14 +16,14 @@ const langs = {
     // [ELang.China]: zh,
 };
 
-const currentLang = zpLangController.getCurrentLang();
-
 @Injectable({ providedIn: "root" })
 export class LangService {
-    onChange = new BehaviorSubject<zpLangController.ELang>(currentLang);
+    readonly onChange = new BehaviorSubject<zpLangController.ELang>(null);
 
-    constructor(private translateService: TranslateService) {
-        this.applyLang(currentLang);
+    constructor(private translateService: TranslateService) {}
+
+    init(): void {
+        this.applyLang(zpLangController.getCurrentLang());
     }
 
     getCurrentLang(): zpLangController.ELang {
@@ -32,15 +32,15 @@ export class LangService {
 
     changeLang(lang: zpLangController.ELang): void {
         zpLangController.changeLang(lang, () => {
-            this.applyLang(lang).subscribe(() => {
-                this.onChange.next(lang);
-            });
+            this.applyLang(lang);
         });
     }
 
-    private applyLang(lang: zpLangController.ELang): Observable<any> {
+    private applyLang(lang: zpLangController.ELang): void {
         registerLocaleData(langs[lang], lang);
 
-        return this.translateService.use(lang);
+        this.translateService.use(lang).subscribe(() => {
+            this.onChange.next(lang);
+        });
     }
 }

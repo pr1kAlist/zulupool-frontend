@@ -88,8 +88,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     );
 }
 
-const currentLang = zpLangController.getCurrentLang();
-
 @NgModule({
     imports: [
         BrowserModule,
