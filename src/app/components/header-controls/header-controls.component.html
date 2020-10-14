@@ -18,7 +18,13 @@
     </ul>
 </nz-dropdown-menu>
 
-<button nz-button nzSize="small" nz-dropdown [nzDropdownMenu]="themePicker">
+<button
+    nz-button
+    nzSize="small"
+    nz-dropdown
+    [nzDropdownMenu]="themePicker"
+    [nzLoading]="isThemeLoading"
+>
     {{ "common.theme" | translate }}
 </button>
 

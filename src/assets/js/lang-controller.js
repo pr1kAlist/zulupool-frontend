@@ -54,3 +54,7 @@ const zpLangController = (function () {
         return langList.indexOf(source) !== -1;
     }
 })();
+
+if (typeof window.zpLangController === "undefined") {
+    window.zpLangController = zpLangController;
+}

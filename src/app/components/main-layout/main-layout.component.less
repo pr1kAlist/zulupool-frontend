@@ -10,7 +10,10 @@
 
 .header-controls {
     display: flex;
-    gap: 15px;
+
+    & > *:not(:first-child) {
+        margin-left: 15px;
+    }
 }
 
 .help-link {

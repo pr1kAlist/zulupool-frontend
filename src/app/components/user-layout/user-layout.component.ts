@@ -90,15 +90,9 @@ export class UserLayoutComponent extends SubscribableComponent
 
     logOut(): void {
         this.appService.logOut().subscribe(() => {
-            this.router.navigate([routeToUrl(EAppRoutes.Auth)], {
-                queryParams: {
-                    to: routeToUrl(EAppRoutes.Monitoring),
-                },
-            });
-
-            // this.router.navigate([routeToUrl(EAppRoutes.Home)]);
-
             this.showMobileNavMenu = false;
+
+            this.router.navigate([routeToUrl(EAppRoutes.Home)]);
         });
     }
 

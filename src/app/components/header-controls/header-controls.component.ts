@@ -1,4 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+
+import { SubscribableComponent } from "ngx-subscribable";
 
 import { LangService } from "services/lang.service";
 import { ThemeService } from "services/theme.service";
@@ -8,7 +10,8 @@ import { ThemeService } from "services/theme.service";
     templateUrl: "./header-controls.component.html",
     styleUrls: ["./header-controls.component.less"],
 })
-export class HeaderControlsComponent {
+export class HeaderControlsComponent extends SubscribableComponent
+    implements OnInit {
     readonly ELang = zpLangController.ELang;
 
     readonly langList = zpLangController.getLangList();
@@ -17,10 +20,23 @@ export class HeaderControlsComponent {
     currentLang = zpLangController.getCurrentLang();
     currentTheme = zpThemeController.getCurrentTheme();
 
+    isThemeLoading = false;
+
     constructor(
         private langService: LangService,
         private themeService: ThemeService,
-    ) {}
+    ) {
+        super();
+    }
+
+    ngOnInit(): void {
+        this.subscriptions.push(
+            this.themeService.onChange.subscribe(theme => {
+                this.isThemeLoading = false;
+                this.currentTheme = theme;
+            }),
+        );
+    }
 
     changeLang(lang: zpLangController.ELang): void {
         this.langService.changeLang(lang);
@@ -29,8 +45,10 @@ export class HeaderControlsComponent {
     }
 
     changeTheme(theme: zpThemeController.ETheme): void {
+        if (this.isThemeLoading || theme === this.currentTheme) return;
+
         this.themeService.changeTheme(theme);
 
-        this.currentTheme = theme;
+        this.isThemeLoading = true;
     }
 }

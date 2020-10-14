@@ -24,18 +24,21 @@ const zpThemeController = (function () {
             currentTheme = target;
             window.localStorage.setItem(STORAGE_KEY, target);
 
-            if (linkElement) linkElement.remove();
+            document.querySelector("head").append(
+                Object.assign(document.createElement("link"), {
+                    rel: "stylesheet",
+                    href: `assets/css/theme-${target}.css`,
+                    onload() {
+                        if (linkElement) linkElement.remove();
 
-            linkElement = Object.assign(document.createElement("link"), {
-                rel: "stylesheet",
-                href: `assets/css/theme-${target}.css`,
-            });
+                        linkElement = this;
 
-            document.querySelector("head").append(linkElement);
-
-            if (typeof callback === "function") {
-                callback();
-            }
+                        if (typeof callback === "function") {
+                            callback();
+                        }
+                    },
+                }),
+            );
         },
 
         getChartsColor() {
@@ -67,3 +70,7 @@ const zpThemeController = (function () {
             : zpThemeController.ETheme.Light;
     }
 })();
+
+if (typeof window.zpThemeController === "undefined") {
+    window.zpThemeController = zpThemeController;
+}
