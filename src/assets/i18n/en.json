@@ -43,7 +43,7 @@
     "validation.serverError.": "",
     "validation.unknownError": "Unknown error",
     "components.mainLayout.help": "Help",
-    "components.mainLayout.enterButton": "User panel",
+    "components.mainLayout.enterButton": "Dashboard",
     "components.userLayout.nav.monitoring": "Monitoring",
     "components.userLayout.nav.history": "History",
     "components.userLayout.nav.users": "Users",
