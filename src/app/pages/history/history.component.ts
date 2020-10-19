@@ -9,11 +9,11 @@ import { ESuffix } from "pipes/suffixify.pipe";
 import { ETime } from "enums/time";
 
 @Component({
-    selector: "app-payments",
-    templateUrl: "./payments.component.html",
-    styleUrls: ["./payments.component.less"],
+    selector: "app-history",
+    templateUrl: "./history.component.html",
+    styleUrls: ["./history.component.less"],
 })
-export class PaymentsComponent implements OnInit {
+export class HistoryComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly ESuffix = ESuffix;
 

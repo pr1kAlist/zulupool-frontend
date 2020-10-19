@@ -52,3 +52,31 @@
 .found-blocks-table {
     margin: 20px 0 0;
 }
+
+.found-blocks-table-mobile {
+    display: none;
+}
+
+.found-blocks-hash {
+    word-break: break-all;
+}
+
+@media (max-width: 992px) {
+    .main {
+        flex-direction: column;
+    }
+
+    .found-blocks-table {
+        display: none;
+    }
+
+    .coins-block {
+        margin-bottom: 32px;
+        padding: 0;
+    }
+
+    .found-blocks-table-mobile {
+        display: block;
+        margin-top: 32px;
+    }
+}

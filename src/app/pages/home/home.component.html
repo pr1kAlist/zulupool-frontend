@@ -83,13 +83,63 @@
     <tbody>
         <tr *ngFor="let foundBlock of foundBlocks">
             <td *ngFor="let key of foundBlockKeys">
-                <ng-container *ngIf="key === 'time'">
-                    {{ foundBlock[key] * 1000 | date: "dd MMM HH:mm" | async }}
-                </ng-container>
-                <ng-container *ngIf="key !== 'time'">
-                    {{ foundBlock[key] }}
-                </ng-container>
+                <ng-container
+                    *ngTemplateOutlet="
+                        foundBlockDataTemplate;
+                        context: {
+                            key: key,
+                            value: foundBlock[key]
+                        }
+                    "
+                ></ng-container>
             </td>
         </tr>
     </tbody>
 </nz-table>
+
+<nz-table
+    *ngFor="let foundBlock of foundBlocks"
+    class="found-blocks-table-mobile _table-mobile"
+    [nzTemplateMode]="true"
+>
+    <tbody>
+        <ng-container *ngFor="let key of foundBlockKeys">
+            <tr>
+                <th>
+                    {{ "home.foundBlocksTable.title." + key | translate }}
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <ng-container
+                        *ngTemplateOutlet="
+                            foundBlockDataTemplate;
+                            context: {
+                                key: key,
+                                value: foundBlock[key]
+                            }
+                        "
+                    ></ng-container>
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</nz-table>
+
+<ng-template #foundBlockDataTemplate let-key="key" let-value="value">
+    <ng-container [ngSwitch]="key">
+        <ng-container *ngSwitchCase="'hash'">
+            <span class="found-blocks-hash">
+                {{ value }}
+            </span>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'time'">
+            {{ value * 1000 | date: "dd MMM HH:mm" | async }}
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+            {{ value }}
+        </ng-container>
+    </ng-container>
+</ng-template>

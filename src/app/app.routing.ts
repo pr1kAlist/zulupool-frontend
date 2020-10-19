@@ -13,7 +13,7 @@ import { UserLayoutComponent } from "components/user-layout/user-layout.componen
 import { HomeComponent } from "pages/home/home.component";
 import { AuthComponent } from "pages/auth/auth.component";
 import { MonitoringComponent } from "pages/monitoring/monitoring.component";
-import { PaymentsComponent } from "pages/payments/payments.component";
+import { HistoryComponent } from "pages/history/history.component";
 import { PageNotFoundComponent } from "pages/404/page-not-found.component";
 import { UserActivateComponent } from "pages/actions/user-activate/user-activate.component";
 import { UserResendEmailComponent } from "pages/user-resend-email/user-resend-email.component";
@@ -72,7 +72,7 @@ const routes: Routes = [
             },
             {
                 path: EAppRoutes.History,
-                component: PaymentsComponent,
+                component: HistoryComponent,
             },
             {
                 path: EAppRoutes.Users,
