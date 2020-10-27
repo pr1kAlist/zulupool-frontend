@@ -1,6 +1,6 @@
 {
     "/api/*": {
-        "target": "http://pool.jsoncrypto.com/",
+        "target": "http://hathor2.zulupool.com/",
         "secure": false
     }
 }

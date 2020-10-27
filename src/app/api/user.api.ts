@@ -37,6 +37,10 @@ export class UserApiService {
     updateSettings(params: IUserSettings): Observable<void> {
         return this.restService.post("/userUpdateSettings", params);
     }
+
+    changePassword(params: IUserChangePassword): Observable<void> {
+        return this.restService.post("/userChangePassword", params);
+    }
 }
 
 export interface IUserCreateParams {
@@ -58,4 +62,8 @@ export interface IUserListResponse {
 
 export interface IUserGetSettings {
     coins: IUserSettings[];
+}
+
+export interface IUserChangePassword {
+    newPassword: string;
 }

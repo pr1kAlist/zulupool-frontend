@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
+import { Validators } from "@angular/forms";
 
 import { Observable } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -15,6 +16,8 @@ import { AppService } from "services/app.service";
 import { routeToUrl } from "tools/route-to-url";
 import { ERole } from "enums/role";
 import { RoleAccessService } from "services/role-access.service";
+import { FormService } from "services/form.service";
+import { UserApiService, IUserChangePassword } from "api/user.api";
 
 @Component({
     selector: "app-user-layout",
@@ -61,6 +64,22 @@ export class UserLayoutComponent extends SubscribableComponent
 
     showMobileNavMenu = false;
 
+    changePasswordForm = this.formService.createFormManager<
+        IUserChangePassword
+    >(
+        {
+            newPassword: {
+                validators: [Validators.required, Validators.maxLength(64)],
+                errors: ["password_format_invalid"],
+            },
+        },
+        {
+            onSubmit: () => this.changePassword(),
+        },
+    );
+    isChangePasswordModalShow = false;
+    isPasswordChanging = false;
+
     get username(): string {
         return this.appService.getUser().name;
     }
@@ -69,8 +88,10 @@ export class UserLayoutComponent extends SubscribableComponent
         private router: Router,
         private location: Location,
         private activatedRoute: ActivatedRoute,
+        private formService: FormService,
         private appService: AppService,
         private roleAccessService: RoleAccessService,
+        private userApiService: UserApiService,
     ) {
         super();
     }
@@ -86,6 +107,31 @@ export class UserLayoutComponent extends SubscribableComponent
                 this.onUrlChange();
             }),
         ];
+    }
+
+    showChangePasswordModal(): void {
+        this.changePasswordForm.formData.reset();
+
+        this.isPasswordChanging = false;
+        this.isChangePasswordModalShow = true;
+    }
+
+    changePassword(): void {
+        this.isPasswordChanging = true;
+
+        const params = this.changePasswordForm.formData
+            .value as IUserChangePassword;
+
+        this.userApiService.changePassword(params).subscribe(
+            () => {
+                this.isChangePasswordModalShow = false;
+            },
+            error => {
+                this.changePasswordForm.onError(error);
+
+                this.isPasswordChanging = false;
+            },
+        );
     }
 
     logOut(): void {

@@ -40,6 +40,7 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     };
     userWorkersStatsList: IWorkerStatsItem[];
     userWorkersStatsHistory: {
+        name: string;
         stats: IWorkerStatsItem[];
         powerMultLog10: number;
     };
@@ -104,6 +105,7 @@ export class MonitoringComponent implements OnInit, OnDestroy {
             })
             .subscribe(({ stats, powerMultLog10 }) => {
                 this.userWorkersStatsHistory = {
+                    name: workerId,
                     stats,
                     powerMultLog10,
                 };

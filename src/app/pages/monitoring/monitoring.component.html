@@ -270,7 +270,7 @@
 <nz-modal
     nzWidth="80%"
     [nzVisible]="userWorkersStatsHistory"
-    [nzTitle]="null"
+    [nzTitle]="userWorkersStatsHistory?.name"
     [nzFooter]="null"
     (nzOnCancel)="userWorkersStatsHistory = null"
 >
