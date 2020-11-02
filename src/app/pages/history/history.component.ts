@@ -26,23 +26,41 @@ export class HistoryComponent implements OnInit {
     constructor(
         private backendQueryApiService: BackendQueryApiService,
         private appService: AppService,
-    ) {}
+    ) { }
 
     ngOnInit(): void {
-        this.backendQueryApiService
+        this.getCoinsList();
+        /*this.backendQueryApiService
             .getUserBalance()
             .subscribe(({ balances }) => {
-                balances = balances.filter(item => item.coin === "HTR");
+                balances = balances.filter(item => item.coin === "sha256");
 
                 this.coins = balances.map(item => item.coin);
 
                 if (this.coins.length > 0) {
                     this.onCurrentCoinChange(this.coins[0]);
                 }
+            });*/
+    }
+
+    private getCoinsList(): void {
+        this.backendQueryApiService
+            .getPoolCoins()
+            .subscribe(({ poolCoins }) => {
+                poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+                this.coins = poolCoins.map(item => item.name);
+                if (this.coins.length > 0) {
+                    const coin = this.coins.includes(poolCoins[0].algorithm)
+                        ? poolCoins[0].algorithm
+                        : this.coins[0];
+                    this.onCurrentCoinChange(coin);
+                }
             });
     }
 
-    private onCurrentCoinChange(coin: Coin): void {
+
+    public onCurrentCoinChange(coin: Coin): void {
+        this.currentCoin = coin;
         const groupByInterval = ETime.Day;
 
         this.appService.user.subscribe(user => {
