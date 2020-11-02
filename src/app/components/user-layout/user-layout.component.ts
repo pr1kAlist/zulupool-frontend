@@ -53,6 +53,12 @@ export class UserLayoutComponent extends SubscribableComponent
             title: "components.userLayout.nav.settings",
             icon: "setting",
         },
+        {
+            route: EAppRoutes.CreateUser,
+            title: "components.userLayout.nav.createuser",
+            icon: "user",
+            access: ERole.SuperUser,
+        },
     ]);
 
     private readonly appRoutes = toValueArray(EAppRoutes).filter(hasValue);
@@ -64,6 +70,7 @@ export class UserLayoutComponent extends SubscribableComponent
     get username(): string {
         return this.appService.getUser().name;
     }
+
 
     constructor(
         private router: Router,
@@ -117,7 +124,7 @@ export class UserLayoutComponent extends SubscribableComponent
 interface INavigationItem {
     route: EAppRoutes;
     title:
-        | "components.userLayout.nav.monitoring"
-        | "components.userLayout.nav.payments";
+    | "components.userLayout.nav.monitoring"
+    | "components.userLayout.nav.payments";
     icon: "fund-projection-screen" | "wallet";
 }

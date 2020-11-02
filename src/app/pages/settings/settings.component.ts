@@ -22,7 +22,7 @@ export class SettingsComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private userApiService: UserApiService,
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.userApiService.getSettings().subscribe(({ coins }) => {
@@ -40,8 +40,8 @@ export class SettingsComponent implements OnInit {
     }
 
     save(): void {
+        if (this.form.value.payoutThreshold === null || this.form.value.address === null) return;
         this.isSubmitting = true;
-
         const data = {
             ...this.form.value,
             coin: this.settingsItems[this.selectedIndex].name,

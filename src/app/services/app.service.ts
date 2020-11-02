@@ -103,12 +103,12 @@ export class AppService {
     private setUpTargetLogin(users: IUser[]): void {
         const { targetLogin } = this.storageService;
 
-        if (targetLogin && users.some(user => user.name === targetLogin)) {
+        if (targetLogin && users.some(user => user.login === targetLogin)) {
             return;
         }
 
         if (users.length > 0) {
-            this.storageService.targetLogin = users[0].name;
+            this.storageService.targetLogin = users[0].login;
         }
     }
 

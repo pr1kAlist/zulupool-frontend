@@ -30,7 +30,7 @@ export class ChartPowerComponent implements OnChanges {
         const stats = [...this.stats];
         const rate = Math.pow(10, 15 - this.powerMultLog10);
 
-        stats.pop();
+//        stats.pop();
 
         stats.forEach(item => {
             this.data.push(item.power / rate);

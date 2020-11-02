@@ -1,6 +1,8 @@
 {
     "common.ok": "OK",
     "common.login": "User name",
+    "common.name": "Public name",
+    "common.registrationDate": "Registration Date",
     "common.password": "User password",
     "common.email": "e-mail",
     "common.save": "Save",
@@ -47,6 +49,7 @@
     "components.userLayout.nav.monitoring": "Monitoring",
     "components.userLayout.nav.history": "History",
     "components.userLayout.nav.users": "Users",
+    "components.userLayout.nav.createuser": "Add user",
     "components.userLayout.nav.payouts": "Payouts",
     "components.userLayout.nav.settings": "Settings",
     "components.userLayout.menu.logOut": "Log out",
@@ -54,7 +57,7 @@
     "components.targetLoginBadge.message": "Current user: {{login}}",
     "components.chartPower.title": "Hashrate (Ph/s)",
     "home.signUpButton": "Registration",
-    "home.coinSelect": "Show found blocks for coin:",
+    "home.coinSelect": "Stats for:",
     "home.foundBlocksTable.title.foundBy": "Found by",
     "home.foundBlocksTable.title.hash": "Hash",
     "home.foundBlocksTable.title.generatedCoins": "Reward",
@@ -75,5 +78,8 @@
     "settings.coinLabel": "Settings for the selected coin:",
     "settings.form.address": "Payment address",
     "settings.form.payoutThreshold": "Automatic payout threshold",
-    "settings.form.autoPayoutEnabled": "Auto payout enabled"
+    "settings.form.autoPayoutEnabled": "Auto payout enabled",
+    "createuser.form.isUserActive": "User activated",
+    "createuser.form.isUserReadOnly": "Read-only user",
+    "createuser.form.addUser": "Create user"
 }

@@ -23,6 +23,12 @@ export interface IUserPayouts {
     value: string;
 }
 
+export interface IPoolCoinsItem {
+    name: Coin;
+    fullName: string;
+    algorithm: string;
+}
+
 export interface IPoolStatsItem {
     coin: Coin;
     clients: number;
@@ -32,6 +38,7 @@ export interface IPoolStatsItem {
     power: number;
     powerMultLog10: number;
     powerUnit: EPowerUnit;
+    lastShareTime: number;
 }
 
 export interface IWorkerStatsItem {
@@ -49,4 +56,5 @@ export interface IUserStatsItem {
     shareRate: number;
     shareWork: number;
     power: number;
+    lastShareTime: number;
 }

@@ -4,6 +4,7 @@ import { not } from "logical-not";
 
 import { EAppRoutes } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
+import { BackendManualApiService } from "api/backend-manual.api";
 import { Coin } from "interfaces/coin";
 import {
     IUserBalanceItem,
@@ -51,17 +52,24 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     // acceptedDifficulty: number;
 
     get balance(): string {
-        if (not(this.userBalances)) return "";
+        if (not(this.userBalances) || this.currentCoin === "sha256") return "";
 
         return this.userBalances.find(item => {
             return item.coin === this.currentCoin;
         }).balance;
     }
 
-    constructor(private backendQueryApiService: BackendQueryApiService) {}
+    isManualPayoutSending = false;
+
+    constructor(
+        private backendQueryApiService: BackendQueryApiService,
+        private backendManualApiService: BackendManualApiService
+    ) { }
 
     ngOnInit(): void {
-        this.backendQueryApiService
+        this.getCoinsList();
+
+        /* this.backendQueryApiService
             .getUserBalance()
             .subscribe(({ balances }) => {
                 this.userBalances = balances;
@@ -74,7 +82,7 @@ export class MonitoringComponent implements OnInit, OnDestroy {
 
                     this.onCurrentCoinChange(coin);
                 }
-            });
+            });*/
     }
 
     ngOnDestroy(): void {
@@ -84,29 +92,40 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     onCurrentCoinChange(coin: Coin): void {
         this.currentCoin = coin;
 
-        this.updateTablesData();
+        this.getUserStat(coin);
+        //this.backendQueryApiService
+        //.getUserStatsHistory({ coin })
+        //.subscribe(({ stats, powerMultLog10 }) => {
+        // this.setAcceptedDifficulty(stats);
 
-        this.backendQueryApiService
-            .getUserStatsHistory({ coin })
-            .subscribe(({ stats, powerMultLog10 }) => {
-                // this.setAcceptedDifficulty(stats);
-
-                this.userStatsHistory = { stats, powerMultLog10 };
-            });
+        //this.userStatsHistory = { stats, powerMultLog10 };
+        //});
     }
 
     onWorkerRowClick(workerId: string): void {
+        var lastPower = this.userWorkersStatsList.find(item => {
+            return item.name === workerId;
+        }).power;
+
         this.backendQueryApiService
             .getWorkerStatsHistory({
                 coin: this.currentCoin,
                 workerId,
                 groupByInterval: 15 * 60,
             })
-            .subscribe(({ stats, powerMultLog10 }) => {
-                this.userWorkersStatsHistory = {
-                    stats,
-                    powerMultLog10,
-                };
+            .subscribe(({ stats, powerMultLog10, currentTime }) => {
+                if (stats.length > 0) {
+                    const lastStatTime = stats[stats.length - 1].time;
+                    if (currentTime < lastStatTime) {
+                        stats[stats.length - 1].time = currentTime;
+                        stats[stats.length - 1].power = lastPower;
+                    }
+                    if (stats.length > 2) stats.shift();
+                    this.userWorkersStatsHistory = {
+                        stats,
+                        powerMultLog10,
+                    };
+                }
             });
     }
 
@@ -122,6 +141,68 @@ export class MonitoringComponent implements OnInit, OnDestroy {
         return EWorkerState.Normal;
     }
 
+    private getCoinsList(): void {
+        this.backendQueryApiService
+            .getPoolCoins()
+            .subscribe(({ poolCoins }) => {
+                poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+                this.coins = poolCoins.map(item => item.name);
+                if (this.coins.length > 0) {
+                    const coin = this.coins.includes(poolCoins[0].algorithm)
+                        ? poolCoins[0].algorithm
+                        : this.coins[0];
+                    this.getUserStat(coin);
+
+                    this.onCurrentCoinChange(coin);
+                }
+            });
+    }
+
+    private getUserBalance(): void {
+        this.backendQueryApiService
+            .getUserBalance()
+            .subscribe(({ balances }) => {
+                this.userBalances = balances;
+            });
+    }
+
+    private getUserStat(coinName: Coin): void {
+        this.currentCoin = coinName;
+        this.updateTablesData();
+        /*this.tableData.isLoading = true;
+        this.backendQueryApiService.getUserStats({ coin: coinName }).subscribe(({ total, workers, currentTime, powerMultLog10 }) => {
+            workers.forEach(item => {
+                item.lastShareTime = currentTime - item.lastShareTime;
+            });
+            workers.sort((a, b) => {
+                return b.lastShareTime - a.lastShareTime;
+            });
+
+            this.userStatsItem = total;
+            this.userStatsItemZeroUnitsOffset = powerMultLog10;
+            this.userWorkersStatsList = workers;
+            this.tableData.isLoading = false;
+            this.getUserStatsHistory(coinName, total);
+            this.getUserBalance();
+            //this.updateTablesData();
+        
+        });*/
+    }
+    private getUserStatsHistory(coinName: Coin, liveStats: IUserStatsItem): void {
+        this.backendQueryApiService
+            .getUserStatsHistory({ coin: coinName })
+            .subscribe(({ stats, powerMultLog10, currentTime }) => {
+                if (stats.length > 0) {
+                    const lastStatTime = stats[stats.length - 1].time;
+                    if (currentTime < lastStatTime) {
+                        stats[stats.length - 1].time = liveStats.lastShareTime;
+                        stats[stats.length - 1].power = liveStats.power;
+                    }
+                    if (stats.length > 2) stats.shift();
+                    this.userStatsHistory = { stats, powerMultLog10 };
+                }
+            });
+    }
     private updateTablesData(): void {
         this.tableData.isLoading = true;
 
@@ -146,11 +227,26 @@ export class MonitoringComponent implements OnInit, OnDestroy {
                     });
 
                     this.userStatsItem = total;
+                    this.getUserStatsHistory(this.currentCoin, total);
+                    this.getUserBalance();
                     this.userStatsItemZeroUnitsOffset = powerMultLog10;
                     this.userWorkersStatsList = workers;
                     this.tableData.isLoading = false;
                 },
             });
+    }
+
+    manualPayout(): void {
+        this.isManualPayoutSending = true;
+        const coin = this.currentCoin;
+        this.backendManualApiService.forcePayout({ coin }).subscribe(
+            () => {
+                this.isManualPayoutSending = false;
+            },
+            () => {
+                this.isManualPayoutSending = false;
+            },
+        );
     }
 
     // private setAcceptedDifficulty(stats: IWorkerStatsItem[]): void {

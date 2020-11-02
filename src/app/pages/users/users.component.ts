@@ -5,13 +5,17 @@ import { IUser } from "interfaces/user";
 import { StorageService } from "services/storage.service";
 import { Router } from "@angular/router";
 import { userRootRoute } from "enums/routing";
+import { ESuffix } from "pipes/suffixify.pipe";
+
 
 @Component({
     selector: "app-users-page",
     templateUrl: "./users.component.html",
 })
 export class UsersComponent implements OnInit {
+    readonly ESuffix = ESuffix;
     users: IUser[];
+    powerMultLog10: number = 6;
 
     get targetLogin(): string {
         return this.storageService.targetLogin;
@@ -21,17 +25,23 @@ export class UsersComponent implements OnInit {
         private router: Router,
         private userApiService: UserApiService,
         private storageService: StorageService,
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.userApiService.getUserList().subscribe(({ users }) => {
+            users = users.filter(function (item) {
+                return item.login !== 'admin' && item.login !== 'observer'
+            });
+            //            users.forEach(item => {
+            //                item.lastShareTime = currentTime - item.lastShareTime;
+            //            });
             this.users = users;
         });
     }
 
     onUserClick(user: IUser): void {
-        if (user.name !== this.targetLogin) {
-            this.storageService.targetLogin = user.name;
+        if (user.login !== this.targetLogin) {
+            this.storageService.targetLogin = user.login;
 
             this.router.navigate([userRootRoute]);
         }

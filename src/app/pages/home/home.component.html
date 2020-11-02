@@ -1,9 +1,5 @@
 <div class="sign-up-block">
-    <a
-        class="sign-up-link"
-        [routerLink]="[signUpLink.href]"
-        [queryParams]="signUpLink.params"
-    >
+    <a class="sign-up-link" [routerLink]="[signUpLink.href]" [queryParams]="signUpLink.params">
         {{ "home.signUpButton" | translate }}
     </a>
 </div>
@@ -15,27 +11,13 @@
                 {{ "home.coinSelect" | translate }}
             </span>
 
-            <nz-select
-                class="coin-select"
-                [(ngModel)]="poolStats"
-                [nzLoading]="!poolStatsList"
-                (ngModelChange)="onPoolStatsSelect()"
-            >
-                <nz-option
-                    *ngFor="let item of poolStatsList"
-                    [nzLabel]="item.coin"
-                    [nzValue]="item"
-                ></nz-option>
+            <nz-select class="coin-select" [(ngModel)]="poolCoin" [nzLoading]="!poolCoinsList"
+                (ngModelChange)="onPoolStatsSelect()">
+                <nz-option *ngFor="let item of poolCoinsList" [nzLabel]="item.name" [nzValue]="item"></nz-option>
             </nz-select>
         </div>
 
-        <nz-table
-            *ngIf="poolStats"
-            style="width: 100%;"
-            nzBordered
-            nzSize="small"
-            [nzTemplateMode]="true"
-        >
+        <nz-table *ngIf="poolStats" style="width: 100%;" nzBordered nzSize="small" [nzTemplateMode]="true">
             <tbody>
                 <tr>
                     <td>{{ "common.dictionary.power" | translate }}</td>
@@ -60,19 +42,12 @@
         </nz-table>
     </div>
 
-    <app-chart-power
-        class="coin-chart"
-        [stats]="poolStatsHistory.stats"
-        [powerMultLog10]="poolStatsHistory.powerMultLog10"
-    ></app-chart-power>
+    <app-chart-power class="coin-chart" [stats]="poolStatsHistory.stats"
+        [powerMultLog10]="poolStatsHistory.powerMultLog10"></app-chart-power>
 </div>
 
-<nz-table
-    class="found-blocks-table"
-    nzBordered
-    [nzTemplateMode]="true"
-    [nzLoading]="foundBlocksLoading"
->
+<nz-table *ngIf="poolCoin && poolCoin.name!=='sha256'" class="found-blocks-table" nzBordered [nzTemplateMode]="true"
+    [nzLoading]="foundBlocksLoading">
     <thead>
         <tr>
             <th *ngFor="let title of foundBlockKeys">
@@ -83,25 +58,20 @@
     <tbody>
         <tr *ngFor="let foundBlock of foundBlocks">
             <td *ngFor="let key of foundBlockKeys">
-                <ng-container
-                    *ngTemplateOutlet="
+                <ng-container *ngTemplateOutlet="
                         foundBlockDataTemplate;
                         context: {
                             key: key,
                             value: foundBlock[key]
                         }
-                    "
-                ></ng-container>
+                    "></ng-container>
             </td>
         </tr>
     </tbody>
 </nz-table>
 
-<nz-table
-    *ngFor="let foundBlock of foundBlocks"
-    class="found-blocks-table-mobile _table-mobile"
-    [nzTemplateMode]="true"
->
+<nz-table *ngFor="let foundBlock of foundBlocks" class="found-blocks-table-mobile _table-mobile"
+    [nzTemplateMode]="true">
     <tbody>
         <ng-container *ngFor="let key of foundBlockKeys">
             <tr>
@@ -111,15 +81,13 @@
             </tr>
             <tr>
                 <td>
-                    <ng-container
-                        *ngTemplateOutlet="
+                    <ng-container *ngTemplateOutlet="
                             foundBlockDataTemplate;
                             context: {
                                 key: key,
                                 value: foundBlock[key]
                             }
-                        "
-                    ></ng-container>
+                        "></ng-container>
                 </td>
             </tr>
         </ng-container>

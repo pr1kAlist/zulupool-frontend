@@ -6,8 +6,11 @@ import {
     IPoolStatsItem,
     IFoundBlock,
     IWorkerStatsItem,
+    IPoolCoinsItem,
 } from "interfaces/backend-query";
 import { ESuffix } from "pipes/suffixify.pipe";
+//import { ETime } from "enums/time";
+
 
 @Component({
     selector: "app-home",
@@ -22,9 +25,16 @@ export class HomeComponent implements OnInit {
         stats: [] as IWorkerStatsItem[],
         powerMultLog10: 0,
     };
+    poolStatsHistoryAdvanced = [{
+        statName: "" as string,
+        stats: [] as IWorkerStatsItem[],
+        powerMultLog10: 0,
+    }];
 
-    poolStatsList: IPoolStatsItem[];
+    poolStatsList: IPoolStatsItem[] = [];
     poolStats: IPoolStatsItem;
+    poolCoinsList: IPoolCoinsItem[];
+    poolCoin: IPoolCoinsItem;
 
     foundBlocks: IFoundBlock[];
     foundBlocksLoading = false;
@@ -45,52 +55,66 @@ export class HomeComponent implements OnInit {
         },
     };
 
-    constructor(private backendQueryApiService: BackendQueryApiService) {}
+    constructor(private backendQueryApiService: BackendQueryApiService) { }
 
     ngOnInit(): void {
+
         this.backendQueryApiService
-            .getPoolStatsHistory({ coin: "HTR" })
-            .subscribe(({ stats, powerMultLog10 }) => {
-                this.poolStatsHistory = { stats, powerMultLog10 };
+            .getPoolCoins()
+            .subscribe(({ poolCoins }) => {
+                poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+                this.poolCoinsList = poolCoins;
+                this.poolCoin = poolCoins[poolCoins.length - 1];
+                this.getCoinStats(this.poolCoin.name);
             });
-
-        this.backendQueryApiService.getPoolStats().subscribe(({ stats }) => {
-            this.poolStatsList = stats;
-
-            if (stats.length > 0) {
-                this.poolStats = stats.find(item => {
-                    return item.coin === "HTR";
-                });
-
-                this.getFoundBlocks();
-            }
-        });
     }
 
     onPoolStatsSelect(): void {
         this.getFoundBlocks();
     }
+    private getCoinStats(coinName: string): void {
+        this.backendQueryApiService.getPoolStats({ coin: coinName }).subscribe(({ stats }) => {
+            if (stats.length > 0) {
+                this.poolStats = stats[0];
+                this.getCoinStatsHistory(coinName, stats[0]);
+            }
+        });
+    }
+    private getCoinStatsHistory(coinName: string, liveStats: IPoolStatsItem): void {
+        this.backendQueryApiService.getPoolStatsHistory({ coin: coinName }).subscribe(({ stats, powerMultLog10, currentTime }) => {
+            if (stats.length > 0) {
+                const lastStatTime = stats[stats.length - 1].time;
+                if (currentTime < lastStatTime) {
+                    stats[stats.length - 1].time = liveStats.lastShareTime;
+                    stats[stats.length - 1].power = liveStats.power;
+                }
+                if (stats.length > 2) stats.shift();
+                this.poolStatsHistory = { stats, powerMultLog10 };
+            }
+        });
+    }
 
     private getFoundBlocks(): void {
-        this.foundBlocksLoading = true;
-
-        this.backendQueryApiService
-            .getFoundBlocks({ coin: this.poolStats.coin })
-            .subscribe(
-                ({ blocks }) => {
-                    this.foundBlocks = blocks;
-                    this.foundBlocksLoading = false;
-                },
-                () => {
-                    this.foundBlocks = [];
-                    this.foundBlocksLoading = false;
-                },
-            );
-
-        this.backendQueryApiService
-            .getPoolStatsHistory({ coin: this.poolStats.coin })
-            .subscribe(({ stats, powerMultLog10 }) => {
-                this.poolStatsHistory = { stats, powerMultLog10 };
-            });
+        if (this.poolCoin.name !== 'sha256') {
+            this.foundBlocksLoading = true;
+            this.backendQueryApiService
+                .getFoundBlocks({ coin: this.poolCoin.name })
+                .subscribe(
+                    ({ blocks }) => {
+                        this.foundBlocks = blocks;
+                        this.foundBlocksLoading = false;
+                    },
+                    () => {
+                        this.foundBlocks = [];
+                        this.foundBlocksLoading = false;
+                    },
+                );
+        }
+        this.getCoinStats(this.poolCoin.name);
+        //this.backendQueryApiService
+        //.getPoolStatsHistory({ coin: this.poolCoin.name })
+        //.subscribe(({ stats, powerMultLog10 }) => {
+        //this.poolStatsHistory = { stats, powerMultLog10 };
+        //});
     }
 }

@@ -10,7 +10,7 @@ import { IUser, IUserSettings } from "interfaces/user";
     providedIn: "root",
 })
 export class UserApiService {
-    constructor(private restService: RestService) {}
+    constructor(private restService: RestService) { }
 
     getUser(sessionId: string): Observable<IUser | null> {
         if (not(sessionId)) return of(null);
@@ -19,7 +19,7 @@ export class UserApiService {
     }
 
     createUser(user: IUserCreateParams): Observable<any> {
-        return this.restService.post("/user", user);
+        return this.restService.post("/userCreate", user);
     }
 
     resendEmail(params: IUserResendEmailParams): Observable<void> {
@@ -39,6 +39,15 @@ export class UserApiService {
     }
 }
 
+export interface IAdminUserCreateParams {
+    login: string;
+    password: string;
+    email: string;
+    name: string;
+    isActive?: boolean;
+    isReadOnly?: boolean;
+    id?: string;
+}
 export interface IUserCreateParams {
     login: string;
     password: string;

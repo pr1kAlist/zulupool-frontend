@@ -58,6 +58,7 @@ import { HelpComponent } from "pages/help/help.component";
 import { UsersComponent } from "pages/users/users.component";
 import { PayoutsComponent } from "pages/payouts/payouts.component";
 import { SettingsComponent } from "pages/settings/settings.component";
+import { CreateUserComponent } from "pages/createuser/createuser.component";
 
 import { FooterComponent } from "components/footer/footer.component";
 import { MainLayoutComponent } from "components/main-layout/main-layout.component";
@@ -170,6 +171,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         UsersComponent,
         PayoutsComponent,
         SettingsComponent,
+        CreateUserComponent,
 
         FooterComponent,
         MainLayoutComponent,
