@@ -16,12 +16,12 @@ export class ChartPowerComponent implements OnChanges {
     stats: IWorkerStatsItem[];
 
     @Input()
-    powerMultLog10 = 6;
+    powerMultLog10: number;
 
     labels: Label[];
     data: number[];
 
-    constructor(private langService: LangService) {}
+    constructor(private langService: LangService) { }
 
     ngOnChanges(): void {
         this.labels = [];
@@ -30,7 +30,7 @@ export class ChartPowerComponent implements OnChanges {
         const stats = [...this.stats];
         const rate = Math.pow(10, 15 - this.powerMultLog10);
 
-//        stats.pop();
+        //        stats.pop();
 
         stats.forEach(item => {
             this.data.push(item.power / rate);

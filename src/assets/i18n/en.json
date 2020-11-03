@@ -1,4 +1,6 @@
 {
+    "common.coin": "Coin name",
+    "common.nobolckfoundyet": "No blocks foynd yet for",
     "common.ok": "OK",
     "common.login": "User name",
     "common.name": "Public name",

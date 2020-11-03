@@ -47,7 +47,9 @@ export class HistoryComponent implements OnInit {
         this.backendQueryApiService
             .getPoolCoins()
             .subscribe(({ poolCoins }) => {
-                poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+                if (poolCoins.length >= 2) {
+                    poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+                }
                 this.coins = poolCoins.map(item => item.name);
                 if (this.coins.length > 0) {
                     const coin = this.coins.includes(poolCoins[0].algorithm)

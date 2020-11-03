@@ -69,20 +69,6 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.getCoinsList();
 
-        /* this.backendQueryApiService
-            .getUserBalance()
-            .subscribe(({ balances }) => {
-                this.userBalances = balances;
-                this.coins = balances.map(item => item.coin);
-
-                if (this.coins.length > 0) {
-                    const coin = this.coins.includes("HTR")
-                        ? "HTR"
-                        : this.coins[0];
-
-                    this.onCurrentCoinChange(coin);
-                }
-            });*/
     }
 
     ngOnDestroy(): void {
@@ -145,7 +131,9 @@ export class MonitoringComponent implements OnInit, OnDestroy {
         this.backendQueryApiService
             .getPoolCoins()
             .subscribe(({ poolCoins }) => {
-                poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+                if (poolCoins.length >= 2) {
+                    poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+                }
                 this.coins = poolCoins.map(item => item.name);
                 if (this.coins.length > 0) {
                     const coin = this.coins.includes(poolCoins[0].algorithm)

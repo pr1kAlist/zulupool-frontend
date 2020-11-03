@@ -2,12 +2,14 @@
 
 <div class="main">
     <div class="info">
-        <nz-radio-group nzButtonStyle="solid" [(ngModel)]="currentCoin" (ngModelChange)="onCurrentCoinChange($event)">
-            <label *ngFor="let coin of coins" nz-radio-button [nzValue]="coin">
-                {{ coin }}
-            </label>
-        </nz-radio-group>
-
+        <div class="coin-select-block">
+            <nz-radio-group nzButtonStyle="solid" [(ngModel)]="currentCoin"
+                (ngModelChange)="onCurrentCoinChange($event)">
+                <label *ngFor="let coin of coins" nz-radio-button [nzValue]="coin">
+                    {{ coin }}
+                </label>
+            </nz-radio-group>
+        </div>
         <nz-table *ngIf="currentCoin && currentCoin !=='sha256'" class="info-table" nzBordered [nzTemplateMode]="true"
             [nzLoading]="tableData.isLoading">
             <thead>
