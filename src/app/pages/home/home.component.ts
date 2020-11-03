@@ -120,8 +120,8 @@ export class HomeComponent implements OnInit {
 
     onCurrentCoinChange(coinName: Coin): void {
         this.setCoin(coinName);
-        this.periodicFastCall(this.currentCoin);
-        this.periodicSlowCall(this.currentCoin);
+        this.periodicFastCall(coinName);
+        this.periodicSlowCall(coinName);
     }
     private setCoin(coinName: Coin): void {
         this.currentCoin = coinName;
@@ -158,7 +158,7 @@ export class HomeComponent implements OnInit {
         clearTimeout(this.updateTimeoutSlowId);
         this.updateTimeoutSlowId = setTimeout(() => {
             this.coinsList.forEach(el => {
-                if (el !== coinName) this.fetchNewData(el);
+                if (el !== this.currentCoin) this.fetchNewData(el);
             });
             this.periodicSlowCall(coinName);
         }, 3 * 60 * 1000);
