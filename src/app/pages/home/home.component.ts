@@ -49,6 +49,11 @@ export class HomeComponent implements OnInit {
     public currentBlocks: IFoundBlock[];
     public currentBlocksLoading: boolean = false;
 
+    public explorersLinksPref: {};
+
+    explorersLinksPrefDGB1: "https://chainz.cryptoid.info/dgb/block.dws?";
+    explorersLinksPrefDGB2: ".htm"
+
     private updateTimeoutFastId: number;
     private updateTimeoutSlowId: number;
 
@@ -72,6 +77,20 @@ export class HomeComponent implements OnInit {
     constructor(private backendQueryApiService: BackendQueryApiService) { }
 
     ngOnInit(): void {
+        this.explorersLinksPref = {
+            BTC: "https://chainz.cryptoid.info/dgb/block.dws?",
+            BCH: "https://blockchair.com/bitcoin-cash/block/",
+            BSV: "https://blockchair.com/bitcoin-sv/block/",
+            DGB: "https://chainz.cryptoid.info/dgb/block.dws?",
+            FCH: "http://fch.world/block/",
+            HTR: "https://explorer.hathor.network/transaction/",
+            BTC2: ".htm",
+            BCH2: "",
+            BSV2: "",
+            DGB2: ".htm",
+            FCH2: "",
+            HTR2: ""
+        };
         this.asyncGetCoinsList()
             .then(() => {
                 this.asyncGetCoinStats(this.currentCoin)

@@ -105,7 +105,18 @@
     <ng-container [ngSwitch]="key">
         <ng-container *ngSwitchCase="'hash'">
             <span class="found-blocks-hash">
-                {{ value }}
+                <a *ngIf="currentCoin =='BTC' "
+                    href="{{ explorersLinksPref.BTC }}{{ value }}{{ explorersLinksPref.BTC2 }}">{{ value }} </a>
+                <a *ngIf="currentCoin =='BSV' "
+                    href="{{ explorersLinksPref.BSV }}{{ value }}{{ explorersLinksPref.BSV2 }}">{{ value }} </a>
+                <a *ngIf="currentCoin =='BCH' "
+                    href="{{ explorersLinksPref.BCH }}{{ value }}{{ explorersLinksPref.BCH2 }}">{{ value }} </a>
+                <a *ngIf="currentCoin =='FCH' "
+                    href="{{ explorersLinksPref.FCH }}{{ value }}{{ explorersLinksPref.FCH2 }}">{{ value }} </a>
+                <a *ngIf="currentCoin =='HTR' "
+                    href="{{ explorersLinksPref.HTR }}{{ value }}{{ explorersLinksPref.HTR2 }}">{{ value }} </a>
+                <a *ngIf="currentCoin =='DGB.sha256' "
+                    href="{{ explorersLinksPref.DGB }}{{ value }}{{ explorersLinksPref.DGB2 }}">{{ value }} </a>
             </span>
         </ng-container>
 
