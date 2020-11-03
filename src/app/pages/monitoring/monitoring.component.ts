@@ -92,12 +92,14 @@ export class MonitoringComponent implements OnInit, OnDestroy {
         var lastPower = this.userWorkersStatsList.find(item => {
             return item.name === workerId;
         }).power;
-
+        let timeFrom = (new Date().valueOf() / 1000 as any).toFixed(0) - (3 * 24 * 60 * 60);
+        let groupByInterval = 15 * 60;
         this.backendQueryApiService
             .getWorkerStatsHistory({
                 coin: this.currentCoin,
                 workerId,
-                groupByInterval: 15 * 60,
+                timeFrom,
+                groupByInterval
             })
             .subscribe(({ stats, powerMultLog10, currentTime }) => {
                 if (stats.length > 0) {
@@ -157,28 +159,13 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     private getUserStat(coinName: Coin): void {
         this.currentCoin = coinName;
         this.updateTablesData();
-        /*this.tableData.isLoading = true;
-        this.backendQueryApiService.getUserStats({ coin: coinName }).subscribe(({ total, workers, currentTime, powerMultLog10 }) => {
-            workers.forEach(item => {
-                item.lastShareTime = currentTime - item.lastShareTime;
-            });
-            workers.sort((a, b) => {
-                return b.lastShareTime - a.lastShareTime;
-            });
-
-            this.userStatsItem = total;
-            this.userStatsItemZeroUnitsOffset = powerMultLog10;
-            this.userWorkersStatsList = workers;
-            this.tableData.isLoading = false;
-            this.getUserStatsHistory(coinName, total);
-            this.getUserBalance();
-            //this.updateTablesData();
-        
-        });*/
     }
+
     private getUserStatsHistory(coinName: Coin, liveStats: IUserStatsItem): void {
+        let timeFrom = (new Date().valueOf() / 1000 as any).toFixed(0) - (1.5 * 24 * 60 * 60);
+        let groupByInterval = 30 * 60;
         this.backendQueryApiService
-            .getUserStatsHistory({ coin: coinName })
+            .getUserStatsHistory({ coin: coinName, timeFrom, groupByInterval })
             .subscribe(({ stats, powerMultLog10, currentTime }) => {
                 if (stats.length > 0) {
                     const lastStatTime = stats[stats.length - 1].time;

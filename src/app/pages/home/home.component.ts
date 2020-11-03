@@ -200,7 +200,9 @@ export class HomeComponent implements OnInit {
     }
     private asyncGetCoinStatsHistory(coinName: Coin, liveStats: IPoolStatsItem): any {
         var promise = new Promise((resolve, reject) => {
-            this.backendQueryApiService.getPoolStatsHistory({ coin: coinName }).subscribe(({ stats, powerMultLog10, currentTime }) => {
+            let timeFrom = (new Date().valueOf() / 1000 as any).toFixed(0) - (2 * 24 * 60 * 60);
+            let groupByInterval = 60 * 60;
+            this.backendQueryApiService.getPoolStatsHistory({ coin: coinName, timeFrom, groupByInterval }).subscribe(({ stats, powerMultLog10, currentTime }) => {
                 if (stats.length > 0) {
                     const lastStatTime = stats[stats.length - 1].time;
                     if (currentTime < lastStatTime) {

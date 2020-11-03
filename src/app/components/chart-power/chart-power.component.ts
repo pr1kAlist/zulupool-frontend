@@ -31,10 +31,11 @@ export class ChartPowerComponent implements OnChanges {
         const rate = Math.pow(10, 15 - this.powerMultLog10);
 
         //        stats.pop();
-
+        //var counter: number = 2;
         stats.forEach(item => {
+            //const nextLabel = n => !(n % 2);
             this.data.push(item.power / rate);
-
+            //if (!nextLabel(counter)) {
             this.labels.push(
                 formatDate(
                     new Date(item.time * 1000),
@@ -42,6 +43,10 @@ export class ChartPowerComponent implements OnChanges {
                     this.langService.getCurrentLang(),
                 ),
             );
+            //} else {
+            //this.labels.push('');
+            //}
+            //counter++;
         });
     }
 }
