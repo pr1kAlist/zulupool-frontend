@@ -119,29 +119,36 @@ export class HomeComponent implements OnInit {
     }
 
     onCurrentCoinChange(coinName: Coin): void {
+        this.setCoin(coinName);
+        this.periodicCall(this.currentCoin);
+    }
+    private setCoin(coinName: Coin): void {
         this.currentCoin = coinName;
         this.currentStats = this.coinsData[coinName].stats;
         this.currentHistory = this.coinsData[coinName].statsHistory.stats ? this.coinsData[coinName].statsHistory.stats : [];
         this.currentPowerMultLog10 = this.coinsData[coinName].statsHistory.powerMultLog10 ? this.coinsData[coinName].statsHistory.powerMultLog10 : 0;
         this.currentBlocks = this.coinsData[coinName].foundBlocks;
         this.currentBlocksLoading = this.coinsData[coinName].foundBlocksLoading;
-        this.periodicCall(this.currentCoin);
     }
 
-    private fetchNewData(coinName: Coin) {
+    private fetchNewData(coinName: Coin, setCoin: boolean = false) {
         this.asyncGetCoinStats(coinName)
             .then(() => {
                 const thisCoinData = this.coinsData[coinName].stats;
                 this.asyncGetCoinStatsHistory(coinName, thisCoinData)
                     .then(() => {
-                        if (coinName !== this.currentAlgo) this.asyncGetFoundBlocks(coinName);
+                        if (coinName !== this.currentAlgo) {
+                            this.asyncGetFoundBlocks(coinName).then(() => {
+                                if (setCoin) this.setCoin(coinName);
+                            });
+                        } else if (setCoin) this.setCoin(coinName);
                     });
             });
     }
     private periodicCall(coinName: Coin) {
         clearTimeout(this.updateTimeoutFastId);
         this.updateTimeoutFastId = setTimeout(() => {
-            this.fetchNewData(coinName);
+            this.fetchNewData(coinName, true);
         }, 45 * 1000);
         clearTimeout(this.updateTimeoutSlowId);
         this.updateTimeoutSlowId = setTimeout(() => {
