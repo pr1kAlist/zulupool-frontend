@@ -21,7 +21,7 @@ interface IcoinInfo {
     stats: IPoolStatsItem,
     statsHistory: IpoolHistoryInfo,
     foundBlocks: IFoundBlock[],
-    foundBlocksLoading: boolean
+    //    foundBlocksLoading: boolean
 }
 interface IcoinsInfo {
     [key: string]: IcoinInfo
@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
     public currentHistory: IWorkerStatsItem[];
     public currentPowerMultLog10: number;
     public currentBlocks: IFoundBlock[];
-    public currentBlocksLoading: boolean
+    public currentBlocksLoading: boolean = false;
 
     private updateTimeoutFastId: number;
     private updateTimeoutSlowId: number;
@@ -120,7 +120,8 @@ export class HomeComponent implements OnInit {
 
     onCurrentCoinChange(coinName: Coin): void {
         this.setCoin(coinName);
-        this.periodicCall(this.currentCoin);
+        this.periodicFastCall(this.currentCoin);
+        this.periodicSlowCall(this.currentCoin);
     }
     private setCoin(coinName: Coin): void {
         this.currentCoin = coinName;
@@ -128,7 +129,7 @@ export class HomeComponent implements OnInit {
         this.currentHistory = this.coinsData[coinName].statsHistory.stats ? this.coinsData[coinName].statsHistory.stats : [];
         this.currentPowerMultLog10 = this.coinsData[coinName].statsHistory.powerMultLog10 ? this.coinsData[coinName].statsHistory.powerMultLog10 : 0;
         this.currentBlocks = this.coinsData[coinName].foundBlocks;
-        this.currentBlocksLoading = this.coinsData[coinName].foundBlocksLoading;
+        //        this.currentBlocksLoading = this.coinsData[coinName].foundBlocksLoading;
     }
 
     private fetchNewData(coinName: Coin, setCoin: boolean = false) {
@@ -145,16 +146,21 @@ export class HomeComponent implements OnInit {
                     });
             });
     }
-    private periodicCall(coinName: Coin) {
+    private periodicFastCall(coinName: Coin) {
         clearTimeout(this.updateTimeoutFastId);
         this.updateTimeoutFastId = setTimeout(() => {
             this.fetchNewData(coinName, true);
+            this.periodicFastCall(coinName);
         }, 45 * 1000);
+    }
+
+    private periodicSlowCall(coinName: Coin) {
         clearTimeout(this.updateTimeoutSlowId);
         this.updateTimeoutSlowId = setTimeout(() => {
             this.coinsList.forEach(el => {
                 if (el !== coinName) this.fetchNewData(el);
             });
+            this.periodicSlowCall(coinName);
         }, 3 * 60 * 1000);
     }
 
@@ -212,19 +218,20 @@ export class HomeComponent implements OnInit {
     private asyncGetFoundBlocks(coinName: Coin) {
         var promise = new Promise((resolve, reject) => {
             if (coinName !== this.currentAlgo) {
-                this.switchBlockLoadingState(coinName, true)
+                //if (this.currentCoin == coinName) this.currentBlocksLoading = true;
                 this.backendQueryApiService
                     .getFoundBlocks({ coin: coinName })
                     .subscribe(
                         ({ blocks }) => {
                             this.addFoundBlocksData(coinName, blocks)
-                            this.switchBlockLoadingState(coinName, false)
+                            //if (this.currentCoin == coinName) this.currentBlocksLoading = false;
                             resolve("Ok");
                         },
                         () => {
                             this.addFoundBlocksData(coinName, [])
-                            this.switchBlockLoadingState(coinName, false)
+                            //if (this.currentCoin == coinName) this.currentBlocksLoading = false;
                             resolve("Ok");
+
                         },
                     );
             }
@@ -238,7 +245,6 @@ export class HomeComponent implements OnInit {
             stats: {} as IPoolStatsItem,
             statsHistory: {} as IpoolHistoryInfo,
             foundBlocks: [],
-            foundBlocksLoading: false
         };
     }
     private addStatsData(coinName: Coin, stats: IPoolStatsItem) {
@@ -246,7 +252,6 @@ export class HomeComponent implements OnInit {
             stats,
             statsHistory: this.coinsData[coinName].statsHistory,
             foundBlocks: this.coinsData[coinName].foundBlocks,
-            foundBlocksLoading: this.coinsData[coinName].foundBlocksLoading
         }
     }
     private addStatsHistoryData(coinName: Coin, statsHistory: IpoolHistoryInfo) {
@@ -254,7 +259,6 @@ export class HomeComponent implements OnInit {
             stats: this.coinsData[coinName].stats,
             statsHistory,
             foundBlocks: this.coinsData[coinName].foundBlocks,
-            foundBlocksLoading: this.coinsData[coinName].foundBlocksLoading
         }
     }
     private addFoundBlocksData(coinName: Coin, foundBlocks: IFoundBlock[]) {
@@ -262,15 +266,6 @@ export class HomeComponent implements OnInit {
             stats: this.coinsData[coinName].stats,
             statsHistory: this.coinsData[coinName].statsHistory,
             foundBlocks,
-            foundBlocksLoading: this.coinsData[coinName].foundBlocksLoading
-        }
-    }
-    private switchBlockLoadingState(coinName: Coin, foundBlocksLoading: boolean) {
-        this.coinsData[coinName] = {
-            stats: this.coinsData[coinName].stats,
-            statsHistory: this.coinsData[coinName].statsHistory,
-            foundBlocks: this.coinsData[coinName].foundBlocks,
-            foundBlocksLoading
         }
     }
 }

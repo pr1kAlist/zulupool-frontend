@@ -12,7 +12,7 @@
         </div>
         <nz-table *ngIf="currentCoin && currentCoin !=='sha256'" class="info-table" nzBordered [nzTemplateMode]="true"
             [nzLoading]="tableData.isLoading">
-            <thead>
+            <!-- <thead>
                 <tr>
                     <th>
                         {{ "monitoring.balance" | translate }}
@@ -29,7 +29,7 @@
                         {{ balance }}
                     </td>
                 </tr>
-            </tbody>
+            </tbody> -->
         </nz-table>
 
         <div class="info-table">
