@@ -7,14 +7,13 @@ import { Injectable } from "@angular/core";
     providedIn: "root",
 })
 export class CoinSwitchService {
-
     private coin = <TCoinName>"";
-    coinSwitch = new BehaviorSubject<TCoinName>(this.coin)
+    coinSwitch = new BehaviorSubject<TCoinName>(this.coin);
 
     setCoin(newCoin: TCoinName) {
         this.coin = newCoin;
         this.coinSwitch.next(newCoin);
     }
 
-    constructor() { }
+    constructor() {}
 }

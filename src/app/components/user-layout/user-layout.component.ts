@@ -96,7 +96,6 @@ export class UserLayoutComponent extends SubscribableComponent
         return this.appService.getUser().name;
     }
 
-
     constructor(
         private router: Router,
         private location: Location,
@@ -176,7 +175,7 @@ export class UserLayoutComponent extends SubscribableComponent
 interface INavigationItem {
     route: EAppRoutes;
     title:
-    | "components.userLayout.nav.monitoring"
-    | "components.userLayout.nav.payments";
+        | "components.userLayout.nav.monitoring"
+        | "components.userLayout.nav.payments";
     icon: "fund-projection-screen" | "wallet";
 }

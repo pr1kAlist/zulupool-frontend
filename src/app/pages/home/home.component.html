@@ -3,20 +3,32 @@
         {{ "home.signUpButton" | translate }}
     </a>
 </div> -->
-<app-coin-switcher></app-coin-switcher>
+<app-coin-switcher (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
 
 <div class="main">
     <div class="coins-block">
         <div class="coin-select-block">
-            <nz-radio-group nzButtonStyle="solid" [(ngModel)]="currentCoin"
-                (ngModelChange)="onCurrentCoinChange($event)">
-                <label *ngFor="let coin of coinsList" nz-radio-button [nzValue]="coin">
+            <nz-radio-group
+                nzButtonStyle="solid"
+                [(ngModel)]="currentCoin"
+                (ngModelChange)="onCurrentCoinChange($event)"
+            >
+                <label
+                    *ngFor="let coin of coinsList"
+                    nz-radio-button
+                    [nzValue]="coin"
+                >
                     {{ coin }}
                 </label>
             </nz-radio-group>
         </div>
 
-        <nz-table style="width: 100%;" nzBordered nzSize="small" [nzTemplateMode]="true">
+        <nz-table
+            style="width: 100%;"
+            nzBordered
+            nzSize="small"
+            [nzTemplateMode]="true"
+        >
             <tbody>
                 <tr>
                     <td>{{ "common.coin" | translate }}</td>
@@ -45,13 +57,22 @@
         </nz-table>
     </div>
 
-    <app-chart-power *ngIf="currentHistory" class="coin-chart" [stats]="currentHistory"
-        [powerMultLog10]="currentPowerMultLog10">
+    <app-chart-power
+        *ngIf="currentHistory"
+        class="coin-chart"
+        [stats]="currentHistory"
+        [powerMultLog10]="currentPowerMultLog10"
+    >
     </app-chart-power>
 </div>
 
-<nz-table *ngIf="currentBlocks && currentCoin !== currentAlgo" class="found-blocks-table" nzBordered
-    [nzTemplateMode]="true" [nzLoading]="currentBlocksLoading">
+<nz-table
+    *ngIf="currentBlocks && currentCoin !== currentAlgo"
+    class="found-blocks-table"
+    nzBordered
+    [nzTemplateMode]="true"
+    [nzLoading]="currentBlocksLoading"
+>
     <thead>
         <tr>
             <th *ngFor="let title of foundBlockKeys">
@@ -59,28 +80,36 @@
             </th>
         </tr>
         <tr *ngIf="currentBlocks.length < 1">
-            {{ "common.nobolckfoundyet" | translate }} {{currentCoin}}
+            {{
+                "common.nobolckfoundyet" | translate
+            }}
+            {{
+                currentCoin
+            }}
         </tr>
-
     </thead>
     <tbody>
-
         <tr *ngFor="let foundBlock of currentBlocks">
             <td *ngFor="let key of foundBlockKeys">
-                <ng-container *ngTemplateOutlet="
+                <ng-container
+                    *ngTemplateOutlet="
                         foundBlockDataTemplate;
                         context: {
                             key: key,
                             value: foundBlock[key]
                         }
-                    "></ng-container>
+                    "
+                ></ng-container>
             </td>
         </tr>
     </tbody>
 </nz-table>
 
-<nz-table *ngFor="let foundBlock of currentBlocks" class="found-blocks-table-mobile _table-mobile"
-    [nzTemplateMode]="true">
+<nz-table
+    *ngFor="let foundBlock of currentBlocks"
+    class="found-blocks-table-mobile _table-mobile"
+    [nzTemplateMode]="true"
+>
     <tbody>
         <ng-container *ngFor="let key of foundBlockKeys">
             <tr>
@@ -90,13 +119,15 @@
             </tr>
             <tr>
                 <td>
-                    <ng-container *ngTemplateOutlet="
+                    <ng-container
+                        *ngTemplateOutlet="
                             foundBlockDataTemplate;
                             context: {
                                 key: key,
                                 value: foundBlock[key]
                             }
-                        "></ng-container>
+                        "
+                    ></ng-container>
                 </td>
             </tr>
         </ng-container>
@@ -107,18 +138,48 @@
     <ng-container [ngSwitch]="key">
         <ng-container *ngSwitchCase="'hash'">
             <span class="found-blocks-hash">
-                <a *ngIf="currentCoin =='BTC' "
-                    href="{{ explorersLinksPref.BTC }}{{ value }}{{ explorersLinksPref.BTC2 }}">{{ value }} </a>
-                <a *ngIf="currentCoin =='BSV' "
-                    href="{{ explorersLinksPref.BSV }}{{ value }}{{ explorersLinksPref.BSV2 }}">{{ value }} </a>
-                <a *ngIf="currentCoin =='BCH' "
-                    href="{{ explorersLinksPref.BCH }}{{ value }}{{ explorersLinksPref.BCH2 }}">{{ value }} </a>
-                <a *ngIf="currentCoin =='FCH' "
-                    href="{{ explorersLinksPref.FCH }}{{ value }}{{ explorersLinksPref.FCH2 }}">{{ value }} </a>
-                <a *ngIf="currentCoin =='HTR' "
-                    href="{{ explorersLinksPref.HTR }}{{ value }}{{ explorersLinksPref.HTR2 }}">{{ value }} </a>
-                <a *ngIf="currentCoin =='DGB.sha256' "
-                    href="{{ explorersLinksPref.DGB }}{{ value }}{{ explorersLinksPref.DGB2 }}">{{ value }} </a>
+                <a
+                    *ngIf="currentCoin == 'BTC'"
+                    href="{{ explorersLinksPref.BTC }}{{ value }}{{
+                        explorersLinksPref.BTC2
+                    }}"
+                    >{{ value }}
+                </a>
+                <a
+                    *ngIf="currentCoin == 'BSV'"
+                    href="{{ explorersLinksPref.BSV }}{{ value }}{{
+                        explorersLinksPref.BSV2
+                    }}"
+                    >{{ value }}
+                </a>
+                <a
+                    *ngIf="currentCoin == 'BCH'"
+                    href="{{ explorersLinksPref.BCH }}{{ value }}{{
+                        explorersLinksPref.BCH2
+                    }}"
+                    >{{ value }}
+                </a>
+                <a
+                    *ngIf="currentCoin == 'FCH'"
+                    href="{{ explorersLinksPref.FCH }}{{ value }}{{
+                        explorersLinksPref.FCH2
+                    }}"
+                    >{{ value }}
+                </a>
+                <a
+                    *ngIf="currentCoin == 'HTR'"
+                    href="{{ explorersLinksPref.HTR }}{{ value }}{{
+                        explorersLinksPref.HTR2
+                    }}"
+                    >{{ value }}
+                </a>
+                <a
+                    *ngIf="currentCoin == 'DGB.sha256'"
+                    href="{{ explorersLinksPref.DGB }}{{ value }}{{
+                        explorersLinksPref.DGB2
+                    }}"
+                    >{{ value }}
+                </a>
             </span>
         </ng-container>
 

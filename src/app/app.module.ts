@@ -48,7 +48,7 @@ import {
     PlusCircleOutline,
     UserAddOutline,
     PullRequestOutline,
-    RestOutline
+    RestOutline,
 } from "@ant-design/icons-angular/icons";
 
 import { ChartsModule } from "ng2-charts";
@@ -152,7 +152,7 @@ export function HttpLoaderFactory(http: HttpClient) {
             PlusCircleOutline,
             UserAddOutline,
             PullRequestOutline,
-            RestOutline
+            RestOutline,
         ]),
 
         ChartsModule,
@@ -211,4 +211,4 @@ export function HttpLoaderFactory(http: HttpClient) {
     ],
     bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

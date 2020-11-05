@@ -64,12 +64,11 @@ export class MonitoringComponent implements OnInit, OnDestroy {
 
     constructor(
         private backendQueryApiService: BackendQueryApiService,
-        private backendManualApiService: BackendManualApiService
-    ) { }
+        private backendManualApiService: BackendManualApiService,
+    ) {}
 
     ngOnInit(): void {
         this.getCoinsList();
-
     }
 
     ngOnDestroy(): void {
@@ -93,23 +92,17 @@ export class MonitoringComponent implements OnInit, OnDestroy {
         var lastPower = this.userWorkersStatsList.find(item => {
             return item.name === workerId;
         }).power;
-        let timeFrom = (new Date().valueOf() / 1000 as any).toFixed(0) - (3 * 24 * 60 * 60);
+        let timeFrom =
+            ((new Date().valueOf() / 1000) as any).toFixed(0) -
+            3 * 24 * 60 * 60;
         let groupByInterval = 15 * 60;
         this.backendQueryApiService
             .getWorkerStatsHistory({
                 coin: this.currentCoin,
                 workerId,
                 timeFrom,
-                groupByInterval
+                groupByInterval,
             })
-<<<<<<< HEAD
-            .subscribe(({ stats, powerMultLog10 }) => {
-                this.userWorkersStatsHistory = {
-                    name: workerId,
-                    stats,
-                    powerMultLog10,
-                };
-=======
             .subscribe(({ stats, powerMultLog10, currentTime }) => {
                 if (stats.length > 0) {
                     const lastStatTime = stats[stats.length - 1].time;
@@ -119,11 +112,11 @@ export class MonitoringComponent implements OnInit, OnDestroy {
                     }
                     if (stats.length > 2) stats.shift();
                     this.userWorkersStatsHistory = {
+                        name: workerId,
                         stats,
                         powerMultLog10,
                     };
                 }
->>>>>>> ef58d008463dfaf39a8bce70dd129f92ab342eb2
             });
     }
 
@@ -140,22 +133,24 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     }
 
     private getCoinsList(): void {
-        this.backendQueryApiService
-            .getPoolCoins()
-            .subscribe(({ coins }) => {
-                if (coins.length >= 2) {
-                    coins.push({ name: coins[0].algorithm, fullName: coins[0].algorithm, algorithm: coins[0].algorithm })
-                }
-                this.coins = coins.map(item => item.name);
-                if (this.coins.length > 0) {
-                    const coin = this.coins.includes(coins[0].algorithm)
-                        ? coins[0].algorithm
-                        : this.coins[0];
-                    this.getUserStat(coin);
+        this.backendQueryApiService.getPoolCoins().subscribe(({ coins }) => {
+            if (coins.length >= 2) {
+                coins.push({
+                    name: coins[0].algorithm,
+                    fullName: coins[0].algorithm,
+                    algorithm: coins[0].algorithm,
+                });
+            }
+            this.coins = coins.map(item => item.name);
+            if (this.coins.length > 0) {
+                const coin = this.coins.includes(coins[0].algorithm)
+                    ? coins[0].algorithm
+                    : this.coins[0];
+                this.getUserStat(coin);
 
-                    this.onCurrentCoinChange(coin);
-                }
-            });
+                this.onCurrentCoinChange(coin);
+            }
+        });
     }
 
     private getUserBalance(): void {
@@ -171,8 +166,13 @@ export class MonitoringComponent implements OnInit, OnDestroy {
         this.updateTablesData();
     }
 
-    private getUserStatsHistory(coinName: TCoinName, liveStats: IUserStatsItem): void {
-        let timeFrom = (new Date().valueOf() / 1000 as any).toFixed(0) - (1.5 * 24 * 60 * 60);
+    private getUserStatsHistory(
+        coinName: TCoinName,
+        liveStats: IUserStatsItem,
+    ): void {
+        let timeFrom =
+            ((new Date().valueOf() / 1000) as any).toFixed(0) -
+            1.5 * 24 * 60 * 60;
         let groupByInterval = 30 * 60;
         this.backendQueryApiService
             .getUserStatsHistory({ coin: coinName, timeFrom, groupByInterval })

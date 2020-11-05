@@ -39,6 +39,7 @@
     "validation.serverError.invalid_password": "Пользователя с такими логином/паролем не существует",
     "validation.serverError.user_not_active": "Пользователь не активирован. Следуйте инструкции в письме, пришедшем при регистрации",
     "validation.serverError.unknown": "Неизвестная ошибка",
+    "validation.serverError.duplicate_login": "Пользователь существует",
     "validation.serverError.user_already_active": "Пользователь уже активирован",
     "validation.serverError.smtp_client_create_error": "Ошибка SMTP клиента",
     "validation.serverError.email_send_error": "Ошибка при отправки письма",

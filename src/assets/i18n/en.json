@@ -36,6 +36,7 @@
     "validation.clientError.maxlength": "Max {{requiredLength}} symbols",
     "validation.clientError.email": "Invalid e-mail format",
     "validation.clientError.": "",
+    "validation.serverError.duplicate_login": "User already exists",
     "validation.serverError.invalid_password": "There is no user with such Name/Password",
     "validation.serverError.user_not_active": "User is not activated. Follow the instructions in the email received during registration",
     "validation.serverError.unknown": "Unknown error",

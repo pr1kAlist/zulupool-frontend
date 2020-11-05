@@ -18,7 +18,7 @@ import { TCoinName } from "interfaces/coin";
     providedIn: "root",
 })
 export class BackendQueryApiService {
-    constructor(private restService: RestService) { }
+    constructor(private restService: RestService) {}
 
     getUserBalance(
         params: IGetUserBalanceParams = {},
@@ -72,7 +72,6 @@ export class BackendQueryApiService {
         return this.restService.post("/backendQueryWorkerStatsHistory", params);
     }
 }
-
 
 export interface IGetUserBalanceParams {
     coin?: TCoinName;

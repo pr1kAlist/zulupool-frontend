@@ -16,7 +16,7 @@ import { AuthApiService } from "api/auth.api";
 import { IUser } from "interfaces/user";
 import { TCoinName } from "interfaces/coin";
 import { StorageService } from "services/storage.service";
-import { IPoolCoinsItem } from "interfaces/backend-query"
+import { IPoolCoinsItem } from "interfaces/backend-query";
 import { ERole } from "enums/role";
 import * as IApi from "interfaces/userapi-query";
 
@@ -41,32 +41,40 @@ export class AppService {
 
     authorize(sessionId: string): Observable<void> {
         return this.userApiService.userGetCredentials({ id: sessionId }).pipe(
-            switchMap<IApi.IUserGetCredentialsResponse, Observable<void>>(user => {
-                this.storageService.sessionId = sessionId;
+            switchMap<IApi.IUserGetCredentialsResponse, Observable<void>>(
+                user => {
+                    this.storageService.sessionId = sessionId;
 
-                return this.userApiService.userEnumerateAll({ id: sessionId }).pipe(
-                    map(({ users }) => {
-                        if (this.storageService.currentUser === 'observer' || 'admin') {
-                            userStore.next({
-                                role: ERole.SuperUser,
-                                users,
-                                ...user,
-                            });
-                            this.setUpTargetLogin(users);
-                        }
-                    }),
-                    catchError(() => {
-                        userStore.next({
-                            role: ERole.User,
-                            ...user,
-                        });
+                    return this.userApiService
+                        .userEnumerateAll({ id: sessionId })
+                        .pipe(
+                            map(({ users }) => {
+                                if (
+                                    ["observer", "admin"].includes(
+                                        this.storageService.currentUser,
+                                    )
+                                ) {
+                                    userStore.next({
+                                        role: ERole.SuperUser,
+                                        users,
+                                        ...user,
+                                    });
+                                    this.setUpTargetLogin(users);
+                                }
+                            }),
+                            catchError(() => {
+                                userStore.next({
+                                    role: ERole.User,
+                                    ...user,
+                                });
 
-                        this.storageService.targetLogin = null;
+                                this.storageService.targetLogin = null;
 
-                        return of(void 0);
-                    }),
-                );
-            }),
+                                return of(void 0);
+                            }),
+                        );
+                },
+            ),
             catchError(error => {
                 this.reset();
 
@@ -120,7 +128,6 @@ export class AppService {
             this.storageService.targetLogin = users[0].login;
         }
     }
-
 
     private reset(): void {
         this.storageService.sessionId = null;

@@ -26,7 +26,7 @@ export class HistoryComponent implements OnInit {
     constructor(
         private backendQueryApiService: BackendQueryApiService,
         private appService: AppService,
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         this.getCoinsList();
@@ -44,22 +44,23 @@ export class HistoryComponent implements OnInit {
     }
 
     private getCoinsList(): void {
-        this.backendQueryApiService
-            .getPoolCoins()
-            .subscribe(({ coins }) => {
-                if (coins.length >= 2) {
-                    coins.push({ name: coins[0].algorithm, fullName: coins[0].algorithm, algorithm: coins[0].algorithm })
-                }
-                this.coins = coins.map(item => item.name);
-                if (this.coins.length > 0) {
-                    const coin = this.coins.includes(coins[0].algorithm)
-                        ? coins[0].algorithm
-                        : this.coins[0];
-                    this.onCurrentCoinChange(coin);
-                }
-            });
+        this.backendQueryApiService.getPoolCoins().subscribe(({ coins }) => {
+            if (coins.length >= 2) {
+                coins.push({
+                    name: coins[0].algorithm,
+                    fullName: coins[0].algorithm,
+                    algorithm: coins[0].algorithm,
+                });
+            }
+            this.coins = coins.map(item => item.name);
+            if (this.coins.length > 0) {
+                const coin = this.coins.includes(coins[0].algorithm)
+                    ? coins[0].algorithm
+                    : this.coins[0];
+                this.onCurrentCoinChange(coin);
+            }
+        });
     }
-
 
     public onCurrentCoinChange(coin: TCoinName): void {
         this.currentCoin = coin;

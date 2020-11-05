@@ -14,7 +14,7 @@ export interface IResponse {
     status?: string;
 }
 
-export class InvalidDataError extends Error { }
+export class InvalidDataError extends Error {}
 
 @Injectable({
     providedIn: "root",
@@ -28,7 +28,7 @@ export class RestService {
     constructor(
         private http: HttpClient,
         private storageService: StorageService,
-    ) { }
+    ) {}
 
     post<T>(url: string, params: any = {}): Observable<T> {
         const options = { headers: this.headers };
@@ -44,7 +44,7 @@ export class RestService {
         if (targetLogin) {
             params.targetLogin = targetLogin;
         }
-        const tmp = url;
+
         return this.http.post(createAPIUrl(url), params, options).pipe(
             catchError(error => {
                 throw error;
@@ -52,7 +52,7 @@ export class RestService {
             tap(response => {
                 const { status } = response as IResponse;
 
-                if (status !== OKStatus ) {
+                if (status !== OKStatus) {
                     throw new InvalidDataError(status);
                 }
             }),

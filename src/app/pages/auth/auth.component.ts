@@ -84,7 +84,7 @@ export class AuthComponent {
         private authApiService: AuthApiService,
         private appService: AppService,
         private storageService: StorageService,
-    ) { }
+    ) {}
 
     onSignIn(): void {
         this.submitting = true;
@@ -96,8 +96,8 @@ export class AuthComponent {
                 this.appService.authorize(sessionid).subscribe(
                     () => {
                         const target =
-                            (this.activatedRoute.snapshot.queryParams.to as string) ||
-                            routeToUrl(userRootRoute);
+                            (this.activatedRoute.snapshot.queryParams
+                                .to as string) || routeToUrl(userRootRoute);
 
                         this.storageService.currentUser = params.login;
                         this.router.navigate([target]);

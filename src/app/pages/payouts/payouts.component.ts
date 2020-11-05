@@ -24,18 +24,20 @@ export class PayoutsComponent implements OnInit {
         private userApiService: UserApiService,
         private backendQueryApiService: BackendQueryApiService,
         private backendManualApiService: BackendManualApiService,
-    ) { }
+    ) {}
 
     ngOnInit(): void {
-        this.userApiService.userGetSettings().subscribe(({ coins: settings }) => {
-            this.settings = settings;
+        this.userApiService
+            .userGetSettings()
+            .subscribe(({ coins: settings }) => {
+                this.settings = settings;
 
-            if (settings.length > 0) {
-                this.selectedIndex = 0;
+                if (settings.length > 0) {
+                    this.selectedIndex = 0;
 
-                this.onCurrentCoinChange();
-            }
-        });
+                    this.onCurrentCoinChange();
+                }
+            });
     }
 
     onCurrentCoinChange(): void {

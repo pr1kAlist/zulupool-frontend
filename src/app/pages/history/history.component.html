@@ -1,6 +1,10 @@
 <app-target-login-badge></app-target-login-badge>
 
-<nz-radio-group nzButtonStyle="solid" [(ngModel)]="currentCoin" (ngModelChange)="onCurrentCoinChange($event)">
+<nz-radio-group
+    nzButtonStyle="solid"
+    [(ngModel)]="currentCoin"
+    (ngModelChange)="onCurrentCoinChange($event)"
+>
     <label *ngFor="let coin of coins" nz-radio-button [nzValue]="coin">
         {{ coin }}
     </label>

@@ -1,11 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { StorageService } from "../../services/storage.service";
-import { CoinSwitchService } from "../../services/coinswitch.service";
-import { ICoinsList, TCoinName } from "../../interfaces/coin";
-import { IPoolCoinsItem } from "../../interfaces/backend-query";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { StorageService } from "services/storage.service";
+import { CoinSwitchService } from "services/coinswitch.service";
+import { ICoinsList, TCoinName } from "interfaces/coin";
+import { IPoolCoinsItem } from "interfaces/backend-query";
 import { BackendQueryApiService } from "api/backend-query.api";
-import { not } from '@angular/compiler/src/output/output_ast';
-
 
 @Component({
     selector: "app-coin-switcher",
@@ -13,6 +11,8 @@ import { not } from '@angular/compiler/src/output/output_ast';
     styleUrls: ["./coin-switcher.component.less"],
 })
 export class CoinSwitcherComponent implements OnInit {
+    @Output()
+    onChange = new EventEmitter<TCoinName>();
 
     get getCurrentCoinName(): TCoinName | null {
         return this.activeCoinName as TCoinName;
@@ -29,52 +29,52 @@ export class CoinSwitcherComponent implements OnInit {
     public poolCoins = <IPoolCoinsItem[]>[];
 
     constructor(
-        private storageService: StorageService = {} as StorageService,
-        private service: CoinSwitchService = {} as CoinSwitchService,
-        private backendQueryApiService: BackendQueryApiService = {} as BackendQueryApiService
-    ) { }
+        private storageService: StorageService,
+        private coinSwitchService: CoinSwitchService,
+        private backendQueryApiService: BackendQueryApiService,
+    ) {}
 
     /*onCurrentCoinChange(coin: TCoinName): void {
         this.storageService.currentCoin = coin;
     }*/
     ngOnInit(): void {
-        if (this.storageService.currentCoin === null || this.storageService.currentCoin === null || 111 === 111) {
-            this.asyncGetCoinsList().then((poolCoins: IPoolCoinsItem[]) => {
-                if (poolCoins.length > 0) {
-                    this.storageService.currentCoin = poolCoins[poolCoins.length - 1] as IPoolCoinsItem;
-                    this.storageService.poolCoins = poolCoins as IPoolCoinsItem[];
-                    this.initCoins();
-                }
-            });
+        if (this.storageService.currentCoin === null || true) {
+            this.backendQueryApiService
+                .getPoolCoins()
+                .subscribe(({ coins }) => {
+                    if (coins.length > 1) {
+                        coins.push({
+                            name: coins[0].algorithm,
+                            fullName: coins[0].algorithm,
+                            algorithm: coins[0].algorithm,
+                        });
+                    }
+
+                    if (coins.length > 0) {
+                        this.storageService.currentCoin = coins[
+                            coins.length - 1
+                        ] as IPoolCoinsItem;
+                        this.storageService.poolCoins = coins as IPoolCoinsItem[];
+                        this.initCoins();
+                    }
+                });
         } else {
             this.initCoins();
         }
     }
     private initCoins(): void {
-        const currentCoin = this.storageService.currentCoin || <IPoolCoinsItem>{};
+        const currentCoin =
+            this.storageService.currentCoin || <IPoolCoinsItem>{};
         const coinsList = this.storageService.poolCoins || <IPoolCoinsItem[]>[];
         this.activeCoinName = currentCoin.name;
-        this.poolCoinsName = coinsList.map(item => item.name);;
+        this.poolCoinsName = coinsList.map(item => item.name);
         this.poolCoins = coinsList;
-        this.cangeCoin(this.activeCoinName)
-
+        this.cangeCoin(this.activeCoinName);
     }
 
     public cangeCoin(newCoin: TCoinName) {
-        this.service.setCoin(newCoin);
-    }
+        this.coinSwitchService.setCoin(newCoin);
 
-    private asyncGetCoinsList(): any {
-        var promise = new Promise((resolve) => {
-            this.backendQueryApiService
-                .getPoolCoins()
-                .subscribe(({ coins }) => {
-                    if (coins.length >= 2) {
-                        coins.push({ name: coins[0].algorithm, fullName: coins[0].algorithm, algorithm: coins[0].algorithm })
-                    }
-                    resolve(coins);
-                });
-        });
-        return promise;
+        this.onChange.emit(newCoin);
     }
 }

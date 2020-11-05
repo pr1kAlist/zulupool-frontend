@@ -21,7 +21,7 @@ export class ChartPowerComponent implements OnChanges {
     labels: Label[];
     data: number[];
 
-    constructor(private langService: LangService) { }
+    constructor(private langService: LangService) {}
 
     ngOnChanges(): void {
         this.labels = [];
