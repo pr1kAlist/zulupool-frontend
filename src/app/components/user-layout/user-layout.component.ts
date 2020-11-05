@@ -38,12 +38,6 @@ export class UserLayoutComponent extends SubscribableComponent
             icon: "history",
         },
         {
-            route: EAppRoutes.Users,
-            title: "components.userLayout.nav.users",
-            icon: "user",
-            access: ERole.SuperUser,
-        },
-        {
             route: EAppRoutes.Payouts,
             title: "components.userLayout.nav.payouts",
             icon: "wallet",
@@ -54,9 +48,21 @@ export class UserLayoutComponent extends SubscribableComponent
             icon: "setting",
         },
         {
+            route: EAppRoutes.Users,
+            title: "components.userLayout.nav.users",
+            icon: "user",
+            access: ERole.SuperUser,
+        },
+        {
             route: EAppRoutes.CreateUser,
             title: "components.userLayout.nav.createuser",
-            icon: "user",
+            icon: "user-add",
+            access: ERole.SuperUser,
+        },
+        {
+            route: EAppRoutes.CreateUser,
+            title: "components.userLayout.nav.profitswitch",
+            icon: "pull-request",
             access: ERole.SuperUser,
         },
     ]);

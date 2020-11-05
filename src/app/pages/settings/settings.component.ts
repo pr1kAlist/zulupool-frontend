@@ -25,7 +25,7 @@ export class SettingsComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.userApiService.getSettings().subscribe(({ coins }) => {
+        this.userApiService.userGetSettings().subscribe(({ coins }) => {
             if (coins.length > 0) {
                 this.settingsItems = coins;
                 this.selectedIndex = 0;
@@ -47,7 +47,7 @@ export class SettingsComponent implements OnInit {
             coin: this.settingsItems[this.selectedIndex].name,
         };
 
-        this.userApiService.updateSettings(data).subscribe(
+        this.userApiService.userUpdateSettings(data).subscribe(
             () => {
                 this.isSubmitting = false;
             },

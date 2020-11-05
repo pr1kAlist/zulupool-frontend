@@ -43,6 +43,12 @@ import {
     UserOutline,
     WalletOutline,
     SettingOutline,
+    PlusOutline,
+    PlusSquareOutline,
+    PlusCircleOutline,
+    UserAddOutline,
+    PullRequestOutline,
+    RestOutline
 } from "@ant-design/icons-angular/icons";
 
 import { ChartsModule } from "ng2-charts";
@@ -58,7 +64,10 @@ import { HelpComponent } from "pages/help/help.component";
 import { UsersComponent } from "pages/users/users.component";
 import { PayoutsComponent } from "pages/payouts/payouts.component";
 import { SettingsComponent } from "pages/settings/settings.component";
+
 import { CreateUserComponent } from "pages/createuser/createuser.component";
+import { CoinSwitcherComponent } from "components/coin-switcher/coin-switcher.component";
+import { CoinSwitchService } from "services/coinswitch.service";
 
 import { FooterComponent } from "components/footer/footer.component";
 import { MainLayoutComponent } from "components/main-layout/main-layout.component";
@@ -138,12 +147,19 @@ export function HttpLoaderFactory(http: HttpClient) {
             UserOutline,
             WalletOutline,
             SettingOutline,
+            PlusOutline,
+            PlusSquareOutline,
+            PlusCircleOutline,
+            UserAddOutline,
+            PullRequestOutline,
+            RestOutline
         ]),
 
         ChartsModule,
     ],
 
     providers: [
+        { provide: CoinSwitchService },
         {
             provide: NZ_CONFIG,
             useValue: {
@@ -179,6 +195,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         LogoComponent,
         EmptyContentComponent,
         TargetLoginBadgeComponent,
+        CoinSwitcherComponent,
+
         ChartComponent,
         ChartPowerComponent,
         HeaderControlsComponent,
@@ -193,4 +211,4 @@ export function HttpLoaderFactory(http: HttpClient) {
     ],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

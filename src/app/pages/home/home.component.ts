@@ -6,11 +6,13 @@ import {
     IPoolStatsItem,
     IFoundBlock,
     IWorkerStatsItem,
-    IPoolCoinsItem,
+    //   IPoolCoinsItem,
 } from "interfaces/backend-query";
 import { ESuffix } from "pipes/suffixify.pipe";
-import { Coin } from 'interfaces/coin';
-import { global } from '@angular/compiler/src/util';
+import { TCoinName } from 'interfaces/coin';
+import { CoinSwitchService } from "../../services/coinswitch.service";
+
+//import { global } from '@angular/compiler/src/util';
 //import { ETime } from "enums/time";
 
 interface IpoolHistoryInfo {
@@ -27,21 +29,19 @@ interface IcoinsInfo {
     [key: string]: IcoinInfo
 }
 
-
 @Component({
     selector: "app-home",
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.less"],
 })
-
 export class HomeComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly ESuffix = ESuffix;
 
-    public coinsList: Coin[];
+    public coinsList: TCoinName[];
     private coinsData: IcoinsInfo = {};
 
-    public currentCoin: Coin;
+    public currentCoin: TCoinName;
     public currentAlgo: string = '';
     public currentStats: IPoolStatsItem;
     public currentHistory: IWorkerStatsItem[];
@@ -74,9 +74,20 @@ export class HomeComponent implements OnInit {
         },
     };
 
-    constructor(private backendQueryApiService: BackendQueryApiService) { }
+    constructor(
+        private backendQueryApiService: BackendQueryApiService,
+        private service: CoinSwitchService,
+    ) { }
+
+    coinSwitch = this.service.coinSwitch;
+
+    ionViewWillLoad() {
+    }
 
     ngOnInit(): void {
+        this.coinSwitch.subscribe(value => {
+            this.onCurrentCoinChange(value);
+        });
         this.explorersLinksPref = {
             BTC: "https://chainz.cryptoid.info/dgb/block.dws?",
             BCH: "https://blockchair.com/bitcoin-cash/block/",
@@ -137,12 +148,12 @@ export class HomeComponent implements OnInit {
         clearTimeout(this.updateTimeoutSlowId);
     }
 
-    onCurrentCoinChange(coinName: Coin): void {
+    onCurrentCoinChange(coinName: TCoinName): void {
         this.setCoin(coinName);
         this.periodicFastCall(coinName);
         this.periodicSlowCall(coinName);
     }
-    private setCoin(coinName: Coin): void {
+    private setCoin(coinName: TCoinName): void {
         this.currentCoin = coinName;
         this.currentStats = this.coinsData[coinName].stats;
         this.currentHistory = this.coinsData[coinName].statsHistory.stats ? this.coinsData[coinName].statsHistory.stats : [];
@@ -151,7 +162,7 @@ export class HomeComponent implements OnInit {
         //        this.currentBlocksLoading = this.coinsData[coinName].foundBlocksLoading;
     }
 
-    private fetchNewData(coinName: Coin, setCoin: boolean = false) {
+    private fetchNewData(coinName: TCoinName, setCoin: boolean = false) {
         this.asyncGetCoinStats(coinName)
             .then(() => {
                 const thisCoinData = this.coinsData[coinName].stats;
@@ -165,7 +176,7 @@ export class HomeComponent implements OnInit {
                     });
             });
     }
-    private periodicFastCall(coinName: Coin) {
+    private periodicFastCall(coinName: TCoinName) {
         clearTimeout(this.updateTimeoutFastId);
         this.updateTimeoutFastId = setTimeout(() => {
             this.fetchNewData(coinName, true);
@@ -173,7 +184,7 @@ export class HomeComponent implements OnInit {
         }, 45 * 1000);
     }
 
-    private periodicSlowCall(coinName: Coin) {
+    private periodicSlowCall(coinName: TCoinName) {
         clearTimeout(this.updateTimeoutSlowId);
         this.updateTimeoutSlowId = setTimeout(() => {
             this.coinsList.forEach(el => {
@@ -187,12 +198,12 @@ export class HomeComponent implements OnInit {
         var promise = new Promise((resolve, reject) => {
             this.backendQueryApiService
                 .getPoolCoins()
-                .subscribe(({ poolCoins }) => {
-                    if (poolCoins.length >= 2) {
-                        poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+                .subscribe(({ coins }) => {
+                    if (coins.length >= 2) {
+                        coins.push({ name: coins[0].algorithm, fullName: coins[0].algorithm, algorithm: coins[0].algorithm })
                     }
-                    this.currentAlgo = poolCoins[0].algorithm;
-                    this.coinsList = poolCoins.map(item => item.name);
+                    this.currentAlgo = coins[0].algorithm;
+                    this.coinsList = coins.map(item => item.name);
                     if (this.coinsList.length > 0) {
                         this.currentCoin = this.coinsList.includes(this.currentAlgo)
                             ? this.currentAlgo
@@ -206,7 +217,7 @@ export class HomeComponent implements OnInit {
         });
         return promise;
     }
-    private asyncGetCoinStats(coinName: Coin): any {
+    private asyncGetCoinStats(coinName: TCoinName): any {
         var promise = new Promise((resolve, reject) => {
             this.backendQueryApiService.getPoolStats({ coin: coinName }).subscribe(({ stats }) => {
                 if (stats.length > 0) {
@@ -217,7 +228,7 @@ export class HomeComponent implements OnInit {
         });
         return promise;
     }
-    private asyncGetCoinStatsHistory(coinName: Coin, liveStats: IPoolStatsItem): any {
+    private asyncGetCoinStatsHistory(coinName: TCoinName, liveStats: IPoolStatsItem): any {
         var promise = new Promise((resolve, reject) => {
             let timeFrom = (new Date().valueOf() / 1000 as any).toFixed(0) - (2 * 24 * 60 * 60);
             let groupByInterval = 60 * 60;
@@ -236,7 +247,7 @@ export class HomeComponent implements OnInit {
         });
         return promise;
     }
-    private asyncGetFoundBlocks(coinName: Coin) {
+    private asyncGetFoundBlocks(coinName: TCoinName) {
         var promise = new Promise((resolve, reject) => {
             if (coinName !== this.currentAlgo) {
                 //if (this.currentCoin == coinName) this.currentBlocksLoading = true;
@@ -261,28 +272,28 @@ export class HomeComponent implements OnInit {
         return promise;
     }
 
-    private inintCoinsData(coinName: Coin) {
+    private inintCoinsData(coinName: TCoinName) {
         this.coinsData[coinName] = {
             stats: {} as IPoolStatsItem,
             statsHistory: {} as IpoolHistoryInfo,
             foundBlocks: [],
         };
     }
-    private addStatsData(coinName: Coin, stats: IPoolStatsItem) {
+    private addStatsData(coinName: TCoinName, stats: IPoolStatsItem) {
         this.coinsData[coinName] = {
             stats,
             statsHistory: this.coinsData[coinName].statsHistory,
             foundBlocks: this.coinsData[coinName].foundBlocks,
         }
     }
-    private addStatsHistoryData(coinName: Coin, statsHistory: IpoolHistoryInfo) {
+    private addStatsHistoryData(coinName: TCoinName, statsHistory: IpoolHistoryInfo) {
         this.coinsData[coinName] = {
             stats: this.coinsData[coinName].stats,
             statsHistory,
             foundBlocks: this.coinsData[coinName].foundBlocks,
         }
     }
-    private addFoundBlocksData(coinName: Coin, foundBlocks: IFoundBlock[]) {
+    private addFoundBlocksData(coinName: TCoinName, foundBlocks: IFoundBlock[]) {
         this.coinsData[coinName] = {
             stats: this.coinsData[coinName].stats,
             statsHistory: this.coinsData[coinName].statsHistory,

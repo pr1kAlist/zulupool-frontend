@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { IPoolCoinsItem } from "interfaces/backend-query";
 
 import { Observable } from "rxjs";
 import { tap, catchError, map } from "rxjs/operators";
@@ -51,16 +52,12 @@ export class RestService {
             tap(response => {
                 const { status } = response as IResponse;
 
-                if (status !== OKStatus && tmp !== '/backendQueryCoins') {
+                if (status !== OKStatus ) {
                     throw new InvalidDataError(status);
                 }
             }),
             map(response => {
                 delete (response as IResponse).status;
-                if (tmp === '/backendQueryCoins') {
-                    var tmpCoins = { poolCoins: response };
-                    response = tmpCoins;
-                }
                 return response as T;
             }),
         ) as Observable<T>;

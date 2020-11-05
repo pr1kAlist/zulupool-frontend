@@ -28,7 +28,7 @@ export class UsersComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.userApiService.getUserList().subscribe(({ users }) => {
+        this.userApiService.userEnumerateAll().subscribe(({ users }) => {
             users = users.filter(function (item) {
                 return item.login !== 'admin' && item.login !== 'observer'
             });

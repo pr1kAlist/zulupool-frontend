@@ -52,6 +52,7 @@
     "components.userLayout.nav.history": "History",
     "components.userLayout.nav.users": "Users",
     "components.userLayout.nav.createuser": "Add user",
+    "components.userLayout.nav.profitswitch": "Profit SW",
     "components.userLayout.nav.payouts": "Payouts",
     "components.userLayout.nav.settings": "Settings",
     "components.userLayout.menu.logOut": "Log out",

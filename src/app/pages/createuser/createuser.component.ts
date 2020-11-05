@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { UserApiService, IAdminUserCreateParams } from "api/user.api";
+import { UserApiService } from "api/user.api";
+import { IUserCreateByAdminParams } from "interfaces/userapi-query";
 
 
 @Component({
@@ -9,7 +10,7 @@ import { UserApiService, IAdminUserCreateParams } from "api/user.api";
     styleUrls: ["./createuser.component.less"],
 })
 export class CreateUserComponent implements OnInit {
-    settingsItems: IAdminUserCreateParams[];
+    settingsItems: IUserCreateByAdminParams[];
     selectedIndex: number;
 
     form = this.formBuilder.group({
@@ -19,7 +20,7 @@ export class CreateUserComponent implements OnInit {
         name: [],
         isActive: [],
         isReadOnly: [],
-    } as Record<keyof IAdminUserCreateParams, any>);
+    } as Record<keyof IUserCreateByAdminParams, any>);
     isSubmitting = false;
 
     constructor(

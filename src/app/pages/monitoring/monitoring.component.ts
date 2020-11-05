@@ -5,7 +5,7 @@ import { not } from "logical-not";
 import { EAppRoutes } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
 import { BackendManualApiService } from "api/backend-manual.api";
-import { Coin } from "interfaces/coin";
+import { TCoinName } from "interfaces/coin";
 import {
     IUserBalanceItem,
     IUserStatsItem,
@@ -29,8 +29,8 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     readonly EWorkerState = EWorkerState;
     readonly ESuffix = ESuffix;
 
-    coins: Coin[];
-    currentCoin: Coin;
+    coins: TCoinName[];
+    currentCoin: TCoinName;
 
     userBalances: IUserBalanceItem[];
     userStatsItem: IUserStatsItem;
@@ -75,7 +75,7 @@ export class MonitoringComponent implements OnInit, OnDestroy {
         clearTimeout(this.tableData.updateTimeoutId);
     }
 
-    onCurrentCoinChange(coin: Coin): void {
+    onCurrentCoinChange(coin: TCoinName): void {
         this.currentCoin = coin;
 
         this.getUserStat(coin);
@@ -132,14 +132,14 @@ export class MonitoringComponent implements OnInit, OnDestroy {
     private getCoinsList(): void {
         this.backendQueryApiService
             .getPoolCoins()
-            .subscribe(({ poolCoins }) => {
-                if (poolCoins.length >= 2) {
-                    poolCoins.push({ name: poolCoins[0].algorithm, fullName: poolCoins[0].algorithm, algorithm: poolCoins[0].algorithm })
+            .subscribe(({ coins }) => {
+                if (coins.length >= 2) {
+                    coins.push({ name: coins[0].algorithm, fullName: coins[0].algorithm, algorithm: coins[0].algorithm })
                 }
-                this.coins = poolCoins.map(item => item.name);
+                this.coins = coins.map(item => item.name);
                 if (this.coins.length > 0) {
-                    const coin = this.coins.includes(poolCoins[0].algorithm)
-                        ? poolCoins[0].algorithm
+                    const coin = this.coins.includes(coins[0].algorithm)
+                        ? coins[0].algorithm
                         : this.coins[0];
                     this.getUserStat(coin);
 
@@ -156,12 +156,12 @@ export class MonitoringComponent implements OnInit, OnDestroy {
             });
     }
 
-    private getUserStat(coinName: Coin): void {
+    private getUserStat(coinName: TCoinName): void {
         this.currentCoin = coinName;
         this.updateTablesData();
     }
 
-    private getUserStatsHistory(coinName: Coin, liveStats: IUserStatsItem): void {
+    private getUserStatsHistory(coinName: TCoinName, liveStats: IUserStatsItem): void {
         let timeFrom = (new Date().valueOf() / 1000 as any).toFixed(0) - (1.5 * 24 * 60 * 60);
         let groupByInterval = 30 * 60;
         this.backendQueryApiService
