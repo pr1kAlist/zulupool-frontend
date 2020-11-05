@@ -10,14 +10,15 @@ import {
     IPoolStatsItem,
     IWorkerStatsItem,
     IUserStatsItem,
+    IPoolCoinsItem,
 } from "interfaces/backend-query";
-import { Coin } from "interfaces/coin";
+import { TCoinName } from "interfaces/coin";
 
 @Injectable({
     providedIn: "root",
 })
 export class BackendQueryApiService {
-    constructor(private restService: RestService) {}
+    constructor(private restService: RestService) { }
 
     getUserBalance(
         params: IGetUserBalanceParams = {},
@@ -41,6 +42,10 @@ export class BackendQueryApiService {
         params: IGetPoolStatsParams = {},
     ): Observable<IGetPoolStatsResponse> {
         return this.restService.post("/backendQueryPoolStats", params);
+    }
+
+    getPoolCoins(): Observable<IGetPoolCoinsResponse> {
+        return this.restService.post("/backendQueryCoins");
     }
 
     getPoolStatsHistory(
@@ -68,8 +73,9 @@ export class BackendQueryApiService {
     }
 }
 
+
 export interface IGetUserBalanceParams {
-    coin?: Coin;
+    coin?: TCoinName;
 }
 
 export interface IGetUserBalanceResponse {
@@ -77,7 +83,7 @@ export interface IGetUserBalanceResponse {
 }
 
 export interface IGetFoundBlocksParams {
-    coin: Coin;
+    coin: TCoinName;
     heightFrom?: number;
     hashFrom?: string;
     count?: number;
@@ -98,28 +104,33 @@ export interface IGetFoundBlocksResponse {
 }
 
 export interface IGetPoolStatsParams {
-    coin?: Coin;
+    coin?: TCoinName;
 }
 
 export interface IGetPoolStatsResponse {
     stats: IPoolStatsItem[];
 }
 
+export interface IGetPoolCoinsResponse {
+    coins: IPoolCoinsItem[];
+}
+
 export interface IGetPoolStatsHistoryParams {
-    coin: Coin;
+    coin: TCoinName;
     timeFrom?: number;
     timeTo?: number;
     groupByInterval?: number;
 }
 
 export interface IGetPoolStatsHistoryResponse {
+    currentTime: number;
     powerUnit: string;
     powerMultLog10: number;
     stats: IWorkerStatsItem[];
 }
 
 export interface IGetUserStatsParams {
-    coin: Coin;
+    coin: TCoinName;
 }
 
 export interface IGetUserStatsResponse {
@@ -131,7 +142,7 @@ export interface IGetUserStatsResponse {
 }
 
 export interface IGetUserStatsHistoryParams {
-    coin: Coin;
+    coin: TCoinName;
     timeFrom?: number;
     groupByInterval?: number;
     [key: string]: any;
@@ -145,7 +156,7 @@ export interface IGetUserStatsHistoryResponse {
 }
 
 export interface IGetWorkerStatsHistoryParams {
-    coin: Coin;
+    coin: TCoinName;
     workerId: string;
     timeFrom?: number;
     timeTo?: number;

@@ -24,10 +24,10 @@ export class PayoutsComponent implements OnInit {
         private userApiService: UserApiService,
         private backendQueryApiService: BackendQueryApiService,
         private backendManualApiService: BackendManualApiService,
-    ) {}
+    ) { }
 
     ngOnInit(): void {
-        this.userApiService.getSettings().subscribe(({ coins: settings }) => {
+        this.userApiService.userGetSettings().subscribe(({ coins: settings }) => {
             this.settings = settings;
 
             if (settings.length > 0) {

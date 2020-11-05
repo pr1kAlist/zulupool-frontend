@@ -41,12 +41,6 @@ export class UserLayoutComponent extends SubscribableComponent
             icon: "history",
         },
         {
-            route: EAppRoutes.Users,
-            title: "components.userLayout.nav.users",
-            icon: "user",
-            access: ERole.SuperUser,
-        },
-        {
             route: EAppRoutes.Payouts,
             title: "components.userLayout.nav.payouts",
             icon: "wallet",
@@ -55,6 +49,24 @@ export class UserLayoutComponent extends SubscribableComponent
             route: EAppRoutes.Settings,
             title: "components.userLayout.nav.settings",
             icon: "setting",
+        },
+        {
+            route: EAppRoutes.Users,
+            title: "components.userLayout.nav.users",
+            icon: "user",
+            access: ERole.SuperUser,
+        },
+        {
+            route: EAppRoutes.CreateUser,
+            title: "components.userLayout.nav.createuser",
+            icon: "user-add",
+            access: ERole.SuperUser,
+        },
+        {
+            route: EAppRoutes.CreateUser,
+            title: "components.userLayout.nav.profitswitch",
+            icon: "pull-request",
+            access: ERole.SuperUser,
         },
     ]);
 
@@ -83,6 +95,7 @@ export class UserLayoutComponent extends SubscribableComponent
     get username(): string {
         return this.appService.getUser().name;
     }
+
 
     constructor(
         private router: Router,
@@ -163,7 +176,7 @@ export class UserLayoutComponent extends SubscribableComponent
 interface INavigationItem {
     route: EAppRoutes;
     title:
-        | "components.userLayout.nav.monitoring"
-        | "components.userLayout.nav.payments";
+    | "components.userLayout.nav.monitoring"
+    | "components.userLayout.nav.payments";
     icon: "fund-projection-screen" | "wallet";
 }

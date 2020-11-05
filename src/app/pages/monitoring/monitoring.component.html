@@ -2,26 +2,24 @@
 
 <div class="main">
     <div class="info">
-        <nz-radio-group
-            nzButtonStyle="solid"
-            [(ngModel)]="currentCoin"
-            (ngModelChange)="onCurrentCoinChange($event)"
-        >
-            <label *ngFor="let coin of coins" nz-radio-button [nzValue]="coin">
-                {{ coin }}
-            </label>
-        </nz-radio-group>
-
-        <nz-table
-            class="info-table"
-            nzBordered
-            [nzTemplateMode]="true"
-            [nzLoading]="tableData.isLoading"
-        >
+        <div class="coin-select-block">
+            <nz-radio-group nzButtonStyle="solid" [(ngModel)]="currentCoin"
+                (ngModelChange)="onCurrentCoinChange($event)">
+                <label *ngFor="let coin of coins" nz-radio-button [nzValue]="coin">
+                    {{ coin }}
+                </label>
+            </nz-radio-group>
+        </div>
+        <nz-table *ngIf="currentCoin && currentCoin !=='sha256'" class="info-table" nzBordered [nzTemplateMode]="true"
+            [nzLoading]="tableData.isLoading">
             <thead>
                 <tr>
                     <th>
                         {{ "monitoring.balance" | translate }}
+                        <button nz-button nzType="primary" [nzLoading]="isManualPayoutSending" (click)="manualPayout()">
+                            {{ "payouts.manualPayoutButton" | translate }}
+                        </button>
+
                     </th>
                 </tr>
             </thead>
@@ -35,11 +33,7 @@
         </nz-table>
 
         <div class="info-table">
-            <nz-table
-                nzBordered
-                [nzTemplateMode]="true"
-                [nzLoading]="tableData.isLoading"
-            >
+            <nz-table nzBordered [nzTemplateMode]="true" [nzLoading]="tableData.isLoading">
                 <thead>
                     <tr>
                         <th>
@@ -76,12 +70,8 @@
             </nz-table>
         </div>
 
-        <nz-table
-            class="info-table-mobile _table-mobile"
-            nzBordered
-            [nzTemplateMode]="true"
-            [nzLoading]="tableData.isLoading"
-        >
+        <nz-table class="info-table-mobile _table-mobile" nzBordered [nzTemplateMode]="true"
+            [nzLoading]="tableData.isLoading">
             <tbody>
                 <tr>
                     <th>
@@ -134,20 +124,11 @@
             </tbody>
         </nz-table>
     </div>
-
-    <app-chart-power
-        class="chart"
-        [stats]="userStatsHistory.stats"
-        [powerMultLog10]="userStatsHistory.powerMultLog10"
-    ></app-chart-power>
+    <app-chart-power class="chart" [stats]="userStatsHistory.stats" [powerMultLog10]="userStatsHistory.powerMultLog10">
+    </app-chart-power>
 </div>
-
-<nz-table
-    class="workers-table"
-    nzBordered
-    [nzTemplateMode]="true"
-    [nzLoading]="tableData.isLoading"
->
+<br>
+<nz-table class="workers-table" nzBordered [nzTemplateMode]="true" [nzLoading]="tableData.isLoading">
     <thead>
         <tr>
             <th nzWidth="1px"></th>
@@ -166,34 +147,15 @@
         </tr>
     </thead>
     <tbody *ngIf="userWorkersStatsList">
-        <tr
-            *ngFor="let item of userWorkersStatsList"
-            className="_clickable"
-            (click)="onWorkerRowClick(item.name)"
-        >
+        <tr *ngFor="let item of userWorkersStatsList" className="_clickable" (click)="onWorkerRowClick(item.name)">
             <td>
                 <ng-container [ngSwitch]="getWorkerState(item.lastShareTime)">
-                    <i
-                        *ngSwitchCase="EWorkerState.Normal"
-                        class="worker-state _normal"
-                        nz-icon
-                        nzType="check-circle"
-                        nzTheme="outline"
-                    ></i>
-                    <i
-                        *ngSwitchCase="EWorkerState.Warning"
-                        class="worker-state _warning"
-                        nz-icon
-                        nzType="exclamation-circle"
-                        nzTheme="outline"
-                    ></i>
-                    <i
-                        *ngSwitchCase="EWorkerState.Error"
-                        class="worker-state _error"
-                        nz-icon
-                        nzType="minus-circle"
-                        nzTheme="outline"
-                    ></i>
+                    <i *ngSwitchCase="EWorkerState.Normal" class="worker-state _normal" nz-icon nzType="check-circle"
+                        nzTheme="outline"></i>
+                    <i *ngSwitchCase="EWorkerState.Warning" class="worker-state _warning" nz-icon
+                        nzType="exclamation-circle" nzTheme="outline"></i>
+                    <i *ngSwitchCase="EWorkerState.Error" class="worker-state _error" nz-icon nzType="minus-circle"
+                        nzTheme="outline"></i>
                 </ng-container>
             </td>
             <td>{{ item.name }}</td>
@@ -214,34 +176,15 @@
 </nz-table>
 
 <div *ngIf="userWorkersStatsList" class="workers-mobile">
-    <div
-        *ngFor="let item of userWorkersStatsList"
-        class="worker-mobile-card"
-        (click)="onWorkerRowClick(item.name)"
-    >
+    <div *ngFor="let item of userWorkersStatsList" class="worker-mobile-card" (click)="onWorkerRowClick(item.name)">
         <div class="worker-mobile-card-title">
             <ng-container [ngSwitch]="getWorkerState(item.lastShareTime)">
-                <i
-                    *ngSwitchCase="EWorkerState.Normal"
-                    class="worker-state _normal"
-                    nz-icon
-                    nzType="check-circle"
-                    nzTheme="outline"
-                ></i>
-                <i
-                    *ngSwitchCase="EWorkerState.Warning"
-                    class="worker-state _warning"
-                    nz-icon
-                    nzType="exclamation-circle"
-                    nzTheme="outline"
-                ></i>
-                <i
-                    *ngSwitchCase="EWorkerState.Error"
-                    class="worker-state _error"
-                    nz-icon
-                    nzType="minus-circle"
-                    nzTheme="outline"
-                ></i>
+                <i *ngSwitchCase="EWorkerState.Normal" class="worker-state _normal" nz-icon nzType="check-circle"
+                    nzTheme="outline"></i>
+                <i *ngSwitchCase="EWorkerState.Warning" class="worker-state _warning" nz-icon
+                    nzType="exclamation-circle" nzTheme="outline"></i>
+                <i *ngSwitchCase="EWorkerState.Error" class="worker-state _error" nz-icon nzType="minus-circle"
+                    nzTheme="outline"></i>
             </ng-container>
 
             <span>{{ item.name }}</span>
@@ -267,6 +210,7 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 <nz-modal
     nzWidth="80%"
     [nzVisible]="userWorkersStatsHistory"
@@ -280,3 +224,10 @@
         [powerMultLog10]="userWorkersStatsHistory.powerMultLog10"
     ></app-chart-power>
 </nz-modal>
+=======
+<nz-modal nzWidth="80%" [nzVisible]="userWorkersStatsHistory" [nzTitle]="null" [nzFooter]="null"
+    (nzOnCancel)="userWorkersStatsHistory = null">
+    <app-chart-power *ngIf="userWorkersStatsHistory" [stats]="userWorkersStatsHistory.stats"
+        [powerMultLog10]="userWorkersStatsHistory.powerMultLog10"></app-chart-power>
+</nz-modal>
+>>>>>>> ef58d008463dfaf39a8bce70dd129f92ab342eb2

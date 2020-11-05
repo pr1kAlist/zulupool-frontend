@@ -1,8 +1,8 @@
-import { Coin } from "interfaces/coin";
+import { TCoinName } from "interfaces/coin";
 import { EPowerUnit } from "enums/power-unit";
 
 export interface IUserBalanceItem {
-    coin: Coin;
+    coin: TCoinName;
     balance: string;
     requested: string;
     paid: string;
@@ -23,8 +23,14 @@ export interface IUserPayouts {
     value: string;
 }
 
+export interface IPoolCoinsItem {
+    name: TCoinName;
+    fullName: string;
+    algorithm: string;
+}
+
 export interface IPoolStatsItem {
-    coin: Coin;
+    coin: TCoinName;
     clients: number;
     workers: number;
     shareRate: number;
@@ -32,6 +38,7 @@ export interface IPoolStatsItem {
     power: number;
     powerMultLog10: number;
     powerUnit: EPowerUnit;
+    lastShareTime: number;
 }
 
 export interface IWorkerStatsItem {
@@ -49,4 +56,5 @@ export interface IUserStatsItem {
     shareRate: number;
     shareWork: number;
     power: number;
+    lastShareTime: number;
 }
