@@ -1,0 +1,54 @@
+<form class="createuser-form" nz-form nzLayout="vertical" [formGroup]="form" (submit)="addUser()">
+    <nz-form-item>
+        <nz-form-label nzFor="login">
+            {{ "common.login" | translate }}
+        </nz-form-label>
+        <nz-form-control>
+            <input nz-input formControlName="login" id="login" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="password">
+            {{ "common.password" | translate }}
+        </nz-form-label>
+        <nz-form-control>
+            <input nz-input formControlName="password" id="password" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="email">
+            {{ "common.email" | translate }}
+        </nz-form-label>
+        <nz-form-control>
+            <input nz-input formControlName="email" id="email" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="name">
+            {{ "common.name" | translate }}
+        </nz-form-label>
+        <nz-form-control>
+            <input nz-input formControlName="name" id="name" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="isActive">
+            <nz-switch [formControl]="form.get('isActive')"></nz-switch>
+            <span class="isUserActive">
+                {{ "createuser.form.isUserActive" | translate }}
+            </span>
+        </nz-form-label>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="isReadOnly">
+            <nz-switch [formControl]="form.get('isReadOnly')"></nz-switch>
+            <span class="isUserReadOnly">
+                {{ "createuser.form.isUserReadOnly" | translate }}
+            </span>
+        </nz-form-label>
+    </nz-form-item>
+
+    <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        {{ "createuser.form.addUser" | translate }}
+    </button>
+</form>

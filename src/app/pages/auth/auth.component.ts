@@ -6,9 +6,12 @@ import { TranslateService } from "@ngx-translate/core";
 import { NzModalService } from "ng-zorro-antd/modal";
 
 import { AuthApiService, IAuthSignInParams } from "api/auth.api";
-import { IUserCreateParams } from "api/user.api";
+import { IUserCreateParams } from "interfaces/userapi-query";
 import { FormService } from "services/form.service";
 import { EAppRoutes, userRootRoute } from "enums/routing";
+import { userCreateResp } from "enums/api-enums";
+import { StorageService } from "services/storage.service";
+
 import { routeToUrl } from "tools/route-to-url";
 import { AppService } from "services/app.service";
 
@@ -80,7 +83,8 @@ export class AuthComponent {
         private nzModalService: NzModalService,
         private authApiService: AuthApiService,
         private appService: AppService,
-    ) {}
+        private storageService: StorageService,
+    ) { }
 
     onSignIn(): void {
         this.submitting = true;
@@ -92,9 +96,10 @@ export class AuthComponent {
                 this.appService.authorize(sessionid).subscribe(
                     () => {
                         const target =
-                            (this.activatedRoute.snapshot.queryParams
-                                .to as string) || routeToUrl(userRootRoute);
+                            (this.activatedRoute.snapshot.queryParams.to as string) ||
+                            routeToUrl(userRootRoute);
 
+                        this.storageService.currentUser = params.login;
                         this.router.navigate([target]);
                     },
                     () => {

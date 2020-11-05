@@ -9,6 +9,7 @@ export enum EAppRoutes {
     Help = "help",
     Payouts = "payouts",
     Settings = "settings",
+    CreateUser = "createuser",
 }
 
 export enum EActionsRoutes {

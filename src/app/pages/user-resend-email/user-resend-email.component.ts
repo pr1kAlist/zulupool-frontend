@@ -5,7 +5,8 @@ import { Router } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import { NzModalService } from "ng-zorro-antd/modal";
 
-import { UserApiService, IUserResendEmailParams } from "api/user.api";
+import { UserApiService } from "api/user.api";
+import { IUserResendEmailParams } from "interfaces/userapi-query";
 import { FormService } from "services/form.service";
 import { EAppRoutes } from "enums/routing";
 import { routeToUrl } from "tools/route-to-url";
@@ -55,14 +56,14 @@ export class UserResendEmailComponent {
         private translateService: TranslateService,
         private nzModalService: NzModalService,
         private uUserApiService: UserApiService,
-    ) {}
+    ) { }
 
     onSubmit(): void {
         this.submitting = true;
 
         const params = this.form.formData.value as IUserResendEmailParams;
 
-        this.uUserApiService.resendEmail(params).subscribe(
+        this.uUserApiService.userResendEmail(params).subscribe(
             () => {
                 this.nzModalService.success({
                     nzContent: this.translateService.instant(

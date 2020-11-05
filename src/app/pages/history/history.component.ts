@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 
 import { EAppRoutes } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
-import { Coin } from "interfaces/coin";
+import { TCoinName } from "interfaces/coin";
 import { IWorkerStatsItem } from "interfaces/backend-query";
 import { AppService } from "services/app.service";
 import { ESuffix } from "pipes/suffixify.pipe";
@@ -17,8 +17,8 @@ export class HistoryComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly ESuffix = ESuffix;
 
-    coins: Coin[];
-    currentCoin: Coin;
+    coins: TCoinName[];
+    currentCoin: TCoinName;
 
     statsHistory: IWorkerStatsItem[];
     powerMultLog10: number;
@@ -26,23 +26,43 @@ export class HistoryComponent implements OnInit {
     constructor(
         private backendQueryApiService: BackendQueryApiService,
         private appService: AppService,
-    ) {}
+    ) { }
 
     ngOnInit(): void {
-        this.backendQueryApiService
+        this.getCoinsList();
+        /*this.backendQueryApiService
             .getUserBalance()
             .subscribe(({ balances }) => {
-                balances = balances.filter(item => item.coin === "HTR");
+                balances = balances.filter(item => item.coin === "sha256");
 
                 this.coins = balances.map(item => item.coin);
 
                 if (this.coins.length > 0) {
                     this.onCurrentCoinChange(this.coins[0]);
                 }
+            });*/
+    }
+
+    private getCoinsList(): void {
+        this.backendQueryApiService
+            .getPoolCoins()
+            .subscribe(({ coins }) => {
+                if (coins.length >= 2) {
+                    coins.push({ name: coins[0].algorithm, fullName: coins[0].algorithm, algorithm: coins[0].algorithm })
+                }
+                this.coins = coins.map(item => item.name);
+                if (this.coins.length > 0) {
+                    const coin = this.coins.includes(coins[0].algorithm)
+                        ? coins[0].algorithm
+                        : this.coins[0];
+                    this.onCurrentCoinChange(coin);
+                }
             });
     }
 
-    private onCurrentCoinChange(coin: Coin): void {
+
+    public onCurrentCoinChange(coin: TCoinName): void {
+        this.currentCoin = coin;
         const groupByInterval = ETime.Day;
 
         this.appService.user.subscribe(user => {

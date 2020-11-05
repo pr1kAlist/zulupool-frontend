@@ -1,24 +1,11 @@
+<app-target-login-badge></app-target-login-badge>
 <div class="header-block">
-    <nz-select
-        class="coin-select"
-        [(ngModel)]="selectedIndex"
-        [nzLoading]="!settings"
-        (ngModelChange)="onCurrentCoinChange()"
-    >
-        <nz-option
-            *ngFor="let item of settings; index as i"
-            [nzLabel]="item.name"
-            [nzValue]="i"
-        ></nz-option>
+    <nz-select class="coin-select" [(ngModel)]="selectedIndex" [nzLoading]="!settings"
+        (ngModelChange)="onCurrentCoinChange()">
+        <nz-option *ngFor="let item of settings; index as i" [nzLabel]="item.name" [nzValue]="i"></nz-option>
     </nz-select>
-
     <div>
-        <button
-            nz-button
-            nzType="primary"
-            [nzLoading]="isManualPayoutSending"
-            (click)="manualPayout()"
-        >
+        <button nz-button nzType="primary" [nzLoading]="isManualPayoutSending" (click)="manualPayout()">
             {{ "payouts.manualPayoutButton" | translate }}
         </button>
     </div>

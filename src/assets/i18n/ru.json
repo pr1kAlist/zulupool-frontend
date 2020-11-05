@@ -58,7 +58,7 @@
     "components.targetLoginBadge.message": "Просмотр пользователя: {{login}}",
     "components.chartPower.title": "Power (Ph/s)",
     "home.signUpButton": "Зарегистрироваться",
-    "home.coinSelect": "Найденые блоки для монеты:",
+    "home.coinSelect": "Статистика для:",
     "home.foundBlocksTable.title.foundBy": "Найдено пользователем",
     "home.foundBlocksTable.title.hash": "Hash",
     "home.foundBlocksTable.title.generatedCoins": "Generated",
