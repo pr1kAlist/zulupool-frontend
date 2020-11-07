@@ -49,21 +49,25 @@ export class HomeComponent implements OnInit {
     public currentBlocks: IFoundBlock[];
     public currentBlocksLoading: boolean = false;
 
-    public explorersLinksPref: {};
-
-    explorersLinksPrefDGB1: "https://chainz.cryptoid.info/dgb/block.dws?";
-    explorersLinksPrefDGB2: ".htm";
+    private explorersLinksPref: {};
+    private explorersLinksSuf: {};
 
     private updateTimeoutFastId: number;
     private updateTimeoutSlowId: number;
 
     public foundBlockKeys: (keyof IFoundBlock)[] = [
-        "foundBy",
-        "hash",
-        "generatedCoins",
-        "confirmations",
         "height",
+        "hash",
+        "confirmations",
+        "generatedCoins",
+        "foundBy",
         "time",
+    ];
+    public foundBlockKeysMobile: (keyof IFoundBlock)[] = [
+        "height",
+        "hash",
+        "confirmations",
+        "foundBy",
     ];
 
     public signUpLink = {
@@ -77,11 +81,11 @@ export class HomeComponent implements OnInit {
     constructor(
         private backendQueryApiService: BackendQueryApiService,
         private service: CoinSwitchService,
-    ) {}
+    ) { }
 
     coinSwitch = this.service.coinSwitch;
 
-    ionViewWillLoad() {}
+    ionViewWillLoad() { }
 
     ngOnInit(): void {
         this.coinSwitch.subscribe(value => {
@@ -94,12 +98,14 @@ export class HomeComponent implements OnInit {
             DGB: "https://chainz.cryptoid.info/dgb/block.dws?",
             FCH: "http://fch.world/block/",
             HTR: "https://explorer.hathor.network/transaction/",
-            BTC2: ".htm",
-            BCH2: "",
-            BSV2: "",
-            DGB2: ".htm",
-            FCH2: "",
-            HTR2: "",
+        };
+        this.explorersLinksSuf = {
+            BTC: ".htm",
+            BCH: "",
+            BSV: "",
+            DGB: ".htm",
+            FCH: "",
+            HTR: "",
         };
         this.asyncGetCoinsList().then(() => {
             this.asyncGetCoinStats(this.currentCoin).then(() => {
@@ -331,5 +337,18 @@ export class HomeComponent implements OnInit {
             statsHistory: this.coinsData[coinName].statsHistory,
             foundBlocks,
         };
+    }
+    onBlockClick(block: IFoundBlock): void {
+        const url = this.explorersLinksPref[this.currentCoin] + block.hash + this.explorersLinksSuf[this.currentCoin];
+        this.openBrowser(url);
+    }
+
+    truncate(fullStr) {
+        var separator = '...', frontChars = 3, backChars = 4;
+        return fullStr.substr(0, frontChars) + separator + fullStr.substr(fullStr.length - backChars);
+    };
+
+    private openBrowser(url: string) {
+        window.open(url, '_system');
     }
 }

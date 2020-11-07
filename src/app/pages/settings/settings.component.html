@@ -1,6 +1,11 @@
 <app-target-login-badge></app-target-login-badge>
 
+<div class="coin-select-block">
+    <app-coin-switcher (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
+</div>
+<!--
 <div>
+
     <span class="coin-label">
         {{ "settings.coinLabel" | translate }}
     </span>
@@ -17,14 +22,8 @@
         ></nz-option>
     </nz-select>
 </div>
-
-<form
-    class="settings-form"
-    nz-form
-    nzLayout="vertical"
-    [formGroup]="form"
-    (submit)="save()"
->
+-->
+<form class="settings-form" nz-form nzLayout="vertical" [formGroup]="form" (submit)="save()">
     <nz-form-item>
         <nz-form-label nzFor="address">
             {{ "settings.form.address" | translate }}
@@ -38,18 +37,12 @@
             {{ "settings.form.payoutThreshold" | translate }}
         </nz-form-label>
         <nz-form-control>
-            <input
-                nz-input
-                formControlName="payoutThreshold"
-                id="payoutThreshold"
-            />
+            <input nz-input formControlName="payoutThreshold" id="payoutThreshold" />
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
         <nz-form-label nzFor="autoPayoutEnabled">
-            <nz-switch
-                [formControl]="form.get('autoPayoutEnabled')"
-            ></nz-switch>
+            <nz-switch [formControl]="form.get('autoPayoutEnabled')"></nz-switch>
 
             <span class="autoPayoutLabel">
                 {{ "settings.form.autoPayoutEnabled" | translate }}

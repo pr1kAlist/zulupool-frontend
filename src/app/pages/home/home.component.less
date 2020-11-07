@@ -1,9 +1,11 @@
 :host {
     display: block;
-    width: 97%;
-    height: 97%;
+    width: 99%;
+    height: 99%;
 }
-
+.ant-layout-content {
+    padding: 2px 2px;
+}
 .sign-up-block {
     text-align: center;
 }
@@ -22,6 +24,7 @@
 .main {
     display: flex;
     flex-direction: row;
+    padding: 5px 5px;
 }
 
 .coin-select-label {
@@ -33,14 +36,14 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 1px;
 }
 
 .coins-block {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding-right: 32px;
+    padding-right: 1px;
     min-width: 300px;
 }
 
@@ -53,7 +56,7 @@
 }
 
 .found-blocks-table {
-    margin: 20px 0 0;
+    margin: 2px 0 0;
 }
 
 .found-blocks-table-mobile {
@@ -67,6 +70,7 @@
 @media (max-width: 992px) {
     .main {
         flex-direction: column;
+        padding: 3px 3px;
     }
 
     .found-blocks-table {
@@ -74,12 +78,11 @@
     }
 
     .coins-block {
-        margin-bottom: 32px;
+        margin-bottom: 3px;
         padding: 0;
     }
 
     .found-blocks-table-mobile {
         display: block;
-        margin-top: 32px;
     }
 }

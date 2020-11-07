@@ -1,6 +1,4 @@
 import { Injectable } from "@angular/core";
-import { ICoinsList, TCoinName } from "interfaces/coin";
-import { IUser } from "interfaces/user";
 import { IPoolCoinsItem } from "interfaces/backend-query";
 
 @Injectable({ providedIn: "root" })

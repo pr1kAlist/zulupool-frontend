@@ -5,6 +5,7 @@ import { BackendQueryApiService } from "api/backend-query.api";
 import { BackendManualApiService } from "api/backend-manual.api";
 import { IUserPayouts } from "interfaces/backend-query";
 import { IUserSettings } from "interfaces/user";
+import { TCoinName } from "interfaces/coin";
 
 @Component({
     selector: "app-payouts",
@@ -19,12 +20,13 @@ export class PayoutsComponent implements OnInit {
     isPayoutsLoading = false;
 
     isManualPayoutSending = false;
+    currentCoin: TCoinName;
 
     constructor(
         private userApiService: UserApiService,
         private backendQueryApiService: BackendQueryApiService,
         private backendManualApiService: BackendManualApiService,
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.userApiService
@@ -35,15 +37,27 @@ export class PayoutsComponent implements OnInit {
                 if (settings.length > 0) {
                     this.selectedIndex = 0;
 
-                    this.onCurrentCoinChange();
+                    this.onCurrentCoinChange(this.settings[0].name);
                 }
             });
     }
 
-    onCurrentCoinChange(): void {
-        this.isPayoutsLoading = true;
+    onCurrentCoinChange(coin: TCoinName): void {
+        this.currentCoin = coin;
 
-        const { name: coin } = this.settings[this.selectedIndex];
+        this.getUserStat(coin);
+        //this.backendQueryApiService
+        //.getUserStatsHistory({ coin })
+        //.subscribe(({ stats, powerMultLog10 }) => {
+        // this.setAcceptedDifficulty(stats);
+
+        //this.userStatsHistory = { stats, powerMultLog10 };
+        //});
+    }
+
+
+    getUserStat(coin: TCoinName): void {
+        this.isPayoutsLoading = true;
 
         this.backendQueryApiService.getUserPayouts({ coin }).subscribe(
             ({ payouts }) => {
