@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { SubscribableComponent } from "ngx-subscribable";
 
 import { EAppRoutes, userRootRoute } from "enums/routing";
 import { BackendQueryApiService } from "api/backend-query.api";
@@ -10,7 +11,7 @@ import {
 } from "interfaces/backend-query";
 import { ESuffix } from "pipes/suffixify.pipe";
 import { TCoinName } from "interfaces/coin";
-import { CoinSwitchService } from "../../services/coinswitch.service";
+import { CoinSwitchService } from "services/coinswitch.service";
 
 //import { global } from '@angular/compiler/src/util';
 //import { ETime } from "enums/time";
@@ -34,28 +35,21 @@ interface IcoinsInfo {
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.less"],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent extends SubscribableComponent implements OnInit {
     readonly EAppRoutes = EAppRoutes;
     readonly ESuffix = ESuffix;
 
-    public coinsList: TCoinName[];
-    private coinsData: IcoinsInfo = {};
+    coinsList: TCoinName[];
 
-    public currentCoin: TCoinName;
-    public currentAlgo: string = "";
-    public currentStats: IPoolStatsItem;
-    public currentHistory: IWorkerStatsItem[];
-    public currentPowerMultLog10: number;
-    public currentBlocks: IFoundBlock[];
-    public currentBlocksLoading: boolean = false;
+    currentCoin: TCoinName;
+    currentAlgo: string = "";
+    currentStats: IPoolStatsItem;
+    currentHistory: IWorkerStatsItem[];
+    currentPowerMultLog10: number;
+    currentBlocks: IFoundBlock[];
+    currentBlocksLoading: boolean = false;
 
-    private explorersLinksPref: {};
-    private explorersLinksSuf: {};
-
-    private updateTimeoutFastId: number;
-    private updateTimeoutSlowId: number;
-
-    public foundBlockKeys: (keyof IFoundBlock)[] = [
+    foundBlockKeys: (keyof IFoundBlock)[] = [
         "height",
         "hash",
         "confirmations",
@@ -63,14 +57,14 @@ export class HomeComponent implements OnInit {
         "foundBy",
         "time",
     ];
-    public foundBlockKeysMobile: (keyof IFoundBlock)[] = [
+    foundBlockKeysMobile: (keyof IFoundBlock)[] = [
         "height",
         "hash",
         "confirmations",
         "foundBy",
     ];
 
-    public signUpLink = {
+    signUpLink = {
         href: `/${EAppRoutes.Auth}`,
         params: {
             to: decodeURIComponent(`/${userRootRoute}`),
@@ -78,35 +72,42 @@ export class HomeComponent implements OnInit {
         },
     };
 
+    private coinsData: IcoinsInfo = {};
+
+    private explorersLinksPref = {
+        BTC: "https://chainz.cryptoid.info/dgb/block.dws?",
+        BCH: "https://blockchair.com/bitcoin-cash/block/",
+        BSV: "https://blockchair.com/bitcoin-sv/block/",
+        DGB: "https://chainz.cryptoid.info/dgb/block.dws?",
+        FCH: "http://fch.world/block/",
+        HTR: "https://explorer.hathor.network/transaction/",
+    };
+    private explorersLinksSuf = {
+        BTC: ".htm",
+        BCH: "",
+        BSV: "",
+        DGB: ".htm",
+        FCH: "",
+        HTR: "",
+    };
+
+    private updateTimeoutFastId: number;
+    private updateTimeoutSlowId: number;
+
     constructor(
         private backendQueryApiService: BackendQueryApiService,
-        private service: CoinSwitchService,
-    ) { }
-
-    coinSwitch = this.service.coinSwitch;
-
-    ionViewWillLoad() { }
+        private coinSwitchService: CoinSwitchService,
+    ) {
+        super();
+    }
 
     ngOnInit(): void {
-        this.coinSwitch.subscribe(value => {
-            this.onCurrentCoinChange(value);
-        });
-        this.explorersLinksPref = {
-            BTC: "https://chainz.cryptoid.info/dgb/block.dws?",
-            BCH: "https://blockchair.com/bitcoin-cash/block/",
-            BSV: "https://blockchair.com/bitcoin-sv/block/",
-            DGB: "https://chainz.cryptoid.info/dgb/block.dws?",
-            FCH: "http://fch.world/block/",
-            HTR: "https://explorer.hathor.network/transaction/",
-        };
-        this.explorersLinksSuf = {
-            BTC: ".htm",
-            BCH: "",
-            BSV: "",
-            DGB: ".htm",
-            FCH: "",
-            HTR: "",
-        };
+        this.subscriptions = [
+            this.coinSwitchService.coinSwitch.subscribe(value => {
+                this.onCurrentCoinChange(value);
+            }),
+        ];
+
         this.asyncGetCoinsList().then(() => {
             this.asyncGetCoinStats(this.currentCoin).then(() => {
                 const thisCoinData = this.coinsData[this.currentCoin].stats;
@@ -339,16 +340,25 @@ export class HomeComponent implements OnInit {
         };
     }
     onBlockClick(block: IFoundBlock): void {
-        const url = this.explorersLinksPref[this.currentCoin] + block.hash + this.explorersLinksSuf[this.currentCoin];
+        const url =
+            this.explorersLinksPref[this.currentCoin] +
+            block.hash +
+            this.explorersLinksSuf[this.currentCoin];
         this.openBrowser(url);
     }
 
     truncate(fullStr) {
-        var separator = '...', frontChars = 3, backChars = 4;
-        return fullStr.substr(0, frontChars) + separator + fullStr.substr(fullStr.length - backChars);
-    };
+        var separator = "...",
+            frontChars = 3,
+            backChars = 4;
+        return (
+            fullStr.substr(0, frontChars) +
+            separator +
+            fullStr.substr(fullStr.length - backChars)
+        );
+    }
 
     private openBrowser(url: string) {
-        window.open(url, '_system');
+        window.open(url, "_system");
     }
 }
